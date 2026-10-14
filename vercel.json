@@ -1,0 +1,33 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "pnpm run build",
+  "outputDirectory": "dist",
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "https://github.com/hunterliu1003/talks",
+      "permanent": false
+    },
+    {
+      "source": "/2026-10-17",
+      "destination": "/2026-10-17-tsdown-vue-final-modal/",
+      "permanent": true
+    },
+    {
+      "source": "/2026-10-17-tsdown-vue-final-modal/pdf",
+      "destination": "https://github.com/hunterliu1003/talks/blob/main/2026-10-17/2026-10-17-vconf-zh-tw.pdf?raw=true",
+      "permanent": false
+    },
+    {
+      "source": "/2026-10-17-tsdown-vue-final-modal/src",
+      "destination": "https://github.com/hunterliu1003/talks/tree/main/2026-10-17",
+      "permanent": false
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/2026-10-17-tsdown-vue-final-modal/:path*",
+      "destination": "/2026-10-17-tsdown-vue-final-modal/index.html"
+    }
+  ]
+}

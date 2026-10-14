@@ -1,0 +1,9 @@
+*.log
+node_modules
+*-export*
+dist
+.DS_Store
+.vercel
+.remote-assets
+components.d.ts
+*.local

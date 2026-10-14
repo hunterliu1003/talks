@@ -1,0 +1,10 @@
+{
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "slidev --open",
+    "build": "node ../../scripts/build.ts /2026-10-17-tsdown-vue-final-modal/",
+    "export": "slidev export --dark --per-slide --output ../2026-10-17-vconf-zh-tw.pdf"
+  }
+}

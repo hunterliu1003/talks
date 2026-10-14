@@ -1,0 +1,986 @@
+@import '@fontsource/dm-sans/400.css';
+@import '@fontsource/dm-sans/500.css';
+@import '@fontsource/dm-sans/600.css';
+@import '@fontsource/dm-sans/700.css';
+@import '@fontsource/dm-sans/800.css';
+@import '@fontsource/noto-sans-tc/400.css';
+@import '@fontsource/noto-sans-tc/500.css';
+@import '@fontsource/noto-sans-tc/600.css';
+@import '@fontsource/noto-sans-tc/700.css';
+@import '@fontsource/noto-sans-tc/800.css';
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/500.css';
+@import '@fontsource/jetbrains-mono/600.css';
+@import '@fontsource/jetbrains-mono/700.css';
+@import '@fontsource/jetbrains-mono/800.css';
+@import '@fontsource/caveat/500.css';
+
+/* ---------- Design Tokens ---------- */
+:root {
+  --accent: #00DC82;
+  --accent-soft: rgba(0, 220, 130, 0.12);
+  --accent-border: rgba(0, 220, 130, 0.35);
+}
+
+html:not(.dark) {
+  --bg: #fbfaf7;
+  --bg-elevated: #ffffff;
+  --fg: #0a0a0a;
+  --fg-2: #262626;
+  --fg-3: #404040;
+  --fg-4: #737373;
+  --border: #e5e4dd;
+  --border-strong: #d4d3cc;
+  --code-bg: #f5f4ef;
+  --accent: #059669;
+}
+
+html.dark {
+  --bg: #0a0a0a;
+  --bg-elevated: #161616;
+  --fg: #fafafa;
+  --fg-2: #e5e5e5;
+  --fg-3: #c4c4c4;
+  --fg-4: #8a8a8a;
+  --border: #262626;
+  --border-strong: #404040;
+  --code-bg: #161616;
+  --accent: #00DC82;
+}
+
+/* ---------- Base ---------- */
+.dark #slide-content {
+  background-color: black !important;
+}
+
+::selection {
+  background: rgba(0, 220, 130, 0.25);
+}
+
+html, body, #app, .slidev-layout {
+  background: var(--bg) !important;
+  color: var(--fg);
+  font-family: 'DM Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Noto Sans TC', system-ui, sans-serif;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'ss01';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.slidev-layout {
+  padding: 4rem 4.5rem;
+}
+
+/* ---------- Typography ---------- */
+.slidev-layout h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.12;
+  color: var(--fg);
+  margin-bottom: 1.25rem;
+}
+
+.slidev-layout h2 {
+  font-size: 1.625rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--fg-2);
+  line-height: 1.35;
+  margin-bottom: 1rem;
+}
+
+.slidev-layout h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+  margin-bottom: 0.5rem;
+}
+
+.slidev-layout :where(p) {
+  color: var(--fg-2);
+  line-height: 1.65;
+  font-size: 1.0625rem;
+}
+
+/* Override Slidev default theme: it sets opacity:0.5 on <p> right after <h1>, dimming subtitles */
+.slidev-layout h1 + p {
+  opacity: 1;
+}
+
+.slidev-layout strong {
+  color: var(--fg);
+  font-weight: 600;
+}
+
+.accent { color: var(--accent); }
+.muted { color: var(--fg-3); }
+.faint { color: var(--fg-4); }
+
+/* ---------- Kickers & labels ---------- */
+.kicker {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.kicker::before {
+  content: '';
+  width: 1.5rem;
+  height: 1px;
+  background: var(--accent);
+}
+
+.eyebrow {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+
+/* ---------- Lists ---------- */
+.slidev-layout ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.slidev-layout ul > li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.625rem;
+  color: var(--fg-2);
+  line-height: 1.7;
+  font-size: 1.0625rem;
+}
+
+.slidev-layout ul > li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.75em;
+  width: 0.625rem;
+  height: 1.5px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+.slidev-layout ol {
+  list-style: none;
+  counter-reset: olc;
+  padding-left: 0;
+}
+
+.slidev-layout ol > li {
+  counter-increment: olc;
+  position: relative;
+  padding-left: 2.25rem;
+  margin-bottom: 0.75rem;
+  color: var(--fg-2);
+  line-height: 1.65;
+}
+
+.slidev-layout ol > li::before {
+  content: counter(olc, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0;
+}
+
+/* ---------- Blockquote ---------- */
+.slidev-layout blockquote {
+  border-left: 2px solid var(--accent);
+  padding: 0.3rem 0 0.3rem 1.4rem;
+  margin: 1.5rem 0;
+  background: transparent !important;
+  color: var(--fg);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1.42rem;
+  line-height: 1.55;
+  letter-spacing: -0.012em;
+}
+
+.slidev-layout blockquote p {
+  color: var(--fg);
+  font-size: inherit;
+  margin: 0;
+}
+
+/* ---------- Code ---------- */
+.slidev-layout :not(pre) > code {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.875em;
+  font-weight: 500;
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding: 0.125rem 0.4rem;
+  border-radius: 0.3rem;
+  border: 1px solid var(--accent-border);
+}
+
+.slidev-layout pre {
+  background: var(--code-bg) !important;
+  border: 1px solid var(--border);
+  border-radius: 0.625rem;
+  padding: 1.125rem 1.25rem !important;
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+html.dark .slidev-layout pre {
+  background: rgba(22, 22, 22, 0.55) !important;
+  border-color: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(10px);
+}
+
+.slidev-layout pre code {
+  font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+  background: transparent !important;
+}
+
+/* ---------- Table ---------- */
+.slidev-layout table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.slidev-layout th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--fg);
+  padding: 0.625rem 1rem 0.625rem 0;
+  border-bottom: 1px solid var(--border-strong);
+  font-size: 0.875rem;
+  letter-spacing: 0.01em;
+}
+
+.slidev-layout td {
+  padding: 0.75rem 1rem 0.75rem 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--fg-2);
+  line-height: 1.55;
+}
+
+html.dark .slidev-layout th { border-bottom-color: rgba(255, 255, 255, 0.16); }
+html.dark .slidev-layout td { border-bottom-color: rgba(255, 255, 255, 0.06); }
+
+/* ---------- Custom helpers ---------- */
+.card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1.25rem 1.375rem;
+  transition: border-color 0.2s ease;
+}
+
+html.dark .card {
+  background: rgba(22, 22, 22, 0.55);
+  border-color: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(10px);
+}
+
+html.dark .card-accent {
+  background: linear-gradient(180deg, rgba(0, 220, 130, 0.10), transparent 62%), rgba(22, 22, 22, 0.55);
+  border-color: rgba(0, 220, 130, 0.32);
+}
+
+.card-accent {
+  border-color: var(--accent-border);
+  background: linear-gradient(180deg, var(--accent-soft), transparent 60%), var(--bg-elevated);
+}
+
+.card ul > li::before {
+  top: 0.55em;
+}
+
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 1.5rem 0;
+}
+
+.divider-accent {
+  height: 2px;
+  width: 3rem;
+  background: var(--accent);
+  margin: 1rem 0 1.5rem;
+}
+
+.tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.3rem;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid var(--accent-border);
+  letter-spacing: 0.02em;
+}
+
+.tag-neutral {
+  background: transparent;
+  color: var(--fg-3);
+  border-color: var(--border-strong);
+}
+
+/* ---------- Cover slide ---------- */
+.cover {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem 5rem !important;
+  position: relative;
+}
+
+.cover h1.hero {
+  font-size: 2.8rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin: 0 0 1.5rem;
+}
+
+.cover .lead {
+  font-size: 1.25rem;
+  color: var(--fg-2);
+  max-width: 36rem;
+  margin: 0 0 2.5rem;
+  line-height: 1.55;
+}
+
+.cover .meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--fg-2);
+  letter-spacing: 0.05em;
+}
+.cover .kicker {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+/* ---------- Section slide ---------- */
+.section-slide {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem 5rem !important;
+}
+
+.section-slide .chapter {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1.25rem;
+}
+
+.section-slide h1 {
+  font-size: 3.7rem;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.12;
+  margin: 0 0 1.25rem;
+  background: linear-gradient(115deg, var(--fg) 30%, #00dc82 78%, #36e4da 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding-bottom: 0.08em;
+}
+
+.section-slide .desc {
+  font-size: 1.125rem;
+  color: var(--fg-3);
+  max-width: 32rem;
+}
+
+/* ---------- Quote slide ---------- */
+.quote-slide {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem 6rem !important;
+}
+
+.quote-slide .qmark {
+  font-family: Georgia, serif;
+  font-size: 6rem;
+  line-height: 0.5;
+  color: var(--accent);
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.quote-slide .q {
+  font-size: 2.5rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  margin-bottom: 1.5rem;
+}
+
+.quote-slide .qsub {
+  font-size: 1.25rem;
+  color: var(--fg-3);
+  font-weight: 400;
+}
+
+/* ---------- Slide number footer ---------- */
+.slidev-page-number {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 0.75rem !important;
+  color: var(--fg-4) !important;
+  letter-spacing: 0.05em;
+}
+
+/* ---------- Misc ---------- */
+.slidev-vclick-target {
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* 不加 filter：blur 過渡會建立 containing block，與 v-mark 的定位量測產生競態 */
+.slidev-vclick-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* fade-out 換頁：淡出帶模糊，後頁延遲進場 */
+.fade-out-leave-active {
+  transition: opacity calc(var(--slidev-transition-duration) * 0.6) ease-out, filter 200ms ease;
+}
+
+.fade-out-enter-active {
+  transition: opacity calc(var(--slidev-transition-duration) * 0.8) ease-in, filter 200ms ease;
+  transition-delay: calc(var(--slidev-transition-duration) * 0.5);
+}
+
+.fade-out-enter-from,
+.fade-out-leave-to {
+  opacity: 0;
+  filter: blur(5px);
+}
+
+.bracket-l, .bracket-r {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* ---------- Social icons ---------- */
+.social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  color: var(--fg-3);
+  transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+}
+
+.social-icon:hover {
+  color: var(--accent);
+  border-color: var(--accent-border);
+  background: var(--accent-soft);
+  transform: translateY(-1px);
+}
+
+/* ---------- Brand marks ---------- */
+.vfm-logo {
+  display: inline-block;
+  height: 0.78em;
+  aspect-ratio: 149 / 65;
+  background-image: url('/vue-final-modal.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  vertical-align: -0.02em;
+}
+
+.cc-logo {
+  display: inline-block;
+  height: 1.25em;
+  aspect-ratio: 23 / 26;
+  background-image: url('/colorful-casting.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  vertical-align: -0.24em;
+}
+
+/* ---------- QR code (static) ---------- */
+.qr-talk {
+  width: 12rem;
+  height: 12rem;
+  background-image: url('/qr-talk.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* ---------- Intro slide photo ---------- */
+.intro-photo {
+  width: 13rem;
+  aspect-ratio: 3 / 4;
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background-image: url('/avatar-vconf.png');
+  background-size: cover;
+  background-position: 52% 28%;
+  box-shadow: 0 14px 36px -14px rgba(0, 220, 130, 0.22);
+}
+
+/* ---------- Content links ---------- */
+.slidev-layout a:not(.social-icon):not(.no-underline) {
+  color: var(--accent);
+  text-decoration: underline dotted;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.slidev-layout a:not(.social-icon):not(.no-underline):hover {
+  text-decoration-style: solid;
+}
+
+/* ---------- Compact list (for dense slides) ---------- */
+.slidev-layout .compact-list {
+  margin: 0;
+}
+
+.slidev-layout .compact-list > li {
+  font-size: 0.875rem !important;
+  line-height: 1.5 !important;
+  padding-left: 1rem !important;
+  margin-bottom: 0.25rem !important;
+  color: var(--fg-2);
+}
+
+.slidev-layout .compact-list > li::before {
+  top: 0.65em !important;
+  width: 0.4rem !important;
+}
+
+/* ---------- Glow（全頁光暈：內容頁淡、cover / section 濃） ---------- */
+html.dark .slidev-layout {
+  background:
+    radial-gradient(720px 480px at 92% 0%, rgba(0, 220, 130, 0.055), transparent 72%),
+    radial-gradient(780px 560px at 0% 104%, rgba(0, 98, 158, 0.05), transparent 72%),
+    var(--bg) !important;
+}
+
+html:not(.dark) .slidev-layout {
+  background:
+    radial-gradient(720px 480px at 92% 0%, rgba(5, 150, 105, 0.05), transparent 72%),
+    radial-gradient(780px 560px at 0% 104%, rgba(0, 98, 158, 0.04), transparent 72%),
+    var(--bg) !important;
+}
+
+.cover,
+.section-slide {
+  position: relative;
+  isolation: isolate;
+}
+
+.cover::before,
+.section-slide::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(460px 340px at 82% 16%, rgba(0, 220, 130, 0.16), transparent 70%),
+    radial-gradient(560px 440px at 10% 92%, rgba(0, 98, 158, 0.14), transparent 70%);
+  filter: blur(70px);
+  animation: glow-drift 16s ease-in-out infinite alternate;
+}
+
+html:not(.dark) .cover::before,
+html:not(.dark) .section-slide::before {
+  background:
+    radial-gradient(460px 340px at 82% 16%, rgba(5, 150, 105, 0.12), transparent 70%),
+    radial-gradient(560px 440px at 10% 92%, rgba(0, 98, 158, 0.08), transparent 70%);
+}
+
+@keyframes glow-drift {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(2.5%, -3%, 0) scale(1.1); }
+}
+
+/* ---------- 章節頁幽靈編號 ---------- */
+.section-slide .chapter-ghost {
+  position: absolute;
+  right: 2.5rem;
+  bottom: 1.2rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11rem;
+  font-weight: 700;
+  letter-spacing: -0.06em;
+  line-height: 1;
+  color: rgba(0, 220, 130, 0.07);
+  pointer-events: none;
+  user-select: none;
+}
+
+html:not(.dark) .section-slide .chapter-ghost {
+  color: rgba(5, 150, 105, 0.08);
+}
+
+/* ---------- 漸層標題與手寫註記 ---------- */
+.text-gradient {
+  background: linear-gradient(120deg, #00dc82 10%, #36e4da 55%, #4c9aff 95%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hand-note {
+  font-family: 'Caveat', 'Noto Sans TC', cursive;
+  color: var(--accent);
+  font-size: 1.6rem;
+  line-height: 1.2;
+  transform: rotate(-4deg);
+  display: inline-block;
+}
+
+/* ---------- 地鐵路線圖（4-0 九站點） ---------- */
+.line-map {
+  position: relative;
+  height: 265px;
+  margin-top: 2.5rem;
+}
+
+.line-map::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: 50%;
+  height: 2px;
+  border-radius: 1px;
+  background: linear-gradient(90deg, var(--accent-border), var(--accent));
+}
+
+.line-stations {
+  position: absolute;
+  inset: 0;
+  display: flex;
+}
+
+.line-station {
+  position: relative;
+  flex: 1;
+}
+
+.line-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2.5px solid var(--accent);
+  background: var(--bg);
+  z-index: 1;
+}
+
+.line-station:last-child .line-dot {
+  background: var(--accent);
+  box-shadow: 0 0 14px rgba(0, 220, 130, 0.55);
+}
+
+.line-label {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 122px;
+  text-align: center;
+}
+
+.line-station:nth-child(odd) .line-label { bottom: calc(50% + 20px); }
+.line-station:nth-child(even) .line-label { top: calc(50% + 20px); }
+
+.line-desc {
+  font-size: 0.72rem;
+  color: var(--fg-3);
+  margin-top: 0.3rem;
+  line-height: 1.45;
+}
+
+/* ---------- Stepper（4-9 發布流程） ---------- */
+.step-row {
+  display: flex;
+  margin-top: 1.25rem;
+}
+
+.step {
+  flex: 1;
+  position: relative;
+  text-align: center;
+  padding: 0 2px;
+}
+
+.step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 15px;
+  left: calc(50% + 22px);
+  right: calc(-50% + 22px);
+  height: 2px;
+  background: var(--border-strong);
+}
+
+.step-n {
+  width: 30px;
+  height: 30px;
+  margin: 0 auto 0.45rem;
+  border-radius: 50%;
+  border: 2px solid var(--accent-border);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step-accent .step-n {
+  border-color: var(--accent);
+  box-shadow: 0 0 12px rgba(0, 220, 130, 0.35);
+}
+
+.step-t {
+  font-size: 0.78rem;
+  color: var(--fg-2);
+  line-height: 1.35;
+}
+
+/* ---------- 大數字卡（4-4 生態調查） ---------- */
+.stat-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 2.3rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--accent);
+}
+
+.stat-unit {
+  font-size: 0.92rem;
+  color: var(--fg-3);
+}
+
+.stat-src {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--fg-4);
+  margin-top: 0.45rem;
+}
+
+/* ---------- 版本範圍數線圖（4-8） ---------- */
+.range-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-top: 0.4rem;
+}
+
+.range-row {
+  display: grid;
+  grid-template-columns: 82px 1fr;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.range-key {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--fg-2);
+}
+
+.range-track {
+  position: relative;
+  height: 30px;
+}
+
+.range-track::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  background: var(--border);
+}
+
+.range-fill {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 0;
+  border-radius: 6px;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0 0.55rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.range-dot {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.range-cap {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--fg-3);
+  white-space: nowrap;
+}
+
+.range-note {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--fg-3);
+  white-space: nowrap;
+}
+
+/* ---------- 授權光譜（4-6） ---------- */
+.spectrum {
+  position: relative;
+  height: 58px;
+  margin-top: 1.1rem;
+}
+
+.spectrum-bar {
+  position: absolute;
+  top: 26px;
+  left: 0;
+  right: 0;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent) 0%, #d9a406 60%, #d97706 100%);
+  opacity: 0.85;
+}
+
+.spectrum-mark {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--fg-2);
+}
+
+.spectrum-mark::after {
+  content: '';
+  display: block;
+  width: 2px;
+  height: 11px;
+  background: var(--fg-4);
+  margin: 3px auto 0;
+}
+
+.spectrum-end {
+  position: absolute;
+  top: 40px;
+  font-size: 0.7rem;
+  color: var(--fg-4);
+}
+
+/* ---------- 直式 stepper（演進史、v5 三組 build） ---------- */
+.vsteps {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  padding-left: 1.75rem;
+}
+
+.vsteps::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 10px;
+  bottom: 10px;
+  width: 2px;
+  border-radius: 1px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-border));
+}
+
+.vstep {
+  position: relative;
+  opacity: 0.35;
+  transition: opacity 0.3s ease;
+}
+
+.vstep.is-on {
+  opacity: 1;
+}
+
+.vstep-dot {
+  position: absolute;
+  left: -1.75rem;
+  top: 0.15rem;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2.5px solid var(--accent);
+  background: var(--bg);
+}
+
+.vstep.is-on .vstep-dot {
+  background: var(--accent);
+  box-shadow: 0 0 14px rgba(0, 220, 130, 0.55);
+}
+
+.vstep-desc {
+  font-size: 0.85rem;
+  color: var(--fg-3);
+  margin-top: 0.3rem;
+  line-height: 1.5;
+}
