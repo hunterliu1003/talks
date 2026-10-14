@@ -23,7 +23,6 @@ class: intro-slide
   <div class="flex items-center gap-2 text-base text-[var(--fg)] font-medium leading-snug whitespace-nowrap">
     <span class="vfm-logo flex-shrink-0"></span>
     <a href="https://vue-final-modal.org" target="_blank" class="accent no-underline flex-shrink-0">Vue Final Modal</a>
-    <img src="/badge-vfm-stars.svg" alt="GitHub stars" class="h-4 flex-shrink-0 ml-1" />
   </div>
 </div>
 
