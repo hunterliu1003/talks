@@ -14,8 +14,6 @@ title: Vue Final Modal v5 發布
 </div>
 
 <!--
-NOTE: 上台前（當天早上）先跑 gh workflow run release.yml --ref v5 -f package=vue-final-modal -f version=5.0.0 -f confirm=5.0.0 -f stage=true，約 3 分鐘，5.0.0 會暫存在 npm 的 Staged Packages。台上只做 npmjs.com 的 Approve 加手機 2FA。registry 延遲 1 到 2 分鐘，按完不要等，先講遷移，謝幕前再回 npm 頁面刷新揭曉。下台後 gh release edit v5.0.0 --draft=false --latest。
-
 講到這裡，v5 的東西都看完了，剩下一件事：把它發出去。(pause) 就是現在。切到 npmjs.com，按下 Approve。(pause) 一兩分鐘後 registry 更新，pnpm add vue-final-modal@5 裝到的就是正式版。我先講遷移，謝幕前再回來刷新給大家看。如果你是 v4 的使用者，接下來講怎麼升級。
 -->
 
@@ -65,8 +63,6 @@ v5.vue-final-modal.org
 </div>
 
 <!--
-NOTE: 在 presenter 點 Migration Guide 會由觀眾視窗開新分頁（AudienceLink 元件）。開場前要在觀眾視窗對簡報網域允許彈出視窗（網址列鎖頭 → 網站設定 → 彈出式視窗與重新導向：允許），否則會被 Chrome 擋掉。
-
 遷移的細節直接看文件。點進去 v5 文件站的遷移指南，照著頁面講四件事：
 
 核心 API 向下相容：createVfm、ModalsContainer、useModal、useVfm 全部照舊，大多數專案不用改程式碼，清掉的只有幾個原本就該算私有的東西。
