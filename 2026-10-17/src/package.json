@@ -5,6 +5,6 @@
   "scripts": {
     "dev": "slidev --open",
     "build": "node ../../scripts/build.ts /2026-10-17-tsdown-vue-final-modal/",
-    "export": "slidev export --dark --per-slide --output ../2026-10-17-vconf-zh-tw.pdf"
+    "export": "slidev export --dark --with-clicks --wait 15000 --output ../2026-10-17-vconf-zh-tw.pdf"
   }
 }
