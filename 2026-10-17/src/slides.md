@@ -59,6 +59,10 @@ src: ./pages/intro.md
 ---
 
 ---
+src: ./pages/01-why-tsdown.md
+---
+
+---
 src: ./pages/02-meet-tsdown.md
 ---
 
