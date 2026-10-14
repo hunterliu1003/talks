@@ -554,13 +554,17 @@ html.dark .card-accent {
 /* ---------- Content links ---------- */
 .slidev-layout a:not(.social-icon):not(.no-underline) {
   color: var(--accent);
-  text-decoration: underline dotted;
+  /* Slidev's base styles also draw a dashed border-bottom under every link. */
+  border-bottom: 0;
+  text-decoration: underline;
   text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+  text-underline-offset: 4px;
+  transition: text-decoration-color 0.2s;
 }
 
 .slidev-layout a:not(.social-icon):not(.no-underline):hover {
-  text-decoration-style: solid;
+  text-decoration-color: currentColor;
 }
 
 /* ---------- Compact list (for dense slides) ---------- */
