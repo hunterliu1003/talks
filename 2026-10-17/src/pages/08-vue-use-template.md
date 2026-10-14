@@ -1,4 +1,4 @@
-<div class="kicker normal-case">10 · vue-use-template</div>
+<div class="kicker normal-case">08 · vue-use-template</div>
 
 # VFM 的動態渲染層
 

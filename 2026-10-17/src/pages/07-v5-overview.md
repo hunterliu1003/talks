@@ -2,7 +2,7 @@
 clicks: 4
 ---
 
-<div class="kicker">09 · v5 概覽</div>
+<div class="kicker">07 · v5 概覽</div>
 
 # 一個入口，兩種 modal
 
@@ -21,5 +21,5 @@ clicks: 4
 
 [click] 平常你不會直接開 VueFinalModal，而是拿它包成自己專案的 Higher Order Component：確認用的 Dialog、側邊的 Nav Drawer、手機上的 Bottom Sheet、整頁等待的 Spinner，就是前面象限裡那些東西。每一個都還是 VueFinalModal，所以一樣走 useModal，一口氣 push 四筆，容器裡就疊了四層。
 
-[click] 最後一種：你自己從頭寫的 Modal 元件。只要遵守同一套契約，v-model 加上開關的事件，useModal 一樣能接，open() 一樣等得到結果，第 11 章會看到這套契約長什麼樣。七筆都在同一個容器裡，疊在同一個畫面上，你的程式碼只換 component 那一行。兩種 modal 都接進了同一個入口，下一頁看它們哪裡一樣、哪裡不一樣。
+[click] 最後一種：你自己從頭寫的 Modal 元件。只要遵守同一套契約，v-model 加上開關的事件，useModal 一樣能接，open() 一樣等得到結果，第 9 章會看到這套契約長什麼樣。七筆都在同一個容器裡，疊在同一個畫面上，你的程式碼只換 component 那一行。兩種 modal 都接進了同一個入口，下一頁看它們哪裡一樣、哪裡不一樣。
 -->

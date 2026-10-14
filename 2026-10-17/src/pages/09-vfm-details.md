@@ -2,7 +2,7 @@
 clicks: 12
 ---
 
-<div class="kicker normal-case">11 · 原生 dialog 行為比較</div>
+<div class="kicker normal-case">09 · 原生 dialog 行為比較</div>
 
 # 開跟關的每一條路，都有結果
 
@@ -46,7 +46,7 @@ clicks: 12
 clicks: 3
 ---
 
-<div class="kicker normal-case">11 · 原生 dialog 行為比較</div>
+<div class="kicker normal-case">09 · 原生 dialog 行為比較</div>
 
 # 選取文字時，不要把 modal 關掉
 
@@ -94,7 +94,7 @@ function onMouseupRoot() {
 
 ---
 
-<div class="kicker normal-case">11 · 原生 dialog 行為比較</div>
+<div class="kicker normal-case">09 · 原生 dialog 行為比較</div>
 
 # 疊三層 modal，畫面不該越來越暗
 

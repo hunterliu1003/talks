@@ -79,7 +79,7 @@ src: ./pages/05-adoption.md
 ---
 
 ---
-src: ./pages/06-section.md
+src: ./pages/part2-section.md
 ---
 
 ---
@@ -91,39 +91,39 @@ src: ./pages/modal-decision-tree.md
 ---
 
 ---
-src: ./pages/06-vfm-history.md
+src: ./pages/v5-map.md
 ---
 
 ---
-src: ./pages/07-tsdown-migration.md
----
-
-
----
-src: ./pages/09-v5-overview.md
----
----
-src: ./pages/09-v5-compare.md
+src: ./pages/06-tsdown-repack.md
 ---
 
 ---
-src: ./pages/10-vue-use-template.md
+src: ./pages/07-v5-overview.md
 ---
 
 ---
-src: ./pages/11-vfm-details.md
+src: ./pages/07-v5-compare.md
 ---
 
 ---
-src: ./pages/12-scroll-lock.md
+src: ./pages/08-vue-use-template.md
 ---
 
 ---
-src: ./pages/13-nuxt-ssr.md
+src: ./pages/09-vfm-details.md
 ---
 
 ---
-src: ./pages/14-takeaway.md
+src: ./pages/10-scroll-lock.md
+---
+
+---
+src: ./pages/11-nuxt-ssr.md
+---
+
+---
+src: ./pages/12-takeaway.md
 ---
 
 ---
