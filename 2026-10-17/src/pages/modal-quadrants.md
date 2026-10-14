@@ -9,7 +9,7 @@ clicks: 11
 <div class="absolute right-[3.4rem] bottom-[2.1rem] text-xs text-[var(--fg-3)] transition-opacity duration-500" :class="$clicks >= 1 && $clicks <= 10 ? 'opacity-0' : ''">改繪自 <a href="https://www.nngroup.com/articles/popups/" target="_blank" rel="noopener" class="no-underline border-none! text-[var(--fg-3)]">NN/g · The Anatomy of Popups</a><span class="mx-1.5">·</span><span class="font-mono tracking-wide">nngroup.com</span></div>
 
 <!--
-進入 VFM 之前，先把 Modal 定義清楚。什麼是 Modal？定義只有一條：它出現的時候，使用者不能操作背景。這張象限圖改繪自 NN/g 的 The Anatomy of Popups，用兩條軸把所有彈出元件分類。橫軸就是這個定義：背景不能操作的是 Modal，還能操作的是 Nonmodal。縱軸看有沒有遮罩，VFM 裡叫 overlay，NN/g 原圖叫 Lightbox。兩條軸切出四個象限，照數學的習慣從右上角開始，逆時針走一圈。
+剛剛說 VFM 管的那一串行為，收斂起來就是 Modal 的定義，只有一條：它出現的時候，使用者不能操作背景。這張象限圖改繪自 NN/g 的 The Anatomy of Popups，用兩條軸把所有彈出元件分類。橫軸就是這個定義：背景不能操作的是 Modal，還能操作的是 Nonmodal。縱軸看有沒有遮罩，VFM 裡叫 overlay，NN/g 原圖叫 Lightbox。兩條軸切出四個象限，照數學的習慣從右上角開始，逆時針走一圈。
 
 [click] 第一象限，右上：Nonmodal，而且沒有遮罩，使用者可以完全不理它。最常見的是 Toast，角落冒出來一下就走。
 

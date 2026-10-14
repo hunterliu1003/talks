@@ -83,6 +83,10 @@ src: ./pages/part2-section.md
 ---
 
 ---
+src: ./pages/vfm-intro.md
+---
+
+---
 src: ./pages/modal-quadrants.md
 ---
 
