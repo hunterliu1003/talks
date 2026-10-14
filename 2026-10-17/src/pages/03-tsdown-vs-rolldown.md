@@ -23,10 +23,10 @@
 <div class="text-sm muted mt-2">型別、格式、exports、發布前檢查</div>
 </div>
 
-<div v-click="4" class="card border-dashed! opacity-80">
-<div class="eyebrow mb-2">未來</div>
-<div class="text-xl font-semibold flex items-center gap-2 whitespace-nowrap"><carbon-arrow-right class="accent text-lg" />Vite library mode</div>
-<div class="text-sm muted mt-2">以 tsdown 為基礎</div>
+<div v-click="4" class="card">
+<div class="eyebrow mb-2">整合</div>
+<div class="text-xl font-semibold"><a href="https://viteplus.dev" target="_blank" rel="noopener">Vite+</a></div>
+<div class="text-sm muted mt-2"><span class="font-mono">vp build</span> 用 Vite，<span class="font-mono">vp pack</span> 用 tsdown</div>
 </div>
 
 </div>
@@ -41,7 +41,7 @@
 
 [click] 函式庫這一側就是 tsdown。它處理的是函式庫才在意的事：型別宣告、輸出格式、package.json 的 exports，還有發布前的檢查。
 
-[click] 而官方給 tsdown 的定位是，未來 Vite 的 library mode 會以 tsdown 為基礎。所以今天學 tsdown，不是學一個小眾工具，而是在學 Vite 生態未來打包函式庫的方式。
+[click] 最後是 Vite+，VoidZero 把這兩條路裝進同一個 vp 指令：vp build 用 Vite 打包應用程式，vp pack 用 tsdown 打包函式庫。所以今天學 tsdown，不是學一個小眾工具，而是在學 Vite 生態打包函式庫的方式。
 -->
 
 ---
