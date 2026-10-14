@@ -18,7 +18,7 @@
 
 </div>
 
-<div v-click="2" class="mt-10 text-2xl text-[var(--fg-2)]">兩邊都接 useModal，<span v-mark.underline.accent="2">只換 component 那一行</span>。</div>
+<div v-click="2" class="mt-10 text-2xl text-[var(--fg-2)]">兩邊都接 useModal，<span v-mark.underline="2">只換 component 那一行</span>。</div>
 
 <!--
 兩個主角先定義清楚：VueFinalDialog 包的是瀏覽器原生的 dialog 元素，VueFinalModal 是 VFM 自己實作的 modal。一樣的部分：Esc 關閉、點外面關閉、role 跟焦點管理、beforeOpen 跟 beforeClose 可以擋下、還有 open() 跟 close() 回傳的 promise 一定等得到結果，不會懸在那裡，連 dialog 上的 CSS 動畫都會等跑完。這不是兩邊各寫一份：promise 契約在 v5 裡只有一份實作，兩個元件都是建在同一個 lifecycle 核心上的呈現層，同一套契約測試跑在兩個元件上。
