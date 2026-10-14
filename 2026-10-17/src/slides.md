@@ -75,6 +75,10 @@ src: ./pages/04-publish-steps.md
 ---
 
 ---
+src: ./pages/05-adoption.md
+---
+
+---
 src: ./pages/06-section.md
 ---
 
