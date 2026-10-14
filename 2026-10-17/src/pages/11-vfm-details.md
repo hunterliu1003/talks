@@ -39,7 +39,7 @@ clicks: 12
 
 [click] 轉場跑完回到 closed，promise resolve 成 closed。這是走完的一圈。
 
-[click] 最後是沒走完的路。開到一半被 Esc 關掉，或關到一半又打開，就直接反轉方向；原本還在等的那個 promise 不會被晾在那裡，它會 resolve「被切換」。元件被銷毀也一樣，例如路由切走或呼叫 destroy()：不管停在哪個狀態，都直接回到 closed，不跑轉場，在等的 promise 會 resolve「被銷毀」。所以每一條路都有結果，promise 不會卡在 pending，比對回傳值就知道發生了什麼。VueFinalDialog 也是同一套規則。
+[click] 最後是沒走完的路。開到一半被 Esc 關掉，或關到一半又打開，就直接反轉方向；原本還在等的那個 promise 不會被晾在那裡，它會 resolve「被切換」。只有一個例外：開到一半時呼叫 useModal 的 close()，它不會反轉，而是等開完再關，兩個 promise 都拿到正常結果。元件被銷毀也一樣，例如路由切走或呼叫 destroy()：不管停在哪個狀態，都直接回到 closed，不跑轉場，在等的 promise 會 resolve「被銷毀」。所以每一條路都有結果，promise 不會卡在 pending，比對回傳值就知道發生了什麼。VueFinalDialog 也是同一套規則。
 -->
 
 ---
