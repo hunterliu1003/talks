@@ -71,11 +71,7 @@ src: ./pages/03-tsdown-vs-rolldown.md
 ---
 
 ---
-src: ./pages/04-source-walkthrough.md
----
-
----
-src: ./pages/05-ux-details.md
+src: ./pages/04-publish-steps.md
 ---
 
 ---

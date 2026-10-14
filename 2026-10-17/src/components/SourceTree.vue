@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import SourceTreeNode from './SourceTreeNode.vue'
 import type { State, TreeNode } from './SourceTreeNode.vue'
 
-type Scene = 'overview' | 'format' | 'css' | 'pkg' | 'exports' | 'unbundle' | 'workspace' | 'watch'
+type Scene = 'overview' | 'format' | 'dts' | 'deps' | 'css' | 'pkg' | 'exports' | 'unbundle' | 'workspace' | 'watch'
 
 const props = defineProps<{
   /** Which walkthrough page this tree sits on; the click table for it lives in `scenes` below. */
@@ -83,6 +83,19 @@ const scenes: Record<Scene, Step[]> = {
     { on: ['src/config/options.ts'] },
     { on: ['src/config/options.ts'] },
     { on: ['src/build.ts'] },
+    { on: ['src/features/output.ts'] },
+  ],
+  dts: [
+    { on: ['src/config/options.ts'] },
+    { on: ['src/config/options.ts'] },
+    { on: ['src/config/options.ts'] },
+    { on: ['src/config/options.ts'], calls: ['src/features/rolldown.ts'] },
+  ],
+  deps: [
+    { on: ['src/features/deps.ts'] },
+    { on: ['src/features/deps.ts'] },
+    { on: ['src/features/deps.ts'], calls: ['src/features/rolldown.ts'] },
+    { on: ['src/features/deps.ts'], calls: ['src/features/pkg/exports.ts'] },
   ],
   css: [
     { on: ['src/features/rolldown.ts'] },
