@@ -91,13 +91,13 @@ function rowState(i: number) {
 
 <template>
   <div class="mdt" :class="{ 'is-intro': step === 0 }">
-    <div class="kicker absolute! left-0 top-0 m-0!">UX · 你需要 Modal 嗎</div>
+    <div class="kicker absolute! left-0 top-0 m-0!">UX · 決策樹 · 選對類型</div>
 
     <div class="mdt-title">
-      其實你<span class="text-gradient">不需要</span> Modal
+      用決策樹<span class="text-gradient">選對</span> Modal 的類型
     </div>
     <div class="mdt-subtitle muted">
-      一言不合就開 modal，關掉彈窗已經是使用者的本能
+      七個問題，每個出口都是最適合那個情境的元件
     </div>
 
     <div class="mdt-tree">
