@@ -135,7 +135,7 @@ if (importer && RE_DTS.test(importer) && !id.startsWith('@types/')) {
 
 <div v-click="3" class="card card-accent py-3! mt-3">
 <div class="flex items-center gap-3 mb-1"><carbon-package class="text-xl accent" /><div class="eyebrow">VFM 的 UMD 是例外</div></div>
-<div class="text-sm muted leading-relaxed"><span class="font-mono">deps.alwaysBundle</span> 把 vue-use-template 與 scroll-lock 打進 UMD，CDN 使用者沒有 build step；打進去的套件與版本寫進 <span class="font-mono">inlinedDependencies</span></div>
+<div class="text-sm muted leading-relaxed"><span class="font-mono">deps.alwaysBundle</span> 把 vue-use-template 與 scroll-lock 打進 UMD，CDN 使用者沒有 build step；有開 <span class="font-mono">exports</span> 的套件，打進去的套件與版本會寫進 <span class="font-mono">inlinedDependencies</span></div>
 </div>
 
 </div>
@@ -151,7 +151,7 @@ if (importer && RE_DTS.test(importer) && !id.startsWith('@types/')) {
 
 [click] 他沒講的是這段：型別宣告也懂 @types。d.ts 裡 import 了某個套件，只要對應的 @types 套件在你的依賴裡，一樣外部化，型別檔不會把別人的型別整包抄進來。
 
-[click] VFM 有一個例外：UMD。CDN 的使用者沒有 build step，vue-use-template 跟 scroll-lock 又沒有自己的 browser build，所以用 alwaysBundle 把這兩個打進去。被打進去的套件跟精確版本，tsdown 會寫進 package.json 的 inlinedDependencies，使用者看得到你的套件裡藏了誰。反過來，如果有 node_modules 的東西意外被打進去，它會在 build 時列出來，建議你加 onlyBundle 白名單。
+[click] VFM 有一個例外：UMD。CDN 的使用者沒有 build step，vue-use-template 跟 scroll-lock 又沒有自己的 browser build，所以用 alwaysBundle 把這兩個打進去。有開 exports 的套件，tsdown 寫 exports 的時候會順手把打進去的套件跟精確版本寫進 inlinedDependencies，使用者看得到你的套件裡藏了誰；VFM 的 exports 是手寫的，所以沒有這個欄位，等一下第五步會講到。反過來，如果有 node_modules 的東西意外被打進去，它會在 build 時列出來，建議你加 onlyBundle 白名單。
 -->
 
 ---
@@ -166,7 +166,7 @@ if (importer && RE_DTS.test(importer) && !id.startsWith('@types/')) {
 
 <div class="card py-3! mb-3">
 <div class="flex items-center gap-3 mb-1"><carbon-paint-brush class="text-xl accent" /><div class="eyebrow normal-case">Vue 一個 plugin，CSS 一行都不用寫</div></div>
-<div class="text-sm muted leading-relaxed">SFC 交給 <span class="font-mono">unplugin-vue/rolldown</span>；偵測到 <span class="font-mono">@tsdown/css</span> 就掛上，SFC 的 style 抽成 <span class="font-mono">style.css</span>，<span class="font-mono">exports</span> 自動多一條 <span class="font-mono">./style.css</span>，VFM 的 CSS 就是這樣對外的</div>
+<div class="text-sm muted leading-relaxed">SFC 交給 <span class="font-mono">unplugin-vue/rolldown</span>；偵測到 <span class="font-mono">@tsdown/css</span> 就掛上，SFC 的 style 抽成 <span class="font-mono">style.css</span>，有開 <span class="font-mono">exports</span> 還會補一條 <span class="font-mono">./style.css</span></div>
 </div>
 
 ```ts {all|2-4|6|7}
@@ -186,7 +186,7 @@ plugins.push(...cssPostPlugins) // 收 CSS，排最後
 </div>
 
 <!--
-第四步，CSS 跟 Vue。Vue 元件庫只要一個 plugin：unplugin-vue 的 rolldown 版。CSS 更省，VFM 的設定檔裡 CSS 一行都沒寫，專案裝了 @tsdown/css，tsdown 偵測到就自動掛上，SFC 的 style 抽成 dist/style.css，exports 也自動多一條 ./style.css。問題是：SFC 的 scoped style 要先經過 Vue plugin 轉換，它怎麼知道要等？
+第四步，CSS 跟 Vue。Vue 元件庫只要一個 plugin：unplugin-vue 的 rolldown 版。CSS 更省，VFM 的設定檔裡 CSS 一行都沒寫，專案裝了 @tsdown/css，tsdown 偵測到就自動掛上，SFC 的 style 抽成 dist/style.css；有開 exports 的套件，它還會補一條 ./style.css，VFM 的 exports 是手寫的，這條是自己加的。問題是：SFC 的 scoped style 要先經過 Vue plugin 轉換，它怎麼知道要等？
 
 [click] 答案在 rolldown.ts 組 plugin 的順序，而且順序是固定的：先掛處理依賴的 DepsPlugin，就是上一步看的 deps.ts；再掛 rolldown-plugin-dts 產型別；然後是 @tsdown/css 的前置 plugin。這些都是內建的。
 
