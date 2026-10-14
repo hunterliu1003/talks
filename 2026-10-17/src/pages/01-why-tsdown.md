@@ -12,6 +12,8 @@ class: section-slide
 
 <!--
 今天分成兩段。前半段講 tsdown：先看打包函式庫有哪些痛點，認識 tsdown 怎麼回應，再跟著一個套件從設定檔一路走到 npm publish。後半段用 Vue Final Modal v5 當實戰案例。
+
+開始之前，想簡單調查一下現場有沒有用過 tsdown 的人？有沒有用過 Vue Final Modal 的人？
 -->
 
 ---
@@ -57,7 +59,7 @@ class: section-slide
 <div v-click class="card py-6! px-7! flex items-start gap-5">
   <carbon-document class="text-3xl accent shrink-0 mt-1" />
   <div>
-    <div class="text-xl font-semibold mb-1">型別宣告難搞</div>
+    <div class="text-xl font-semibold mb-1">TS 型別宣告複雜</div>
     <div class="text-base muted">tsc 一次只吐一份，多格式要自己寫腳本</div>
   </div>
 </div>
@@ -85,9 +87,9 @@ class: section-slide
 
 [click] 第一，設定繁瑣。Rollup 是以 plugin 為核心，一個完整的打包流程要湊好幾個 plugin，plugin 之間還可能打架。esbuild 跟 tsup 簡單，但功能不夠全面，plugin 生態也比不上 Rollup。
 
-[click] 第二，型別宣告難搞。tsc 只是逐檔把 TS 轉成 JS 和 d.ts，一次只吐一份。你要同時出 ESM 跟 CJS，就得自己寫腳本產兩份型別，想把 d.ts 也打包起來，又要再找別的工具。
+[click] 第二，型別宣告複雜。tsc 只是逐檔把 TS 轉成 JS 和 d.ts，一次只吐一份。你要同時出 ESM 跟 CJS，就得自己寫腳本產兩份型別，Vue Final Modal 最初的版本甚至不支援 TS。這時候就不得不提到 Alex，我們這屆 VConf 的總召，也是我 TypeScript 的 mentor，告訴我 TS 有多好，也才有了 VFM v4。
 
-[click] 第三，多格式容易出錯。用 esbuild 或 Rollup 要同時輸出 ESM、CJS、IIFE，不是寫三套設定，就是抽一層共用設定，改一個地方很容易漏掉另一個。
+[click] 第三，多格式容易出錯。用 esbuild 或 Rollup 要同時輸出 ESM、CJS、IIFE、UMD，不是寫好幾套設定，就是抽一層共用設定，改一個地方很容易漏掉另一個。
 
 [click] 第四，效能。Rollup 是 JavaScript 寫的，大專案一跑就慢，天生比不過 Go 或 Rust 寫的工具。tsdown 就是為了這四件事而生的，下一頁看它怎麼回應。
 -->
