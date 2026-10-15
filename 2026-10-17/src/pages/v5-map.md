@@ -19,5 +19,20 @@ class: text-center
 </div>
 
 <!--
-v5 改了這八件事，這一頁是下半場的地圖。打包換成 tsdown；核心改建立在 vue-use-template 上；元件行為逐項對照原生 dialog，原生負責邊界，VFM 負責體驗；捲動鎖定換成新寫的 scroll-lock。SSR 這次正式支援：v4 只是裝得進 Nuxt 專案，v5 的 modal 可以在 server 端 render、每個 request 各自隔離，解掉的老問題留到第 10 章講。Nuxt module 併入主套件，不再是另一個套件；API 跟 v4 相容；還有測試：v4 只有 6 個單元測試、沒有 Cypress，v5 有 206 個單元測試加 22 個 Cypress 元件測試。接下來一格一格看。先講打包，但打包之前，先回頭看 VFM 之前換過哪些工具。
+VFM 5 改進了非常多東西，算是累積了三年左右迎來的一次報復性改動
+因為過去三年，小弟我主要專注在照顧女兒上，也感謝 VFM 使用者多多包涵，還有老婆的寬容。
+
+打包換成 tsdown。
+
+核心換成 vue-use-template，這是我從 VFM 拆出來用於動態渲染元件的部分。
+
+將元件行為對齊原生 dialog，還新增了一個 VueFinalDialog 的元件，提供給想直接使用原生 dialog 的使用者。
+
+然後因為原本用的函式庫 body-scroll-lock 的作者沒有再維護了，因此我用 Typescript 重新寫了 scroll-lock。
+
+Nuxt 這次是正式且完整的支援，細節留到後面講。
+
+API 幾乎全部相容，大部分專案只需要進行微調。
+
+最後則是補上比 v4 更多的單元測試、e2e 測試。
 -->
