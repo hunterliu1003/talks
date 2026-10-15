@@ -124,7 +124,7 @@ const { open, close } = useModal({
 </div>
 
 <!--
-上一章的 useModal 跟 ModalsContainer，底下都是 vue-use-template：useModal 包的是 useTemplate，ModalsContainer 包的是 TemplateProvider。VFM 自己不再管「怎麼把一個元件動態渲染出來」，這件事整個交給 vut。vut 是我以 VFM 的核心概念從頭重寫的獨立函式庫，不是把程式碼複製出來，零 runtime 依賴。
+打包講完，接下來回到 VFM 5 本身。useModal 跟 ModalsContainer，底下都是 vue-use-template：useModal 包的是 useTemplate，ModalsContainer 包的是 TemplateProvider。VFM 自己不再管「怎麼把一個元件動態渲染出來」，這件事整個交給 vut。vut 是我以 VFM 的核心概念從頭重寫的獨立函式庫，不是把程式碼複製出來，零 runtime 依賴。
 
 那它最重要的改變是什麼？是把 v4 的 patchOptions 換掉。v4 開著的 modal 要改資料，你得拿著 useModal 回傳的物件呼叫 patchOptions，手動同步一次，寫起來跟 Vue 其他地方的響應式完全不一樣。
 
@@ -140,5 +140,5 @@ const { open, close } = useModal({
 
 [click] 連 slots 也是：slot 裡放的巢狀 template，用 defineTemplate 包起來，它的 props 一樣可以給 getter，hint 一變，slot 內容就跟著變。你平常怎麼寫 Vue，這裡就怎麼寫。
 
-[click] 寫法自由了，型別沒有跟著變鬆。所有型別都從 component 那一行推出來，vut 靠 vue-component-type-helpers 把元件的 props、emits、slots 讀出來：title 給數字，編輯器當場就紅；emits 只收 on 開頭的 listener，onConfirm 的 value 型別來自元件的 emit 宣告，不用自己標；slots 只能是元件宣告過的名字，header 沒宣告就紅。不管你用 getter、ref、computed 還是 reactive 包，檢查的都是解開之後的那個物件；巢狀 template 要用 defineTemplate 包一層才有檢查，這是 TypeScript 對巢狀 callback 推導的限制。這些規則全部寫成型別測試放在 repo 裡。動態渲染這一層講完，接下來看 VueFinalModal 元件本身的細節。
+[click] 寫法自由了，型別沒有跟著變鬆。所有型別都從 component 那一行推出來，vut 靠 vue-component-type-helpers 把元件的 props、emits、slots 讀出來：title 給數字，編輯器當場就紅；emits 只收 on 開頭的 listener，onConfirm 的 value 型別來自元件的 emit 宣告，不用自己標；slots 只能是元件宣告過的名字，header 沒宣告就紅。不管你用 getter、ref、computed 還是 reactive 包，檢查的都是解開之後的那個物件；巢狀 template 要用 defineTemplate 包一層才有檢查，這是 TypeScript 對巢狀 callback 推導的限制。這些規則全部寫成型別測試放在 repo 裡。型別講完，接下來用一段動畫看動態渲染的機制實際上怎麼運作。
 -->

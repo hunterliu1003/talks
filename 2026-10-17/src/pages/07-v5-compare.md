@@ -25,5 +25,5 @@
 
 [click] 不一樣的部分，都是原生 dialog 把背景整個鎖住之後就做不到的事：背景可以互動、modal 可以關在某個容器裡、SSR 的第一個畫面就是開著的、疊三層只留一層遮罩、手勢關閉。原生行為夠用就選 VueFinalDialog，碰到這五件事就回來用 VueFinalModal。
 
-[click] 所以選哪一個不用一開始就決定：兩邊都接 useModal，你的程式碼只換 component 那一行。原生 dialog 都 Baseline 了，為什麼還需要 modal 函式庫？答案在底層的控制層：vut 做的，是 dialog 沒做的那件事，等一下拆開來看。
+[click] 所以選哪一個不用一開始就決定：兩邊都接 useModal，你的程式碼只換 component 那一行。接下來看 VueFinalModal 元件本身的細節，每一項都先看原生 dialog 怎麼做，再看 VFM 怎麼做。
 -->

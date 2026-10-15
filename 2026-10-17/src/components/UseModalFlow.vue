@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed } from 'vue'
 
 /** Each click calls open() with a component; the HOC click pushes four in a burst. */
 const STEPS = [
@@ -32,26 +32,6 @@ function isActive(s: Step) {
   return s.click === props.clicks
 }
 
-/** The code card shows the component being opened; during the burst it walks through the HOC names. */
-const shownName = ref('…')
-let timers: ReturnType<typeof setTimeout>[] = []
-watch(() => props.clicks, (clicks, prev) => {
-  timers.forEach(clearTimeout)
-  timers = []
-  const steps = active.value
-  if (steps.length === 0) {
-    shownName.value = pushedSteps.value.at(-1)?.name ?? '…'
-    return
-  }
-  if (prev !== undefined && clicks < prev) {
-    shownName.value = steps[steps.length - 1].name
-    return
-  }
-  shownName.value = steps[0].name
-  steps.slice(1).forEach((s) => {
-    timers.push(setTimeout(() => { shownName.value = s.name }, s.order * BURST_MS))
-  })
-}, { immediate: true })
 
 function chipClass(s: Step) {
   if (isActive(s)) return 'border-[var(--accent)] text-[var(--fg)] bg-[var(--accent-soft)]'
@@ -73,14 +53,8 @@ function boxState(s: Step) {
   <div class="grid grid-cols-[1.05fr_auto_1fr] gap-x-4 items-start w-full">
     <!-- the call site -->
     <div class="flex flex-col gap-2.5 min-w-0">
-      <div class="card py-2.5! px-4! font-mono text-sm leading-6 text-[var(--fg-2)]">
-        <div><span class="text-[#c678dd]">const</span> { open } = <span class="text-[#61afef]">useModal</span>({</div>
-        <div class="pl-4">component: <span class="transition-colors duration-300" :class="clicks > 0 ? 'text-[var(--accent)] font-semibold' : 'text-[var(--fg-4)]'">{{ shownName }}</span>,</div>
-        <div>})</div>
-        <div class="transition-opacity duration-300" :class="clicks > 0 ? 'opacity-100' : 'opacity-30'"><span class="text-[#61afef]">open</span>()</div>
-      </div>
       <div class="flex flex-col gap-1">
-        <div class="eyebrow normal-case">component 可以是</div>
+        <div class="eyebrow normal-case">useModal 的 component 可以是</div>
         <template v-for="s in STEPS" :key="s.name">
           <div v-if="s.kind !== 'hoc'" class="rounded-md border px-3 py-[3px] text-sm transition-all duration-300 flex items-center justify-between" :class="[chipClass(s), s.kind === 'custom' ? 'border-dashed' : '']">
             <span>{{ s.kind === 'custom' ? '你自己的 Modal 元件' : s.name }}</span>
