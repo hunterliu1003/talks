@@ -2,7 +2,7 @@
 clicks: 4
 ---
 
-<div class="kicker">07 · v5 概覽</div>
+<div class="kicker">08 · v5 概覽</div>
 
 # 動態渲染 Modal 元件的機制如何運作
 
