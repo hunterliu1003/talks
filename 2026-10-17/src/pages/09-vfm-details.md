@@ -15,31 +15,31 @@ clicks: 12
 </div>
 
 <!--
-接下來看行為層，VueFinalModal 這個元件的細節，每一項都先看原生 dialog 怎麼做，再看 VFM：open 的 promise、選取文字、多層遮罩、捲動鎖跟焦點。第一項，開跟關。原生 dialog 的 showModal 跟 close 都是同步的，呼叫完就回來，沒有「轉場完成」這個時間點；你想等 modal 真的開好再做事，只能自己去聽 transitionend。
+接下來看行為層，VueFinalModal 元件本身的細節，每一項都先看原生 dialog 怎麼做，再看 VFM 怎麼做：開跟關的 promise、選取文字、多層遮罩、捲動鎖跟焦點。第一項，開跟關。原生 dialog 的 showModal 跟 close 是同步的，呼叫完就回來，沒有「轉場完成」這個時間點，想等 modal 真的開好再做事，只能自己聽 transitionend。
 
-[click] VFM 這邊，可以把一個 modal 的一生畫成有限狀態機。四個狀態：closed、opening、opened、closing，也就是 useModal 回傳的 status。實線框是停得住的狀態，虛線框是轉場進行中。初始狀態是 closed。
+[click] VFM 把一個 modal 的一生畫成狀態機。四個狀態：closed、opening、opened、closing，就是 useModal 回傳的 status。實線框是停得住的狀態，虛線框是轉場中。一開始在 closed。
 
-[click] 停在 closed 的時候想打開，第一關是 beforeOpen。裡面呼叫 stop()，modal 就留在 closed，open() 的 promise 直接 resolve「被擋下」。
+[click] 要開的第一關是 beforeOpen，裡面呼叫 stop() 就留在 closed，open() 直接 resolve「被擋下」。
 
-[click] 已經關著又呼叫 close()，狀態也不動，promise 馬上 resolve「已經關著」，不用等。
+[click] 關著的時候又呼叫 close()，狀態不動，馬上 resolve「已經關著」。
 
-[click] 這次真的要開：呼叫 open()，beforeOpen 沒有擋，
+[click] 這次真的開：呼叫 open()，beforeOpen 沒擋，
 
-[click] 就進到 opening，進場轉場開始跑；這時候 open() 回傳的 promise 還在等。
+[click] 進到 opening，進場轉場開始跑，open() 的 promise 在等。
 
-[click] 轉場跑完，進到 opened，promise 這時候才 resolve 成 opened。所以 await open() 回來的那一刻，modal 一定已經開好了，可以放心做下一件事。
+[click] 轉場跑完到 opened，promise 這時候才 resolve 成 opened。所以 await open() 回來的時候，modal 一定已經開好了。
 
-[click] 開著的時候也一樣。beforeClose 呼叫 stop()，modal 留在 opened，close() 的 promise resolve「被擋下」。
+[click] 開著的時候一樣：beforeClose 呼叫 stop() 就留在 opened，close() resolve「被擋下」。
 
-[click] 已經開著又呼叫 open()，promise 馬上 resolve「已經開著」。如果還在開，就跟著同一趟，開完一起拿到 opened。
+[click] 已經開著又呼叫 open()，馬上 resolve「已經開著」；還在開的話就跟著同一趟，開完一起拿到 opened。
 
-[click] 要關：呼叫 close()、按 Esc 或點外面，beforeClose 沒有擋，
+[click] 要關：呼叫 close()、按 Esc 或點擊外部，beforeClose 沒擋，
 
-[click] 就進到 closing，退場轉場開始跑，close() 的 promise 在等。
+[click] 進到 closing，退場轉場跑，close() 的 promise 在等。
 
-[click] 轉場跑完回到 closed，promise resolve 成 closed。這是走完的一圈。
+[click] 跑完回到 closed，resolve 成 closed。這是走完的一圈。
 
-[click] 最後是沒走完的路。開到一半被 Esc 關掉，或關到一半又打開，就直接反轉方向；原本還在等的那個 promise 不會被晾在那裡，它會 resolve「被切換」。只有一個例外：開到一半時呼叫 useModal 的 close()，它不會反轉，而是等開完再關，兩個 promise 都拿到正常結果。元件被銷毀也一樣，例如路由切走或呼叫 destroy()：不管停在哪個狀態，都直接回到 closed，不跑轉場，在等的 promise 會 resolve「被銷毀」。所以每一條路都有結果，promise 不會卡在 pending，比對回傳值就知道發生了什麼。VueFinalDialog 也是同一套規則。
+[click] 最後是沒走完的路。開到一半被 Esc 關掉，或關到一半又打開，就直接反轉方向，原本在等的 promise resolve「被切換」，不會被晾著。例外只有一個：開到一半呼叫 useModal 的 close()，它不反轉，等開完再關，兩個 promise 都拿到正常結果。元件被銷毀也一樣，不管停在哪裡都直接回到 closed，不跑轉場，在等的 promise resolve「被銷毀」。所以每一條路都有結果，promise 不會卡在 pending。VueFinalDialog 也是同一套規則。
 -->
 
 ---
