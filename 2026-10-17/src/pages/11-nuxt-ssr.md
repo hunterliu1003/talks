@@ -1,4 +1,4 @@
-<div class="kicker">10 · SSR 與 Nuxt</div>
+<div class="kicker">09 · SSR 與 Nuxt</div>
 
 # 一個套件，附 Nuxt module
 
@@ -43,7 +43,7 @@ export default defineNuxtConfig({
 clicks: 5
 ---
 
-<div class="kicker">10 · SSR 與 Nuxt</div>
+<div class="kicker">09 · SSR 與 Nuxt</div>
 
 <div class="mt-6">
 

@@ -111,10 +111,6 @@ src: ./pages/07-v5-overview.md
 ---
 
 ---
-src: ./pages/07-v5-compare.md
----
-
----
 src: ./pages/09-vfm-details.md
 ---
 

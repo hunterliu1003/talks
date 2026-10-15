@@ -2,7 +2,7 @@
 clicks: 7
 ---
 
-<div class="kicker">08 · v5 概覽</div>
+<div class="kicker normal-case">07 · vue-use-template</div>
 
 # 動態渲染 Modal 元件的機制如何運作
 

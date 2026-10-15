@@ -135,5 +135,5 @@ const { open, close } = useModal({
 
 [click] 再來 slots 也是：slot 裡放的巢狀 template，slot 可以用 defineTemplate 包起來，提供較好的型別檢查。
 
-[click] 寫法自由了，型別沒有跟著變鬆。型別檢查主要是靠 vue-component-type-helpers 把元件的 props、events、slots 讀取出來：title 是必填的字串，你給數字，TS型別檢查都會報錯；同理 events 和 slots 也是，巢狀 template 要用 defineTemplate 包一層才有檢查，這是 TypeScript 對巢狀 callback 推導的限制，目前還沒有更好的解決辦法。型別講完，接下來用一段動畫看動態渲染的機制實際上怎麼運作。
+[click] 寫法自由了，型別沒有跟著變鬆。型別檢查主要是靠 vue-component-type-helpers 把元件的 props、events、slots 讀取出來：title 是必填的字串，你給數字，TS型別檢查都會報錯；同理 events 和 slots 也是，巢狀 template 要用 defineTemplate 包一層才有檢查，這是 TypeScript 對巢狀 callback 推導的限制，目前還沒有更好的解決辦法。
 -->

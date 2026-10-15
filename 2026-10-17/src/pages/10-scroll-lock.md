@@ -2,7 +2,7 @@
 clicks: 6
 ---
 
-<div class="kicker normal-case">09 · 原生 dialog 行為比較</div>
+<div class="kicker normal-case">08 · 原生 dialog 行為比較</div>
 
 # 捲動鎖與焦點
 
