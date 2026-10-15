@@ -6,14 +6,13 @@ class: section-slide
 
 # tsdown
 
-<div class="desc">先看打包函式庫的痛點，再跟著一個套件從設定檔走到 npm publish。</div>
-
 <div class="chapter-ghost">1</div>
 
 <!--
-今天分成兩段。前半段講 tsdown：先看打包函式庫有哪些痛點，認識 tsdown 怎麼回應，再跟著一個套件從設定檔一路走到 npm publish。後半段用 Vue Final Modal v5 當實戰案例。
+今天的分享主要分成兩段：
 
-開始之前，想簡單調查一下現場有沒有用過 tsdown 的人？有沒有用過 Vue Final Modal 的人？
+1. 前半段介紹 tsdown
+2. 後半段用 Vue Final Modal 當實戰案例
 -->
 
 ---

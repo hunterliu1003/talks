@@ -57,5 +57,5 @@ class: intro-slide
 </div>
 
 <!--
-先簡單自我介紹一下。我是 Hunter，目前在 Colorful Casting 工作。開源這塊，我是 Vue Final Modal 的作者，這個套件現在每個月大概有三十萬次下載。社群方面我也長期參與 Vue.js Taiwan，曾經在 MOPCON、Laravel x Vue Conf 這些場合分享。
+正式開始前，先簡單自我介紹一下。我是 Hunter，目前在一家日商當 Tech Lead。我是 Vue Final Modal 的作者。社群方面我參與 Vue.js Taiwan 管理者，幫忙打打雜，也曾經在寫過鐵人賽，和在 MOPCON、Laravel x Vue Conf 等等場合做技術分享。可以透過這個帳號在各個社群找到我。
 -->

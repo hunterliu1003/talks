@@ -31,13 +31,12 @@ export default defineNuxtConfig({
 
 </div>
 
-
 <!--
-鎖講完了，最後一章：SSR 與 Nuxt。vut 這次花最多力氣的地方是 SSR：每一次 server render 各自隔離，A 使用者的 modal 絕對不會出現在 B 使用者的頁面上，連 polyfill 了 window 的伺服器環境都有 markServer 可以手動標記。這些細節在文件裡，這裡先講 Nuxt。
+鎖講完了，最後一章：SSR 與 Nuxt。v5 這次花最多力氣的地方是 SSR，徹底的解決 hydration error, memory leak, 每個 server request 各自獨立等等問題，確保 A 使用者的 modal 絕對不會出現在 B 使用者的頁面上，細節都放在新的文件裡。
 
 [click] v4 的時候，Nuxt module 是另一個獨立的套件 @vue-final-modal/nuxt，要另外安裝。
 
-[click] v5 把它併回主套件，modules 裡寫 vue-final-modal/nuxt 就好。為什麼要併？那個獨立套件的最後一版 1.0.3 停在 2023 年 12 月，主套件後來的版本它都沒跟上；併回來之後兩邊永遠是同一個版本。這就是 tsdown 設定的第三組 build 產出來的東西，套件的 exports 裡 ./nuxt 指向 dist/nuxt/module.mjs，等一下會看它怎麼打包。module 會自動匯入 useModal、useVfm、defineModal、defineTemplate 這些 composables，還有 VueFinalModal 跟 ModalsContainer 兩個元件，不用再 import；style.css 也由它自動加進去。如果跟別的 module 撞名，可以把 autoImports 關掉。裝好之後，modal 在 SSR 下怎麼開，下一頁用動畫看兩條路。
+[click] v5 透過 tsdown 簡易的設定，把 Nuxt module 併回主套件，modules 裡寫 vue-final-modal/nuxt 就好。module 會自動匯入 vue-final-modal exports 出去的東西。
 -->
 
 ---
