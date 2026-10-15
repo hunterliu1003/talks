@@ -22,22 +22,30 @@ class: section-slide
 
 # 打包函式庫的工具，已經不少了
 
-<div v-click="1" class="flex flex-wrap gap-4 mt-12">
-  <span class="tag tag-neutral text-xl! px-5! py-2!">Rollup</span>
-  <span class="tag tag-neutral text-xl! px-5! py-2!">esbuild</span>
-  <span class="tag tag-neutral text-xl! px-5! py-2!">tsup</span>
-  <span class="tag tag-neutral text-xl! px-5! py-2!">unbuild</span>
-  <span class="tag tag-neutral text-xl! px-5! py-2!">Rslib</span>
+<div v-click="1" class="flex flex-wrap items-center gap-4 mt-10">
+  <span class="eyebrow w-28 shrink-0">VFM 用過的</span>
+  <span class="tag text-xl! px-5! py-2!">webpack</span>
+  <span class="tag text-xl! px-5! py-2!">Rollup</span>
+  <span class="tag text-xl! px-5! py-2!">Vite</span>
 </div>
 
-<div v-click="2" class="mt-16 text-4xl font-semibold tracking-tight">那為什麼還要 <span class="text-gradient">tsdown</span>？</div>
+<div v-click="2" class="flex flex-wrap items-center gap-4 mt-5">
+  <span class="eyebrow w-28 shrink-0">沒用過的</span>
+  <span class="tag tag-neutral text-xl! px-5! py-2! opacity-70">esbuild</span>
+  <span class="tag tag-neutral text-xl! px-5! py-2! opacity-70">tsup</span>
+  <span class="tag tag-neutral text-xl! px-5! py-2! opacity-70">unbuild</span>
+</div>
+
+<div v-click="3" class="mt-12 text-4xl font-semibold tracking-tight">那為什麼還要 <span class="text-gradient">tsdown</span>？</div>
 
 <!--
-先問一個問題。打包函式庫這件事，工具早就不缺了。
+先問大家一個問題：打包函式庫的工具，是不是已經夠多了？
 
-[click] Rollup 是老牌，我自己的套件從 2020 年一路用到 v4，Vite 的 library mode 底層也是它；esbuild 是 Go 寫的，主打快；tsup 是包著 esbuild 的函式庫打包器；unbuild 是 UnJS 的，Rslib 是 Rspack 家的。後面這幾個我自己沒在套件上用過，用過的是 Vue CLI 時代的 webpack、Rollup，還有 Vite。你現在手上的專案，八成就是其中一個。
+[click] 這三個是我在 Vue Final Modal 上真的用過的。最早是 Vue CLI，底下是 webpack；後來換 Rollup，從 v0 用到 v3；v4 換成 Vite 的 library mode，底層其實還是 Rollup。
 
-[click] 那為什麼還要再做一個 tsdown？要回答這個問題，得先看這些工具沒解決的痛點。
+[click] 這三個我沒在自己的套件上用過，只在別人的專案裡看過：esbuild 是 Go 寫的，主打快；tsup 包著 esbuild；unbuild 是 UnJS 的。它們好不好用，今天我不評論。大家手上的專案，八成就是這六個裡的其中一個。
+
+[click] 那為什麼還要再來一個 tsdown？我自己的答案是：同一個套件換了三次工具，每一次都在重堆設定。先看這些工具沒解決的痛點是什麼。
 -->
 
 ---
@@ -91,5 +99,5 @@ class: section-slide
 
 [click] 第三，多格式容易出錯。要同時輸出 ESM、CJS、UMD，Rollup 不是 output 寫好幾段，就是抽一層共用設定，改一個地方很容易漏掉另一個。VFM v3 的 Rollup 設定就是 UMD 跟 ESM 各寫一段。
 
-[click] 第四，效能。webpack 跟 Rollup 都是 JavaScript 寫的，專案一大就慢，天生比不過 Go 或 Rust 寫的工具。tsdown 就是為了這四件事而生的，下一頁看它怎麼回應。
+[click] 第四，效能。這點我先說清楚：VFM 很小，build 慢不是我遇過的痛。但 webpack 跟 Rollup 都是 JavaScript 寫的，專案一大就慢，這是社群的共識，也是 esbuild 跟後來一堆 Rust 打包器出現的原因。tsdown 就是衝著這四件事來的，下一頁看它怎麼回應。
 -->

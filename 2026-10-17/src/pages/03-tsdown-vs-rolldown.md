@@ -33,15 +33,15 @@
 
 
 <!--
-大家常把 tsdown 跟 Rolldown 混在一起，我們用一張圖分清楚。
+tsdown 跟 Rolldown 的關係，我一開始也搞不清楚，翻了原始碼才分清楚，用一張圖講。
 
-[click] 核心是 Rolldown。它是 Rust 寫的打包器，API 相容 Rollup，功能上對齊 esbuild，是一個通用的打包核心。
+[click] 核心是 Rolldown。Rust 寫的打包器，API 相容 Rollup，功能對齊 esbuild，它只管打包本身。
 
-[click] 從它長出來的，應用程式這一側是 Vite。從 Vite 8 開始，打包就是由 Rolldown 負責。
+[click] 從它長出來的，應用程式這一側是 Vite。Vite 8 開始，打包就是 Rolldown 在做。
 
-[click] 函式庫這一側就是 tsdown。它處理的是函式庫才在意的事：型別宣告、輸出格式、package.json 的 exports，還有發布前的檢查。
+[click] 函式庫這一側是 tsdown。它管的是函式庫才會碰到的事：型別宣告、輸出格式、package.json 的 exports，還有發布前的檢查。
 
-[click] 最後是 Vite+，VoidZero 把這兩條路裝進同一個 vp 指令：vp build 用 Vite 打包應用程式，vp pack 用 tsdown 打包函式庫。所以今天學 tsdown，不是學一個小眾工具，而是在學 Vite 生態打包函式庫的方式。
+[click] 再上去是 Vite+。VoidZero 把兩條路裝進同一個 vp 指令：vp build 用 Vite 打應用程式，vp pack 用 tsdown 打函式庫。如果大家用 vp pack 打過函式庫，底層就是 tsdown。所以今天學的不是一個小眾工具，是 Vite 生態打包函式庫的方式。
 -->
 
 ---
@@ -69,15 +69,15 @@
 </div>
 
 <!--
-再具體一點，兩者的分工可以用一句話講：Rolldown 給能力，tsdown 給預設值。
+再具體一點，兩邊的分工一句話：Rolldown 給能力，tsdown 給預設值。這五列對應的就是等一下的六步。
 
-[click] 外部化：Rolldown 提供 external 這個選項，但要外部化哪些套件，是 tsdown 讀 package.json 的依賴自動幫你填。
+[click] 外部化。Rolldown 有 external 選項，但要外部化哪些套件，是 tsdown 讀 package.json 的依賴幫你填，VFM 的設定一個字都沒寫。
 
-[click] 輸出格式：Rolldown 有 format 選項，tsdown 決定的是一個 format 跑一次 build，副檔名依 package.json 的 type 來決定。
+[click] 輸出格式。Rolldown 有 format，tsdown 決定一個 format 跑一次 build，副檔名照 package.json 的 type 決定。
 
-[click] 型別宣告：Rolldown 本身不產生型別，它提供的是 plugin 介面，tsdown 用 rolldown-plugin-dts 這個 plugin 產生 d.ts 跟 d.cts。
+[click] 型別宣告。Rolldown 本身不產型別，只提供 plugin 介面；tsdown 用 rolldown-plugin-dts 產 d.ts 跟 d.cts。
 
-[click] 發布前：這部分 Rolldown 完全不負責。tsdown 則是在你開啟對應選項之後，幫你把 exports 寫回 package.json，再跑 publint 跟 attw 檢查。
+[click] 發布前。Rolldown 完全不管。tsdown 在你開了選項之後，把 exports 寫回 package.json，再跑 publint 跟 attw。
 
-[click] 最後要講清楚它的邊界：tsdown 負責的是產出可以發布的產物。版本號、changelog、npm publish，這些不在它的範圍，還是要交給你的發布流程。
+[click] 最後是邊界：tsdown 負責的是產出可以發布的東西。版本號、changelog、npm publish 本身，不在它的範圍，還是你自己的流程。接下來就跟著 VFM 走六步。
 -->

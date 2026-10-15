@@ -24,17 +24,17 @@
 </div>
 
 <!--
-tsdown 的定位很明確：專為現代函式庫而生，它的標語是 The Elegant Library Bundler。剛才的四個痛點，它一個一個回應。
+tsdown 把自己定位成專為函式庫設計的打包器，標語是 The Elegant Library Bundler。標語歸標語，我拿 VFM 的四個痛點去對它，看它到底回應了什麼。
 
-[click] 設定繁瑣，它用極簡設定回應：預設值是照函式庫的需求調好的，大部分專案連設定檔都不用寫。
+[click] 設定繁瑣。它的預設值是照函式庫的需求調好的，VFM 主套件那一組設定從 v4 的 56 行變成 9 行，後半段會攤開來看。
 
-[click] TS 型別宣告複雜，它自動產生 d.ts；依賴也自動分析，哪些要打進去、哪些留給使用者自己裝，不用你手動列。
+[click] 型別宣告。VFM 的 dist 自己多出 index.d.ts 跟 index.d.cts，連 .vue 檔的型別都有，我設定裡只寫了一行；依賴也是它讀 package.json 自己判斷哪些要外部化，不用我列。
 
-[click] 多格式易出錯，它一套設定就一致輸出 ESM 跟 CJS，不用抽共用設定。
+[click] 多格式。ESM 跟 CJS 一份設定一次 build，不用再抽共用設定。
 
-[click] 效能，它的底層是 Rust 寫的 Rolldown。等一下會把它跟 Rolldown 的關係分清楚。
+[click] 效能。底層是 Rust 寫的 Rolldown。這點 VFM 感受不深，因為專案小；它跟 Rolldown 的關係等一下分清楚。
 
-[click] 第五點，也是今天的主線：它連發布前的事都管。package.json 的 exports 它幫你寫，publint 跟 attw 它幫你跑。等一下就跟著這條線，從設定檔一路走到 npm publish。
+[click] 第五點是今天的主線：它連發布前的事都管。package.json 的 exports 它幫你寫，publint 跟 attw 它幫你跑。這兩個工具是什麼，我做 v5 之前也不知道，等一下跟著 VFM 從設定檔一路走到 npm publish，就會碰到。
 -->
 
 ---
@@ -86,21 +86,21 @@ tsdown 的定位很明確：專為現代函式庫而生，它的標語是 The El
 <div v-click class="mt-4 text-xl muted">還有更多：JSON、WASM、source map、watch…，今天只挑核心的講</div>
 
 <!--
-那 tsdown 具體能做什麼？
+那它具體能做什麼？六張卡，我照 VFM 用到的講。
 
-[click] Node.js 跟 CommonJS 它都處理：程式碼裡的 require 它看得懂，也能直接輸出 CJS 格式給還沒轉 ESM 的使用者。
+[click] Node.js 跟 CommonJS。VFM 的 dist 有 index.cjs，給還沒轉 ESM 的專案用；Nuxt module 那一組 build 的 platform 設成 node。程式碼裡的 require 它也看得懂，這部分 VFM 用不到。
 
-[click] Vue 元件。Node 跟瀏覽器都不認識 .vue 檔，tsdown 可以把 SFC 編譯成 JS，型別宣告也一起產出。等一下 VFM 就是這個情境。
+[click] Vue 元件。Node 跟瀏覽器都不認識 .vue 檔，VFM 整個套件都是 SFC，所以這張卡是我最需要的：SFC 編成 JS，型別一起出來。
 
-[click] 型別宣告。它會把 TypeScript 的型別打包成一份 d.ts，方便發布，也不用再跑 tsc。
+[click] 型別宣告。打包成一份 d.ts，不用另外跑 vue-tsc；v4 的 build 指令要跑兩次，v5 一次。
 
-[click] 壓縮。minify 跟 tree shaking 都內建，要給瀏覽器用、在意體積的函式庫特別需要。
+[click] 壓縮。VFM 只有給 CDN 的 UMD 開 minify，因為 CDN 的使用者沒有自己的 build step；ESM 跟 CJS 不壓，交給使用者的打包工具。
 
-[click] 打包。給瀏覽器用的當然要打成一包；給 Node 用的，有些人覺得不需要打包，所以也有 bundleless 模式，一個檔案對一個檔案。
+[click] 打包。給瀏覽器用的當然打成一包。它也有 bundleless 模式，一個檔案對一個檔案，給 Node 用的套件有人偏好這樣，VFM 用不到，一句帶過。
 
-[click] 最重要的是 plugin。Rolldown 的 plugin 全部能用，Rollup 的大多數能用，unplugin 當然也能用，所以原本的生態幾乎都能沿用。
+[click] plugin。Rolldown 的 plugin 全部能用，Rollup 的大多數能用，unplugin 當然也能用。VFM 只掛了一個：unplugin-vue 的 rolldown 版。
 
-[click] 還有更多功能，今天不一一展開，等一下只挑核心的講。
+[click] 還有更多功能，今天不展開，只挑 VFM 碰到的講。
 -->
 
 ---
@@ -149,13 +149,13 @@ pnpm tsdown
 </div>
 
 <!--
-上手非常簡單。新專案一行指令建立範本，既有專案直接裝成 devDependency，打包也只要一行，就會在 dist 底下得到 index.mjs。這個 .mjs 的副檔名先記著，等一下會回來講。
+怎麼開始？我重啟 v5 的第一天就是這三行：新專案一行指令建範本，既有專案直接裝成 devDependency，打包一行，dist 底下就有 index.mjs。這個 .mjs 先記著，等一下會回來講它為什麼不是 .js。
 
-[click] npm、pnpm、Yarn、Bun 都支援。
+[click] npm、pnpm、Yarn、Bun 都能裝。
 
-[click] Node.js 要 22.18、24.11 或 26 以上，奇數版不支援。Deno 跟 Bun 的執行環境還是實驗性的。
+[click] Node 要 22.18、24.11 或 26 以上，奇數版不支援。Deno 跟 Bun 當執行環境還是實驗性的，我沒試過。
 
-[click] 沒有設定檔也能跑。有設定檔的話，CLI 旗標會蓋過設定檔，例如設定檔開了 dts，臨時想跳過就加 --no-dts。我實測過，產物裡就只剩 index.mjs。
+[click] 沒有設定檔也能跑。有設定檔的話，CLI 旗標會蓋過設定檔，例如設定檔開了 dts，臨時想跳過就加 --no-dts。這個我實測過，產物裡就只剩 index.mjs。
 
-[click] 常用的旗標都有：format、watch、minify。預設值已經調好了，大部分需求不用再加。
+[click] 常用的旗標 format、watch、minify 都有。預設值已經調好了，大部分情況不用再加。
 -->

@@ -49,7 +49,7 @@ const bundles = await Promise.all(
 <!--
 接下來跟著 VFM 走六步，從設定檔一路走到 npm publish。每一步都先看它替你做了什麼，再看原始碼怎麼做到的，右邊會點亮正在讀的檔案。第一步，格式。VFM 的設定只有一行 format，產物是四個檔：index.js、index.cjs，加上各自的型別。你可能沒注意的是：onSuccess、copy 這類副作用只跑一次，dist 也只清一次。這是怎麼做到的？
 
-[click] options.ts 把你寫的 format 轉成陣列，沒寫就預設 esm，然後對每一個 format 各產生一份獨立的設定。所以我們平常說的 dual format，在 tsdown 裡其實是兩次獨立的 build。
+[click] options.ts 把你寫的 format 轉成陣列，沒寫就預設 esm，然後對每一個 format 各產生一份獨立的設定。所以平常說的 dual format，在 tsdown 裡其實是兩次獨立的 build。
 
 [click] 細節在這裡：copy 跟 onSuccess 只交給第一份，否則你的 onSuccess 會因為 ESM 跟 CJS 各跑一次。
 
@@ -366,7 +366,7 @@ node16 (from CJS)  🟢 (CJS)
 </div>
 
 <!--
-第六步，發布前檢查。先說兩個工具，大部分人沒聽過很正常，我也是做 v5 才認真用。兩個都是獨立的套件，裝好之後設定裡開起來，tsdown 會在對的時間點替你跑。
+第六步，發布前檢查。這兩個工具是什麼，我做 v5 之前根本不知道，我猜大部分的人也沒聽過。兩個都是獨立的套件，裝好之後設定裡開起來，tsdown 會在對的時間點替你跑。
 
 [click] publint 是 Vite 團隊的 bluwy 寫的。它拿 npm pack 出來的那一包去對 package.json：main、types、exports 指到的檔案在不在、ESM 跟 CJS 有沒有擺錯格式、副檔名對不對。
 
