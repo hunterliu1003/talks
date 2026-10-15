@@ -225,9 +225,9 @@ export default defineConfig({
 </div>
 
 <!--
-v5 不只 VFM 用 tsdown，拆出來的 vue-use-template 跟 scroll-lock 也是，三個套件住在同一個 monorepo。根目錄的 tsdown.config.ts 只有一行：workspace 指到 packages 底下所有東西，就是第 4 章原始碼講的那個功能。
+v5 不只 VFM 用 tsdown，拆出來的 vue-use-template 跟 scroll-lock 也是，三個套件放在同一個 monorepo。根目錄的 tsdown.config.ts 只有一行，workspace 指到 packages 底下。
 
-[click] 它做的事：掃 packages 底下每個套件，讀各自的 tsdown.config.ts，各自 build，而且平行跑。每個套件照自己的需求寫設定，scroll-lock 幾行就夠，VFM 是三組 build，根目錄完全不用知道這些差異。
+[click] 它會掃 packages 底下每個套件，讀各自的 tsdown.config.ts，各自 build，而且是平行跑的。每個套件照自己的需求寫設定就好。
 
-[click] 一個實際踩到的點：平行跑沒有先後順序，而 VFM 給 CDN 的 UMD 要把 vue-use-template 跟 scroll-lock 的 dist 打進去，所以它們得先 build 好。做法是用 -F 過濾，分兩次跑：先 build 那兩個，再 build VFM。打包講完了，接下來回到 VFM v5 本身，看它拆成哪兩層。
+[click] 這邊有一個我實際踩到的點：平行跑就沒有先後順序，但 VFM 給 CDN 的 UMD 要把 vue-use-template 跟 scroll-lock 的 dist 打進去，所以它們兩個要先 build 好。解法是用 -F 過濾，分兩次跑：先 build 那兩個，再 build VFM。
 -->

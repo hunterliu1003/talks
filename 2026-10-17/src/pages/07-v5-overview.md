@@ -13,7 +13,9 @@ clicks: 4
 </div>
 
 <!--
-打包講完，回到架構，用一段動畫看 v5 的 modal 怎麼開。左邊是你寫的程式：useModal 給一個 component，回傳 open；右邊是 App.vue 放一次的 ModalsContainer，所有用 useModal 開的 modal 實際上都渲染在它裡面。useModal 負責控制元件開關的生命週期，底下由 vue-use-template 做動態渲染。
+打包講完，接下來回到 VFM 5 本身，看看 modal 是怎麼被打開的。
+
+左邊是你寫的程式：useModal 給一個 component，回傳 open；右邊是 App.vue 放一次的 ModalsContainer，所有用 useModal 開的 modal 實際上都渲染在它裡面。useModal 負責控制元件開關的生命週期，底下由 vue-use-template 做動態渲染。
 
 [click] component 先給 VueFinalModal，呼叫 open：ModalsContainer 的清單被 push 一筆，畫面就渲染出一個有遮罩的 modal。這是 v4 就有的用法，headless，什麼都能客製。
 
