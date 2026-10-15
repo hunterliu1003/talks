@@ -117,7 +117,7 @@ class: cover
 
 <div class="divider-accent mx-auto"></div>
 
-<div class="text-2xl text-[var(--fg-2)] flex items-center gap-2">投影片稍後將在 <carbon-logo-github class="text-xl" /><a href="https://github.com/hunterliu1003/talks" target="_blank" rel="noopener" class="no-underline border-none! text-[var(--fg)] font-medium">github.com/hunterliu1003/talks</a> 開放</div>
+<div class="text-2xl text-[var(--fg-2)] flex items-center gap-2">投影片稍後將在 <carbon-link class="text-xl" /><a href="https://talks.hunterliu.tw" target="_blank" rel="noopener" class="no-underline border-none! text-[var(--fg)] font-medium">talks.hunterliu.tw</a> 開放</div>
 
 <div class="text-base text-[var(--fg-3)] mt-8">💖 感謝 <a href="https://github.com/antfu" target="_blank" rel="noopener" class="no-underline border-none! text-[var(--fg-2)]">Anthony Fu</a>，投影片由 <img src="/slidev.svg" alt="Slidev" class="inline-block h-4 align-[-3px] mx-1" /><a href="https://sli.dev" target="_blank" rel="noopener" class="no-underline border-none! text-[var(--fg-2)]">Slidev</a> 強力驅動！</div>
 
@@ -133,5 +133,5 @@ class: cover
 </div>
 
 <!--
-以上就是我今天的分享，感謝大家。投影片稍後會放在 github.com/hunterliu1003/talks。這份投影片是用 Anthony Fu 的 Slidev 做的，前半段 tsdown 的介紹順序參考 sxzz 在深圳 VueConf 的演講和簡報，也謝謝他們。接下來的時間開放提問。
+以上就是我今天的分享，感謝大家。投影片稍後會放在 talks.hunterliu.tw。這份投影片是用 Anthony Fu 的 Slidev 做的，前半段 tsdown 的介紹順序參考 sxzz 在深圳 VueConf 的演講和簡報，也謝謝他們。接下來的時間開放提問。
 -->
