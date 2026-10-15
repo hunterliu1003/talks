@@ -170,13 +170,13 @@ export default defineConfig({
 </div>
 
 <!--
-v5 的 tsdown 設定整份 58 行，是三組 build，左下角的 dist 會跟著亮出每一組產出的檔案。第一組是主套件的 ESM 跟 CJS，攤平只有 9 行：macros 的 plugin 不需要了，Vue 3.3 之後 defineOptions 是原生的；external 整段刪掉，tsdown 讀 package.json 自己決定；build.lib 消失，因為預設就是為函式庫設計的，entry 一行、format 一行，副檔名跟路徑它自己決定。型別一行：dts 設定 vue 為 true，tsdown 改用 vue-tsc 處理 .vue 檔的型別，產出 index.d.ts 給 ESM、index.d.cts 給 CJS。
+這是 v5 的 tsdown 設定檔，整份 58 行，分成三組 build，左下角的 dist 會跟著亮出每一組產出的檔案。先看第一組，主套件的 ESM 跟 CJS，只有 9 行。跟 v4 的 Vite 設定比，少掉的東西比留下的多：VueMacros 不用了，因為 Vue 3.3 之後 defineOptions 是原生的；external 整段刪掉，tsdown 會讀 package.json 自己判斷；build.lib 也不用寫，因為它本來就是為函式庫設計的，entry 一行、format 一行就好。型別只要一行，dts 的 vue 設成 true，.vue 檔的型別它會用 vue-tsc 處理，產出 index.d.ts 給 ESM、index.d.cts 給 CJS。
 
-[click] CSS 零行。設定檔裡一行都沒寫，只要專案裝了 @tsdown/css，tsdown 偵測到就自動載入它處理 SFC 的 style，就是第 4 章看過的那個 plugin 順序，產出 dist/style.css，package.json 的 exports 自動多一條 ./style.css。使用者的用法跟 v4 一樣要自己 import，用 Nuxt module 的話會自動加進去。
+[click] CSS 的部分，設定檔裡一行都沒寫。只要專案裝了 @tsdown/css，tsdown 偵測到就會自動掛上，把 SFC 的 style 抽成 dist/style.css。使用者的用法跟 v4 一樣要自己 import style.css，用 Nuxt module 的話會自動幫你加進去。
 
-[click] 第二組是 UMD，只給 CDN 用。deps.alwaysBundle 把 vue-use-template 跟 scroll-lock 打包進去，因為這兩個套件沒有提供會定義全域變數的瀏覽器版本，CDN 使用者沒辦法自己用 script 標籤載入。minify 設成 true，因為 CDN 使用者沒有自己的 build step，下載到什麼就跑什麼；ESM 跟 CJS 不壓，交給使用者的打包工具。outputOptions 是 UMD 的全域名稱跟 globals 對應表。誰會拿到它？只有 CDN：package.json 的 unpkg 跟 jsdelivr 欄位指向它，exports 跟 main 都不指向它，用 npm 安裝的人完全碰不到這個檔案。
+[click] 第二組是 UMD，只給 CDN 用。這裡用 deps.alwaysBundle 把 vue-use-template 跟 scroll-lock 一起打包進去，因為這兩個套件沒有瀏覽器可以直接用 script 標籤載入的版本。minify 開著，因為 CDN 的使用者沒有自己的 build step，下載到什麼就跑什麼；ESM 跟 CJS 就不壓，交給使用者自己的打包工具。這個檔案只有 package.json 的 unpkg 跟 jsdelivr 欄位指向它，用 npm 安裝的人完全碰不到。
 
-[click] 第三組是 Nuxt module，三個入口：module 本身、跑在瀏覽器的 runtime plugin、跑在伺服器的 server plugin，輸出路徑直接寫在 key 裡，產到 dist/nuxt 底下。platform 是 node，因為 module 是在 Nuxt 的 build 階段跑的。deps.neverBundle 把 @nuxt、nuxt 跟 # 開頭的 import 都外部化，這些由 Nuxt 提供；最特別的是 vue-final-modal 自己也要外部化，runtime plugin 必須 import 套件本身而不是原始碼，這樣 app 跟 plugin 拿到的才是同一個 vfm 實例，否則兩邊各拿一份，狀態就對不起來。最後 clean 設成 false，因為這組跟第一組都寫進同一個 dist，清空的工作交給 build script 在最前面做一次。三組 build 加上 CSS，就是左下角這一整個 dist。
+[click] 第三組是 Nuxt module，三個入口：module 本身、跑在瀏覽器的 runtime plugin、跑在伺服器的 server plugin，一起產到 dist/nuxt 底下。platform 設成 node，因為 module 是在 Nuxt build 的時候跑的。deps.neverBundle 把 @nuxt、nuxt 跟 # 開頭的 import 都外部化，這些由 Nuxt 提供；比較特別的是 vue-final-modal 自己也要外部化，因為 runtime plugin 必須 import 套件本身，app 跟 plugin 拿到的才會是同一個 vfm 實例，不然狀態會對不起來。最後 clean 設成 false，因為這組跟第一組都寫進同一個 dist，清空的事交給 build script 在最前面做一次就好。三組 build 加上 CSS，就是左下角這一整個 dist。
 -->
 
 ---
