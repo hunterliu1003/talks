@@ -73,20 +73,14 @@ export default defineConfig({
 
 </div>
 
-<div v-click="3" class="mt-4">
-
-> 設定越堆越多，打包工具本身變成<span v-mark.underline.delay400="{ at: 3, color: '#00DC82', seed: 114 }">技術債</span>。
-
-</div>
-
 <!--
-後半段先用一頁把 v5 之前的 VFM 走一遍：左邊是三代打包工具，右邊是當時的設定檔。2020 年 6 月的 v0 給 Vue 2，直接拿 Vue CLI 的 target lib 來 build。函式庫的 build 就是一行旗標，webpack 的設定全部藏在 CLI 裡面，產出只有 UMD，main 跟 unpkg 都指向同一個 min.js，沒有 ESM、沒有型別，外部化也管不到。
+先從打包開始。不過在看 v5 的設定檔之前，先回頭看一下 VFM 之前換過哪些打包工具。
 
-[click] 同年 8 月的 v0.10 換成 Rollup，一路用到 2021 年 3 月的 v3，中間 Vue 3 出來，v1 給 Vue 3、v2 給 Vue 2，同一套元件分兩條線維護，常常同一天要發兩個版號。設定 46 行，plugin 一個一個接：解析模組、編譯 SFC、清理、壓縮、PostCSS、commonjs、Babel，UMD 跟 ESM 各寫一段，external 自己列。專案還是 JavaScript，型別宣告是我手寫的 d.ts，實作一改，型別就要記得跟著改。
+2020 年 6 月的第一版是給 Vue 2 的，從來沒打包過元件庫的我，當時我直接用 Vue CLI 的 library mode，webpack 設定全部交給 CLI。方便是方便，但產出只有 UMD，沒有 ESM。
 
-[click] 2023 年的 v4 改寫成 TypeScript，打包換成 Vite 的 library mode，56 行。plugin 變少了，但疊了三層：VueMacros 包著 Vue、DefineOptions、還有產生型別的 vite-plugin-dts；build.lib 要自己寫，external 跟 globals 手寫維護。型別終於自動產生了，代價是 build 指令要另外跑一次 vue-tsc。這是一次不相容的重寫，遷移指南第一句就說請把 4.x 當成另一個函式庫。2024 年 1 月發了 v5 的 beta，然後專案停了快兩年。
+[click] 同年 8 月換成 Rollup，一路用到 2021 年的 v3。中間 Vue 3 出來，同一套元件要同時維護 Vue 2 跟 Vue 3 兩條線，一個改動要發兩個版本。Rollup 的 plugin 一個一個自己接。那時候專案還是 JavaScript，支援 TS 型別的部分我沒記錯的話，第一版還是 Alex 幫我寫的 d.ts，問題就是 d.ts 常常和實際的 API 不同步。
 
-[click] 回頭看，每換一次打包工具，設定就重新堆一次：plugin 清單、型別怎麼產、CSS 怎麼出、哪些依賴外部化。設定越堆越多，打包工具本身就變成了技術債。這個月重新啟動的 v5，要做的第一件事就是把這筆債還掉：換成 tsdown。
+[click] 2023 年改用 TypeScript 重寫了 v4，打包改用 Vite 的 library mode。搭配 VueMacros、DefineOptions、dts 等等 plugins。我覺得是 VueFinalModal 變得真正好用且穩定的版本。然後 2024 年 1 月發了 v5 的第一個 beta 版本後，就沒有然後了。但是暫停維護的這兩年多，也讓我迎來了 tsdown，接下來看看它怎麼優雅的解決 v5 打包的問題！
 -->
 
 ---
