@@ -42,7 +42,7 @@ const questions: Question[] = [
   },
   {
     short: '短暫、單一、用完就回主頁？',
-    criteria: ['使用者常在功能之間來回切換', '使用者與功能的互動很單一', '內容是暫時的', '之後注意力要回到主頁面', '內容簡短', '內容位在 sitemap 的最深層', '有其他充分的理由'],
+    criteria: ['使用者常在功能之間來回切換', '使用者與功能的互動很單一', '內容是暫時的', '之後注意力要回到主頁面', '內容簡短', '有其他充分的理由'],
     exitOn: 'No',
     exit: { kind: 'page', label: 'Page' },
   },
@@ -56,7 +56,7 @@ const questions: Question[] = [
     short: '只是告知結果？',
     criteria: ['成功訊息：「已儲存」', '按鈕直接變成「已儲存」'],
     exitOn: 'Yes',
-    exit: { kind: 'nonmodal', label: 'Toast / Inline' },
+    exit: { kind: 'nonmodal', label: 'Toast' },
   },
   {
     short: '要收集資訊或確認操作？',

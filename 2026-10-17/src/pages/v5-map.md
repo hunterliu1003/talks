@@ -21,4 +21,3 @@ class: text-center
 <!--
 v5 改了這八件事，這一頁是下半場的地圖。打包換成 tsdown；核心改建立在 vue-use-template 上；元件行為逐項對照原生 dialog，原生負責邊界，VFM 負責體驗；捲動鎖定換成新寫的 scroll-lock。SSR 這次正式支援：v4 只是裝得進 Nuxt 專案，v5 的 modal 可以在 server 端 render、每個 request 各自隔離，解掉的老問題留到第 10 章講。Nuxt module 併入主套件，不再是另一個套件；API 跟 v4 相容；還有測試：v4 只有 6 個單元測試、沒有 Cypress，v5 有 206 個單元測試加 22 個 Cypress 元件測試。接下來一格一格看。先講打包，但打包之前，先回頭看 VFM 之前換過哪些工具。
 -->
-
