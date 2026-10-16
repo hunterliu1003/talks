@@ -47,15 +47,15 @@ const bundles = await Promise.all(
 </div>
 
 <!--
-接下來跟著 VFM 走六步，從設定檔一路走到 npm publish。每一步都先看它替你做了什麼，再看原始碼怎麼做到的，右邊會點亮正在讀的檔案。第一步，格式。VFM 的設定只有一行 format，產物是四個檔：index.js、index.cjs，加上各自的型別。你可能沒注意的是：onSuccess、copy 這類副作用只跑一次，dist 也只清一次。這是怎麼做到的？
+接下來跟著 VFM 走六步，從設定檔到 npm publish。每一步先看它替你做了什麼，再看原始碼，右邊會點亮正在讀的檔案。第一步，格式。VFM 只寫了一行 format，產物是四個檔：index.js、index.cjs，加上各自的型別。
 
-[click] options.ts 把你寫的 format 轉成陣列，沒寫就預設 esm，然後對每一個 format 各產生一份獨立的設定。所以平常說的 dual format，在 tsdown 裡其實是兩次獨立的 build。
+[click] options.ts 把 format 轉成陣列，對每一個 format 各產生一份獨立的設定。平常說的 dual format，在 tsdown 裡是兩次獨立的 build。
 
-[click] 細節在這裡：copy 跟 onSuccess 只交給第一份，否則你的 onSuccess 會因為 ESM 跟 CJS 各跑一次。
+[click] copy 跟 onSuccess 只交給第一份，不然 ESM 跟 CJS 會各跑一次。
 
-[click] 展開後的這幾份設定，在 build.ts 用 Promise.all 平行跑，clean 用一個共用的 promise 包起來，所以 dist 只清一次。VFM 的設定檔寫了三組，第一組同時要 ESM 跟 CJS，展開之後就是四次 build 平行跑。
+[click] 展開後的設定在 build.ts 用 Promise.all 平行跑，clean 只做一次。VFM 三組設定展開就是四次 build 平行跑。
 
-[click] 還記得快速上手那頁的 index.mjs 嗎？副檔名也是它決定的。platform 預設是 node，這時候一律用 .mjs 跟 .cjs，避免跟 package.json 的 type 打架；VFM 是給瀏覽器用的，platform 設成 neutral，再看 package.json 有 type module，所以 ESM 就是 .js，CJS 是 .cjs。你不用自己想副檔名，它照規則替你決定。
+[click] 快速上手那頁的 index.mjs，副檔名也是這裡決定的。platform 預設 node，一律用 .mjs 跟 .cjs；VFM 是給瀏覽器用的，platform 設成 neutral，再看 package.json 有 type module，所以 ESM 是 .js、CJS 是 .cjs。
 -->
 
 ---
@@ -97,13 +97,13 @@ if (dts == null) {
 </div>
 
 <!--
-第二步，型別。VFM 的設定裡沒有寫「要產型別」，但 dist 裡有 index.d.ts 跟 index.d.cts。因為 tsdown 讀你的 package.json 替你決定：有 types 欄位、exports 裡有 types 條件，或 tsconfig 開了 declaration，三個訊號有一個就自動產。
+第二步，型別。VFM 的設定裡沒寫要產型別，dist 裡卻有 index.d.ts 跟 index.d.cts，因為 tsdown 讀 package.json 替你決定。
 
-[click] 原始碼就是這幾行：設定裡沒寫 dts，先看 package.json 有沒有 types 或 typings，exports 裡有沒有 types 條件，有就開。
+[click] 原始碼就這幾行：設定裡沒寫 dts，先看 package.json 有沒有 types，或 exports 裡有沒有 types 條件，有就開。
 
-[click] 都沒有，再讀 tsconfig，看 compilerOptions 的 declaration。你本來就會替 TypeScript 專案設這些，所以 tsdown 不用你再講一次。
+[click] 都沒有，再讀 tsconfig 的 declaration。你本來就會替 TypeScript 專案設這些，不用再講一次。
 
-[click] Vue 元件庫要多一行：dts 的 vue 設成 true。型別預設是用 tsc 產的，tsconfig 開了 isolatedDeclarations 才會改用 Oxc，快很多；但 tsc 跟 Oxc 都看不懂 .vue 檔。開了 vue，它一律走 tsc，再接上 Vue 的語言支援，等於 vue-tsc 那一套，SFC 的 props 跟 emits 才推得出來。產出來的型別跟格式配對：ESM 配 .d.ts，CJS 配 .d.cts，VFM 的 dist 就是這兩份。
+[click] Vue 元件庫要多一行：dts 的 vue 設成 true。因為預設的 tsc 跟 Oxc 都看不懂 .vue 檔，開了 vue 才會接上 Vue 的語言支援，等於 vue-tsc 那一套，SFC 的 props 跟 emits 才推得出來。
 -->
 
 ---
@@ -145,13 +145,13 @@ if (importer && RE_DTS.test(importer) && !id.startsWith('@types/')) {
 </div>
 
 <!--
-第三步，依賴。VFM 的 package.json 裡，vue、focus-trap、@vueuse/core 是 peerDependencies，vue-use-template 跟 scroll-lock 是 dependencies。設定檔一個字都沒提它們，產物裡卻全部變成 import，沒有被打進去。這是 sxzz 去年講過的自動外部化，今天看它怎麼判斷。
+第三步，依賴。VFM 的 package.json 裡，vue、focus-trap、@vueuse/core 是 peerDependencies，vue-use-template 跟 scroll-lock 是 dependencies。設定檔一個字都沒提它們，產物裡卻全部變成 import。這是 sxzz 去年講過的自動外部化，今天看它怎麼判斷。
 
-[click] deps.ts 拿每一個 import 的名字去對 package.json：在 dependencies 或 peerDependencies 裡的就外部化，連 vue/server-renderer 這種子路徑都算。
+[click] deps.ts 拿每一個 import 去對 package.json：在 dependencies 或 peerDependencies 裡的就外部化，連 vue/server-renderer 這種子路徑都算。
 
-[click] 他沒講的是這段：型別宣告也懂 @types。d.ts 裡 import 了某個套件，只要對應的 @types 套件在你的依賴裡，一樣外部化，型別檔不會把別人的型別整包抄進來。
+[click] 他沒講的是這段：型別宣告也懂 @types。d.ts 裡 import 的套件，只要對應的 @types 在你的依賴裡，一樣外部化。
 
-[click] VFM 有一個例外：UMD。CDN 的使用者沒有 build step，vue-use-template 跟 scroll-lock 又沒有自己的 browser build，所以用 alwaysBundle 把這兩個打進去。有開 exports 的套件，tsdown 寫 exports 的時候會順手把打進去的套件跟精確版本寫進 inlinedDependencies，使用者看得到你的套件裡藏了誰；VFM 的 exports 是手寫的，所以沒有這個欄位，等一下第五步會講到。反過來，如果有 node_modules 的東西意外被打進去，它會在 build 時列出來，建議你加 onlyBundle 白名單。
+[click] VFM 有一個例外：UMD。CDN 的使用者沒有 build step，所以用 alwaysBundle 把 vue-use-template 跟 scroll-lock 打進去。反過來，node_modules 的東西意外被打進去，它會在 build 時列出來提醒你。
 -->
 
 ---
@@ -186,13 +186,13 @@ plugins.push(...cssPostPlugins) // 收 CSS，排最後
 </div>
 
 <!--
-第四步，CSS 跟 Vue。Vue 元件庫只要一個 plugin：unplugin-vue 的 rolldown 版。CSS 更省，VFM 的設定檔裡 CSS 一行都沒寫，專案裝了 @tsdown/css，tsdown 偵測到就自動掛上，SFC 的 style 抽成 dist/style.css；有開 exports 的套件，它還會補一條 ./style.css，VFM 的 exports 是手寫的，這條是自己加的。問題是：SFC 的 scoped style 要先經過 Vue plugin 轉換，它怎麼知道要等？
+第四步，CSS 跟 Vue。Vue 元件庫只要一個 plugin：unplugin-vue。CSS 一行都不用寫，裝了 @tsdown/css 它就自動掛上，SFC 的 style 抽成 dist/style.css。問題是 scoped style 要先經過 Vue plugin 轉換，它怎麼知道要等？
 
-[click] 答案在 rolldown.ts 組 plugin 的順序，而且順序是固定的：先掛處理依賴的 DepsPlugin，就是上一步看的 deps.ts；再掛 rolldown-plugin-dts 產型別；然後是 @tsdown/css 的前置 plugin。這些都是內建的。
+[click] 答案在 rolldown.ts 組 plugin 的順序，而且是固定的：先掛處理依賴的 DepsPlugin，再掛產型別的 dts，然後是 @tsdown/css 的前置 plugin，這些都是內建的。
 
-[click] 內建的掛完，才掛你自己的 plugins，VFM 的 unplugin-vue 就排在這裡。
+[click] 內建的掛完，才掛你自己的 plugins，unplugin-vue 排在這裡。
 
-[click] 最後是 CSS 的後處理，特地放在使用者 plugin 之後，因為要等 Vue 的 scoped CSS 轉換完才能收集。你只做了「裝一個套件」，順序的事它替你排好了。
+[click] 最後是 CSS 的後處理，特地放在使用者 plugin 之後，因為要等 Vue 的 scoped CSS 轉換完才能收集。
 -->
 
 ---
@@ -299,13 +299,13 @@ export default defineConfig({
 </div>
 
 <!--
-第五步，exports。這一步我自己最有感：scroll-lock 的設定檔只有兩行，exports 設成 true，格式 CJS 跟 ESM。右邊 package.json 的 main、module、types、exports 四個欄位，全部是 tsdown 每次 build 寫回去的：main 指 CJS、module 指 ESM、exports 的點拆成 import 跟 require，還順手補一條 package.json 的子路徑。這是我 10 月 11 號用 v0.22.5 實際跑出來的結果，不是文件上的示意。原始碼在 pkg 底下的 exports.ts，它掃每一個入口的產物，是 index 的填進 main 跟 module，不是 index 的就變成子路徑。
+第五步，exports。這一步我自己最有感：scroll-lock 的設定檔只有兩行，exports 設成 true，格式 CJS 跟 ESM。右邊 package.json 的 main、module、types、exports，全部是 tsdown 每次 build 寫回去的，這是我 10 月 11 號用 v0.22.5 實際跑出來的。
 
-[click] 多加一個入口 foo，什麼都不用改，exports 自動多一個 ./foo 子路徑，import 跟 require 兩個條件都有。
+[click] 多加一個入口 foo，什麼都不用改，exports 自動多一個 ./foo。
 
-[click] 再開 devExports：開發的時候 exports 直接指向 src 底下的原始碼，monorepo 裡其他套件 import 你，不用先 build；dist 的版本搬到 publishConfig，pnpm 跟 yarn 在 publish 的時候自動換回去。設定檔是唯一的真相，package.json 變成產物。
+[click] 再開 devExports：開發時 exports 直接指向 src，monorepo 裡其他套件 import 你不用先 build；dist 的版本搬到 publishConfig，publish 時自動換回去。設定檔是唯一的真相，package.json 變成產物。
 
-[click] 一個要先講的坑：純 ESM 的時候 main 跟 module 會被拿掉，但舊的 types 會留著，指到一個已經不存在的 .d.cts。要嘛開 legacy，要嘛自己把舊欄位刪掉。它替你寫，你還是要看一眼。這個坑，下一步的檢查會抓到。
+[click] 一個坑：改成純 ESM 時 main 跟 module 會被拿掉，但舊的 types 會留著，指到已經不存在的 .d.cts。它替你寫，你還是要看一眼。這個坑下一步的檢查會抓到。
 -->
 
 ---
@@ -366,15 +366,15 @@ node16 (from CJS)  🟢 (CJS)
 </div>
 
 <!--
-第六步，發布前檢查。這兩個工具是什麼，我做 v5 之前根本不知道，我猜大部分的人也沒聽過。兩個都是獨立的套件，裝好之後設定裡開起來，tsdown 會在對的時間點替你跑。
+第六步，發布前檢查。這兩個工具是什麼，我做 v5 之前根本不知道，我猜大部分的人也沒聽過。兩個都是獨立的套件，設定裡開起來，tsdown 會在對的時間點替你跑。
 
-[click] publint 是 Vite 團隊的 bluwy 寫的。它拿 npm pack 出來的那一包去對 package.json：main、types、exports 指到的檔案在不在、ESM 跟 CJS 有沒有擺錯格式、副檔名對不對。
+[click] publint 是 Vite 團隊的 bluwy 寫的。它拿 npm pack 出來的那一包去對 package.json：main、types、exports 指到的檔案在不在、格式有沒有擺錯。
 
-[click] attw 是 Are the types wrong 的縮寫，TypeScript 團隊的 Andrew Branch 做的。它模擬四種模組解析模式去找你的型別：舊的 node10、node16 分別從 import 跟 require 進來、還有 bundler，抓的是只有使用者裝了才會炸的錯。
+[click] attw 是 Are the types wrong 的縮寫，TypeScript 團隊的 Andrew Branch 做的。它模擬四種模組解析模式去找你的型別，抓的是只有使用者裝了才會炸的錯。
 
-[click] 看實際的例子，就是上一步那個坑。scroll-lock 改成純 ESM，舊的 types 還指著 .d.cts。publint 一行就抓到：types 指到的檔案不存在。attw 則說 require 會解析到 ESM 檔，CommonJS 的使用者只能用 dynamic import。這兩段都是我實際跑出來的。
+[click] 實際的例子就是上一步那個坑。scroll-lock 改成純 ESM，舊的 types 還指著 .d.cts。publint 一行就抓到：types 指到的檔案不存在；attw 則說 require 會解析到 ESM 檔。
 
-[click] 改回 CJS 加 ESM 之後，publint 沒有錯誤，attw 四種模式全綠。設成 ci-only 的話，只有 CI 環境變數是 true 才跑，本機 build 不會被拖慢；GitHub Actions 跟 GitLab CI 都預設會設這個變數。
+[click] 改回 CJS 加 ESM 之後，publint 沒有錯誤，attw 四種模式全綠。設成 ci-only 的話只在 CI 跑，本機 build 不會被拖慢。
 
-[click] 它在哪個時間點跑？等所有 format 都 build 完，先寫 exports 回 package.json，再把套件真的 pack 成 tarball，publint 跟 attw 平行檢查同一包。檢查的是 npm publish 真正會上傳的內容，不是 dist 資料夾。六步走完了：格式、型別、依賴、CSS、exports、檢查，你寫的設定只有幾行，其他的它照你的 package.json 替你決定。接下來看看現在有多少人在用它。
+[click] 它在哪個時間點跑？所有 format 都 build 完，先寫 exports 回 package.json，再把套件 pack 成 tarball，publint 跟 attw 檢查同一包。檢查的是 npm publish 真正會上傳的內容，不是 dist 資料夾。
 -->

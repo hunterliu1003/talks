@@ -38,13 +38,13 @@ class: section-slide
 <div v-click="3" class="mt-12 text-4xl font-semibold tracking-tight">那為什麼還要 <span class="text-gradient">tsdown</span>？</div>
 
 <!--
-先問大家一個問題：打包函式庫的工具，是不是已經夠多了？
+打包函式庫的工具其實已經不少了。
 
-[click] 這三個是我在 Vue Final Modal 上真的用過的。最早是 Vue CLI，底下是 webpack；後來換 Rollup，從 v0 用到 v3；v4 換成 Vite 的 library mode，底層其實還是 Rollup。
+[click] 這三個是我在 Vue Final Modal 上真的用過的：最早是 Vue CLI，底下是 webpack；後來換 Rollup；v4 換成 Vite 的 library mode，底層其實還是 Rollup。
 
-[click] 這三個我沒在自己的套件上用過，只在別人的專案裡看過：esbuild 是 Go 寫的，主打快；tsup 包著 esbuild；unbuild 是 UnJS 的。它們好不好用，今天我不評論。大家手上的專案，八成就是這六個裡的其中一個。
+[click] 這三個我自己沒用過，只在別人的專案裡看過，所以好不好用我不評論。大家手上的專案，八成就是這六個裡的其中一個。
 
-[click] 那為什麼還要再來一個 tsdown？我自己的答案是：同一個套件換了三次工具，每一次都在重堆設定。先看這些工具沒解決的痛點是什麼。
+[click] 那為什麼還要再來一個 tsdown？以我自己的經驗，同一個套件換了三次工具，每一次都在重堆設定。
 -->
 
 ---
@@ -90,13 +90,13 @@ class: section-slide
 </div>
 
 <!--
-這四個痛點，做過函式庫的人應該都遇過。
+剛剛說的重堆設定，拆開來是四個痛點，做過函式庫的人應該都遇過。
 
-[click] 第一，設定繁瑣。Rollup 是以 plugin 為核心，一個完整的打包流程要湊好幾個 plugin：解析模組、編譯 SFC、PostCSS、commonjs、壓縮，plugin 之間還可能打架。換成 Vite 的 library mode 也一樣，build.lib、external、globals 全部自己寫，型別還要再疊一個 plugin。這兩份設定我在 Vue Final Modal 上都親手堆過，後半段會攤開來看。
+[click] 第一，設定繁瑣。Rollup 以 plugin 為核心，一個完整的流程要湊好幾個 plugin：解析模組、編譯 SFC、PostCSS、commonjs、壓縮，plugin 之間還可能打架。Vite 的 library mode 也一樣，build.lib、external、globals 全部自己寫，型別還要再疊一個 plugin。這兩份設定我在 VFM 上都親手堆過，後半段會攤開來看。
 
 [click] 第二，型別宣告複雜。tsc 只是逐檔把 TS 轉成 JS 和 d.ts，一次只吐一份。你要同時出 ESM 跟 CJS，就得自己寫腳本產兩份型別，Vue Final Modal 最初的版本甚至不支援 TS。這時候就不得不提到 Alex，我們這屆 VConf 的總召，也是我 TypeScript 的 mentor，告訴我 TS 有多好，也才有了 VFM v4。
 
 [click] 第三，多格式容易出錯。要同時輸出 ESM、CJS、UMD，Rollup 不是 output 寫好幾段，就是抽一層共用設定，改一個地方很容易漏掉另一個。VFM v3 的 Rollup 設定就是 UMD 跟 ESM 各寫一段。
 
-[click] 第四，效能。這點我先說清楚：VFM 很小，build 慢不是我遇過的痛。但 webpack 跟 Rollup 都是 JavaScript 寫的，專案一大就慢，這是社群的共識，也是 esbuild 跟後來一堆 Rust 打包器出現的原因。tsdown 就是衝著這四件事來的，下一頁看它怎麼回應。
+[click] 第四，效能。這點先說清楚：VFM 很小，build 慢不是我遇過的痛。但 webpack 跟 Rollup 都是 JavaScript 寫的，專案一大就慢，這是社群的共識，也是 esbuild 和後來一堆 Rust 打包器出現的原因。
 -->
