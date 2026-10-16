@@ -1,23 +1,3 @@
----
-class: cover
-title: Vue Final Modal v5 發布
----
-
-<div class="flex flex-col items-center justify-center text-center gap-5">
-
-<span class="vfm-logo text-7xl opacity-90"></span>
-
-<div class="font-mono text-7xl font-bold tracking-tight accent leading-none mt-2 drop-shadow-[0_0_28px_rgba(52,211,153,0.35)]">v5.0.0</div>
-
-<div class="text-2xl text-[var(--fg-2)] mt-2">現在發布</div>
-
-</div>
-
-<!--
-講到這裡，v5 的東西都看完了，剩下一件事：把它發出去。(pause) 就是現在。切到 npmjs.com，按下 Approve。(pause) 一兩分鐘後 registry 更新，pnpm add vue-final-modal@5 裝到的就是正式版。如果你是 v4 的使用者，接下來講怎麼升級。
--->
-
----
 
 <div class="kicker">結語</div>
 
@@ -80,7 +60,8 @@ title: Vue Final Modal v5 發布
 </div>
 
 <!--
-v5 不是我一個人做的。這 14 位是六年來在 vue-final-modal 留下 commit 的人，圓越大 commit 越多：Mini-ghost 54 個最多，fatihsolhan、mesqueeb 接著，Nuxt 核心的 danielroe 也在裡面。謝謝你們。
+這邊要感謝所有貢獻過 vfm 的人，
+尤其是這次 v-conf 的總召 Alex 貢獻最多，以及我的前主管 Luca，甚至 Daniel Roe 也協助過我關於 Nuxt module 的設定，小弟我也是倍感榮幸。
 -->
 
 ---
@@ -109,5 +90,9 @@ class: cover
 </div>
 
 <!--
-以上就是我今天的分享，感謝大家。投影片稍後會放在 talks.hunterliu.tw。這份投影片是用 Anthony Fu 的 Slidev 做的，前半段 tsdown 的介紹順序參考 sxzz 在深圳 VueConf 的演講和簡報，也謝謝他們。接下來的時間開放提問。
+投影片稍後會開放在 talks.hunterliu.tw。
+
+這份投影片是用 Anthony Fu 的 Slidev 做的，前半段 tsdown 的介紹也參考智子在深圳 VueConf 的演講和簡報。
+
+以上是我今天的分享，謝謝大家。
 -->

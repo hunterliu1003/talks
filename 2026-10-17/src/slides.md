@@ -123,6 +123,10 @@ src: ./pages/11-nuxt-ssr.md
 ---
 
 ---
+src: ./pages/v5-release.md
+---
+
+---
 src: ./pages/12-takeaway.md
 ---
 
