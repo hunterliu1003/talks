@@ -25,11 +25,6 @@ function trapState(i: number) {
   return isTop(i) ? 'active' : 'paused'
 }
 
-const focusLabel = computed(() => {
-  if (open.value === 0) return props.clicks === 0 ? '頁面上的「開啟 A」' : '回到頁面上的「開啟 A」'
-  const m = MODALS[open.value - 1]
-  return closing.value ? `回到 ${m.name} 的「${m.button}」` : `${m.name} 的內容區`
-})
 
 /** Opening focuses the level's content container; closing returns focus to the button that opened the closed level. */
 function focusOnBox(i: number) {
@@ -59,7 +54,7 @@ const ring = 'ring-2 ring-[var(--accent)] ring-offset-1 ring-offset-[#fbfbfa]'
         <div class="h-2 w-1/2 rounded bg-[#d6d6d1]"></div>
       </div>
       <div class="absolute right-1 top-6 bottom-1 w-1.5 rounded bg-[#e2e2de]"><div class="w-full h-1/3 rounded transition-colors duration-500" :class="locked ? 'bg-[#c9c9c4]' : 'bg-[#9a9a95]'"></div></div>
-      <div class="absolute right-3 top-7 flex items-center gap-1 rounded-full px-2 py-0.5 text-[0.6rem] font-mono transition-all duration-500" :class="locked ? 'opacity-100 bg-[var(--accent)] text-[#0b1a12]' : 'opacity-0'" data-lock-badge><carbon-locked class="text-[0.65rem]" />scroll lock ×{{ open }}</div>
+      <div class="absolute right-3 top-7 z-50 flex items-center gap-1 rounded-full px-2 py-0.5 text-[0.6rem] font-mono transition-all duration-500" :class="locked ? 'opacity-100 bg-[var(--accent)] text-[#0b1a12]' : 'opacity-0'" data-lock-badge><carbon-locked class="text-[0.65rem]" />scroll lock ×{{ open }}</div>
 
       <!-- overlay -->
       <div class="absolute inset-x-0 top-5 bottom-0 bg-black/40 transition-opacity duration-500" :class="locked ? 'opacity-100' : 'opacity-0'"></div>
@@ -78,14 +73,6 @@ const ring = 'ring-2 ring-[var(--accent)] ring-offset-1 ring-offset-[#fbfbfa]'
 
     <!-- the two stacks -->
     <div class="flex flex-col gap-2">
-      <div class="card py-2! px-4! flex items-center justify-between">
-        <div>
-          <div class="eyebrow mb-0.5">捲動鎖</div>
-          <div class="text-sm muted">body 被鎖了幾次</div>
-        </div>
-        <div class="font-mono text-4xl font-semibold transition-colors duration-300 tabular-nums" :class="locked ? 'accent' : 'text-[var(--fg-4)]'" data-lock-count>{{ open }}</div>
-      </div>
-
       <div class="card py-2! px-4!">
         <div class="eyebrow mb-1">focus trap 堆疊</div>
         <div class="flex flex-col gap-1">
@@ -95,10 +82,6 @@ const ring = 'ring-2 ring-[var(--accent)] ring-offset-1 ring-offset-[#fbfbfa]'
         </div>
       </div>
 
-      <div class="card py-2! px-4!">
-        <div class="eyebrow mb-0.5">焦點在</div>
-        <div class="text-sm transition-colors duration-300" :class="closing ? 'accent' : 'text-[var(--fg)]'" data-focus-label>{{ focusLabel }}</div>
-      </div>
     </div>
   </div>
 </template>

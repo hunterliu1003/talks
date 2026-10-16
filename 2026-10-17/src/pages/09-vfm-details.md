@@ -2,9 +2,9 @@
 clicks: 12
 ---
 
-<div class="kicker normal-case">08 · 原生 dialog 行為比較</div>
+<div class="kicker normal-case">08 · 對齊原生 dialog 行為</div>
 
-# 開跟關的每一條路，都有結果
+# Modal 的生命週期
 
 <div class="card py-2.5! px-4! mt-4 flex items-baseline gap-4"><div class="eyebrow normal-case shrink-0">原生 &lt;dialog&gt;</div><div class="text-base muted"><code>showModal()</code> / <code>close()</code> 是同步的，呼叫完就回來，沒有「轉場完成」這個時間點</div></div>
 
@@ -15,7 +15,7 @@ clicks: 12
 </div>
 
 <!--
-接下來看行為層，VueFinalModal 元件本身的細節，每一項都先看原生 dialog 怎麼做，再看 VFM 怎麼做：開跟關的 promise、選取文字、多層遮罩、捲動鎖跟焦點。第一項，開跟關。原生 dialog 的 showModal 跟 close 是同步的，呼叫完就回來，沒有「轉場完成」這個時間點，想等 modal 真的開好再做事，只能自己聽 transitionend。
+接下來看行為層，VueFinalModal 元件本身的細節，每一項都先看原生 dialog 怎麼做，再看 VFM 怎麼做：生命週期、文字選取、巢狀遮罩、滾動鎖跟焦點。第一項，Modal 的生命週期。原生 dialog 的 showModal 跟 close 是同步的，呼叫完就回來，沒有「轉場完成」這個時間點，想等 modal 真的開好再做事，只能自己聽 transitionend。
 
 [click] VFM 把一個 modal 的一生畫成狀態機。四個狀態：closed、opening、opened、closing，就是 useModal 回傳的 status。實線框是停得住的狀態，虛線框是轉場中。一開始在 closed。
 
@@ -46,9 +46,9 @@ clicks: 12
 clicks: 3
 ---
 
-<div class="kicker normal-case">08 · 原生 dialog 行為比較</div>
+<div class="kicker normal-case">08 · 對齊原生 dialog 行為</div>
 
-# 選取文字時，不要把 modal 關掉
+# 文字反白、文字選取
 
 <div class="grid grid-cols-[1fr_1.15fr] gap-8 mt-6 items-center">
 
@@ -83,20 +83,20 @@ function onMouseupRoot() {
 
 
 <!--
-第二項很小，但每個人都遇過：在 modal 裡選取文字。先看原生：原生 dialog 預設點遮罩不會關；要關得加 closedby="any"，判定交給瀏覽器，而且前面說過，Safari 還不支援。我實測過，瀏覽器的判定會看按下跟放開是不是在同一個地方，選取文字不會誤關。
+第二項，文字反白、文字選取，很小但每個人都遇過。原生 dialog 預設點遮罩不會關，要關得加 closedby="any"，判定交給瀏覽器，Safari 還不支援。我實測過，瀏覽器會看按下跟放開是不是同一個地方，選取文字不會誤關。
 
-[click] VFM 要自己判定「點外面」：記住 mousedown 發生在哪裡，只有從遮罩上按下、也在遮罩上放開，才算點外面。右邊用一個 VFM 的 modal 實際走一次。
+[click] VFM 要自己判定：記住 mousedown 在哪裡，從遮罩按下、也在遮罩放開，才算點外面。右邊實際走一次。
 
-[click] 看實際情境：你在 modal 裡面想選取一段文字，滑鼠在內容上按下去，拖著拖著，
+[click] 你在 modal 裡選一段文字，按下去拖著拖著，
 
-[click] 一不小心拖到遮罩上才放開。很多 modal 只看 click 事件，會把這個當成「點外面」，直接關掉，你剛打的東西就不見了；VFM 這裡不會關。
+[click] 拖到遮罩上才放開。很多 modal 只看 click，會當成點外面直接關掉，你剛打的東西就不見了；VFM 不會關。
 -->
 
 ---
 
-<div class="kicker normal-case">08 · 原生 dialog 行為比較</div>
+<div class="kicker normal-case">08 · 對齊原生 dialog 行為</div>
 
-# 疊三層 modal，畫面不該越來越暗
+# 巢狀 Modal 遮罩
 
 <div class="grid grid-cols-2 gap-8 mt-6">
 
@@ -139,9 +139,9 @@ function onMouseupRoot() {
 <div v-after class="text-sm faint mt-5">示意圖；<code>overlayBehavior: 'persist'</code> 則保留每一層的遮罩</div>
 
 <!--
-第三項是多層 modal。實際專案裡，modal 裡再開一個確認視窗很常見。
+第三項，巢狀 Modal 的遮罩。modal 裡再開一個確認視窗很常見。
 
-[click] 原生 dialog 每一層都有自己的 backdrop，疊三層之後，最底下的畫面就被蓋了三層，越來越暗。
+[click] 原生 dialog 每一層都有自己的 backdrop，疊三層就蓋了三層，越來越暗。
 
-[click] VFM 預設的 overlayBehavior 是 auto：疊了幾層都只顯示最上面那一層的遮罩，畫面的亮度維持一致。如果你就是想要每層都有遮罩，設成 persist 就好。第四項，捲動鎖跟焦點。
+[click] VFM 預設只顯示最上面那一層的遮罩，亮度一致；想要每層都有，overlayBehavior 設成 persist 就好。
 -->

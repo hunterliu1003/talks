@@ -81,13 +81,13 @@ open()
 <!--
 SSR 是 v5 新增的能力，底層來自 vue-use-template。open 在哪裡呼叫，會走兩條不同的路。左邊是 server，右邊是瀏覽器。
 
-[click] 第一條：在元件的 script setup 內呼叫 open，或是設定 defaultModelValue 為 true。伺服器渲染時，這個 modal 直接寫進 HTML，而且帶著正確的 z-index，這就是前面說 zIndexFn 用 computed 的原因。補充一個細節：在 server 上沒有 transition，open 會立刻 resolve 成 opened，所以 HTML 寫出來的時候 modal 已經是開的。
+[click] 第一條：在元件的 script setup 內呼叫 open，或是 defaultModelValue 設 true。伺服器渲染時，這個 modal 直接寫進 HTML，帶著正確的 z-index。server 上沒有 transition，open 會立刻 resolve 成 opened。
 
-[click] 到了瀏覽器，hydration 直接接上 server 寫好的 DOM，modal 維持開啟，第一個畫面就立刻可以操作，不用等 client 重新 render；而且不重播進場動畫，使用者第一眼看到的就是開好的 modal，不會閃一下。
+[click] 到了瀏覽器，hydration 直接接上 server 寫好的 DOM，modal 維持開啟，第一個畫面就能操作，也不重播進場動畫，不會閃一下。
 
-[click] 第二條：open 不是在 script setup 內呼叫。程式碼和第一條一模一樣，差別只在它寫在任何元件之外，例如 plugin。一定會碰到的情境是閒置逾時警告：計時器跟著整個 app，到期時沒有任何元件正在 setup，而「再 1 分鐘就登出，要延長嗎」又需要使用者當場決定，只能在這裡開 modal。server 上它可能在任何時間點被觸發，前面 SSR 隔離那頁講過，伺服器分不出這是哪個 request，所以直接跳過、不寫進 HTML，useTemplate 回傳的 ignored 會是 true，等於把它當成 client-only 的 modal，dev 模式會印警告提醒你。Nuxt 的 plugin 跟路由 middleware 都跑在 render 之前，那時候還沒有這次 request 的 SSR context，所以都是同一條路，這些都在 Nuxt 專案裡實測過。
+[click] 第二條：open 寫在任何元件之外，例如 plugin。典型的情境是閒置逾時警告，計時器跟著整個 app 跑，到期時沒有任何元件在 setup，只能在這裡開 modal。server 上分不出這是哪個 request，所以直接跳過、不寫進 HTML，當成 client-only 的 modal，dev 模式會印警告提醒你。
 
-[click] 重點是它會自動退回 client 端：瀏覽器接手、元件 mount 之後再把 modal 開起來，這時候就是一般的 client 端開啟，進場動畫照播，只是少了首屏就開著的好處。
+[click] 它會自動退回 client 端：瀏覽器接手、元件 mount 之後再把 modal 開起來，進場動畫照播，只是少了首屏就開著的好處。
 
-[click] 兩條路 server 跟瀏覽器的輸出都一致：第一條兩邊都有 modal，第二條兩邊都沒有、client 再補開，所以都不會 hydration mismatch。這也順便解掉 v4 的另一個老問題：v4 只是裝得進 Nuxt 專案，modal 的狀態掛在跨 request 的單例上，server render 會 memory leak；v5 每個 request 各自隔離，這個問題一起消失。
+[click] 兩條路 server 跟瀏覽器的輸出都一致，所以不會 hydration mismatch。這也順便解掉 v4 的老問題：v4 的 modal 狀態掛在跨 request 的單例上，server render 會 memory leak；v5 每個 request 各自隔離。
 -->
