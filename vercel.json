@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "pnpm run build",
   "outputDirectory": "dist",
-  "ignoreCommand": "git diff --quiet ${VERCEL_GIT_PREVIOUS_SHA:-HEAD^} HEAD -- . ':(exclude)*README.md' ':(exclude)*.pdf' ':(exclude)LICENSE'",
+  "ignoreCommand": "git fetch -q --depth=1 origin \"$VERCEL_GIT_PREVIOUS_SHA\" >/dev/null 2>&1; git diff --quiet \"${VERCEL_GIT_PREVIOUS_SHA:-HEAD^}\" HEAD -- . ':(exclude)*README.md' ':(exclude)*.pdf' ':(exclude)LICENSE' 2>/dev/null; test $? -eq 0",
   "redirects": [
     {
       "source": "/",
