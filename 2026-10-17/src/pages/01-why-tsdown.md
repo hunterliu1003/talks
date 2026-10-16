@@ -59,7 +59,7 @@ class: section-slide
   <carbon-settings-adjust class="text-3xl accent shrink-0 mt-1" />
   <div>
     <div class="text-xl font-semibold mb-1">設定繁瑣</div>
-    <div class="text-base muted">Rollup 要湊一堆 plugin，Vite 也要自己疊</div>
+    <div class="text-base muted">Rollup、esbuild 設定複雜</div>
   </div>
 </div>
 
@@ -92,7 +92,7 @@ class: section-slide
 <!--
 剛剛說的重堆設定，拆開來是四個痛點，做過函式庫的人應該都遇過。
 
-[click] 第一，設定繁瑣。Rollup 以 plugin 為核心，一個完整的流程要湊好幾個 plugin：解析模組、編譯 SFC、PostCSS、commonjs、壓縮，plugin 之間還可能打架。Vite 的 library mode 也一樣，build.lib、external、globals 全部自己寫，型別還要再疊一個 plugin。這兩份設定我在 VFM 上都親手堆過，後半段會攤開來看。
+[click] 第一，設定繁瑣。Rollup 以 plugin 為核心，一個完整的流程要湊好幾個 plugin：解析模組、編譯 SFC、PostCSS、commonjs、壓縮，plugin 之間還可能打架。esbuild 雖然快，但型別、多格式這些函式庫要的東西都得自己補。這些設定我在 VFM 上親手堆過，後半段會攤開來看。
 
 [click] 第二，型別宣告複雜。tsc 只是逐檔把 TS 轉成 JS 和 d.ts，一次只吐一份。你要同時出 ESM 跟 CJS，就得自己寫腳本產兩份型別，Vue Final Modal 最初的版本甚至不支援 TS。這時候就不得不提到 Alex，我們這屆 VConf 的總召，也是我 TypeScript 的 mentor，告訴我 TS 有多好，也才有了 VFM v4。
 

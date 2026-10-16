@@ -139,7 +139,8 @@ pnpm tsdown
 <div class="mt-8 text-xl space-y-3">
 <div v-click class="flex items-center gap-3"><carbon-checkmark-outline class="accent shrink-0" />npm、pnpm、Yarn、Bun 都支援</div>
 <div v-click class="flex items-center gap-3"><carbon-checkmark-outline class="accent shrink-0" />Node.js 22.18+</div>
-<div v-click class="flex items-center gap-3"><carbon-checkmark-outline class="accent shrink-0" /><span>設定檔可有可無，CLI 旗標會蓋過它：<span class="font-mono">--format</span>、<span class="font-mono">--watch</span>、<span class="font-mono">--no-dts</span></span></div>
+<div v-click class="flex items-center gap-3"><carbon-checkmark-outline class="accent shrink-0" /><span>設定檔和 CLI 旗標可以混用，例如 <span class="font-mono">tsdown --no-dts</span></span></div>
+<div v-click class="flex items-center gap-3"><carbon-checkmark-outline class="accent shrink-0" /><span>常用旗標都有，例如 <span class="font-mono">--format</span>、<span class="font-mono">--watch</span></span></div>
 </div>
 
 <!--
@@ -149,5 +150,7 @@ pnpm tsdown
 
 [click] Node 要 22.18 以上。
 
-[click] 設定檔不是必要的選擇，CLI 就提供很多旗標能夠使用，例如臨時不要型別就加 --no-dts。
+[click] 設定檔和 CLI 旗標可以混用，例如臨時不要型別就加 --no-dts。
+
+[click] 常用的旗標都有，像 --format、--watch。
 -->
