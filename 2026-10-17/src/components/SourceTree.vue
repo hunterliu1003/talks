@@ -80,9 +80,6 @@ const scenes: Record<Scene, Step[]> = {
   ],
   format: [
     { on: ['src/config/options.ts', 'src/build.ts'] },
-    { on: ['src/config/options.ts'] },
-    { on: ['src/build.ts'] },
-    { on: ['src/features/output.ts'] },
   ],
   dts: [
     { on: ['src/config/options.ts'] },

@@ -2,9 +2,9 @@
 
 <div class="-mt-1 mb-5"><PublishSteps :current="1" /></div>
 
-<div class="grid grid-cols-[1.35fr_1fr] gap-6 items-start">
+<div class="grid grid-cols-[1.7fr_1fr] gap-6 items-start">
 
-<div class="min-w-0 [&_pre]:text-[0.7rem]!">
+<div class="min-w-0 [&_pre]:text-[0.62rem]! [&_pre]:leading-[1.35]!">
 
 <div class="flex items-center gap-2 mb-3 text-base whitespace-nowrap">
 <span class="font-mono">format: ['esm', 'cjs']</span>
@@ -12,31 +12,34 @@
 <span class="tag">index.js</span><span class="tag">index.cjs</span><span class="tag tag-neutral">+ .d.ts</span>
 </div>
 
-<div v-show="$clicks < 2">
+<div>
 
-```ts {all|2-3}
+```ts
 // src/config/options.ts
-const formats = resolveComma(toArray(format, 'esm'))
-return formats.map((fmt, idx) => ({
-  ...config,
-  format: normalizeFormat(fmt),
-}))
+async function resolveUserConfig(config) {
+  const formats = resolveComma(toArray(format, 'esm'))
+  return formats.map((fmt, idx) => ({
+    ...config,
+    format: normalizeFormat(fmt),
+  }))
+}
 ```
 
 </div>
 
-<div v-show="$clicks >= 2">
+<div class="mt-2">
 
-```ts {all|2-4}
+```ts
 // src/build.ts
-const bundles = await Promise.all(
-  configs.map(o => buildSingle(o, clean, done)),
-) // clean 只跑一次
+async function buildWithConfigs(configs) {
+  const bundles = await Promise.all(
+    configs.map(o => buildSingle(o, clean, done)),
+  )
+}
 ```
 
 </div>
 
-<div v-click="3" class="text-sm muted mt-2 leading-relaxed">副檔名也是它決定：<span class="font-mono">platform</span> 是 node 一律 <span class="font-mono">.mjs</span> / <span class="font-mono">.cjs</span>；VFM 是 neutral 加 <span class="font-mono">"type": "module"</span>，所以是 <span class="font-mono">.js</span> / <span class="font-mono">.cjs</span></div>
 
 </div>
 
@@ -45,13 +48,10 @@ const bundles = await Promise.all(
 </div>
 
 <!--
-接下來跟著 VFM 走六步，從設定檔到 npm publish。每一步先看它替你做了什麼，再看原始碼，右邊會點亮正在讀的檔案。第一步，格式。寫一次 format，產物兩份。VFM 只寫了一行 format，產物是四個檔：index.js、index.cjs，加上各自的型別。
+接下來從設定檔到 npm publish 發生什麼事情，我簡單分成了六個步驟。搭配簡化過後的原始碼，一起看看 tsdown 替我們做掉了什麼。
+第一步，格式。寫一次 format，產物兩份。只寫了一行 format，產物是四個檔：index.js、index.cjs，加上各自的型別。
 
-[click] options.ts 把 format 轉成陣列，對每一個 format 各產生一份獨立的設定。平常說的 dual format，在 tsdown 裡是兩次獨立的 build。
-
-[click] 展開後的設定在 build.ts 用 Promise.all 平行跑，clean 只做一次。VFM 三組設定展開就是四次 build 平行跑。
-
-[click] 快速上手那頁的 index.mjs，副檔名也是這裡決定的。platform 預設 node，一律用 .mjs 跟 .cjs；VFM 是給瀏覽器用的，platform 設成 neutral，再看 package.json 有 type module，所以 ESM 是 .js、CJS 是 .cjs。
+左邊 options.ts 的 resolveUserConfig 把 format 轉成陣列，對每一個 format 各產生一份獨立的設定。 tsdown 裡是兩次獨立的 build。下面 build.ts 的 buildWithConfigs 把展開後的每一份設定丟給 buildSingle，用 Promise.all 平行跑。buildSingle 就是一次完整的 build：組好 Rolldown 的選項和 plugin，叫 Rolldown 打包，產物寫進 dist。
 -->
 
 ---
@@ -60,7 +60,7 @@ const bundles = await Promise.all(
 
 <div class="-mt-1 mb-5"><PublishSteps :current="2" /></div>
 
-<div class="grid grid-cols-[1.35fr_1fr] gap-6 items-start">
+<div class="grid grid-cols-[1.7fr_1fr] gap-6 items-start">
 
 <div class="min-w-0 [&_pre]:text-[0.66rem]! [&_pre]:leading-[1.45]!">
 
@@ -69,14 +69,16 @@ const bundles = await Promise.all(
 <span class="tag">types</span><span class="tag">exports.types</span><span class="tag">declaration</span>
 </div>
 
-```ts {all|3-4|5-7}
-// src/config/options.ts · 設定裡沒寫 dts 的時候
-if (dts == null) {
-  if (pkg?.types || pkg?.typings || hasExportsTypes(pkg?.exports)) {
-    dts = true
-  } else if (tsconfig) {
-    const { config } = readTsconfig(tsconfig)
-    dts = !!config.compilerOptions?.declaration
+```ts {all|4-5|6-8}
+// src/config/options.ts
+async function resolveUserConfig(config) {
+  if (dts == null) {
+    if (pkg?.types || pkg?.typings || hasExportsTypes(pkg?.exports)) {
+      dts = true
+    } else if (tsconfig) {
+      const { config } = readTsconfig(tsconfig)
+      dts = !!config.compilerOptions?.declaration
+    }
   }
 }
 ```
@@ -95,11 +97,11 @@ if (dts == null) {
 <!--
 第二步，型別。要不要產型別，它看你的 package.json。VFM 的設定裡沒寫要產型別，dist 裡卻有 index.d.ts 跟 index.d.cts，因為 tsdown 讀 package.json 替你決定。
 
-[click] 原始碼就這幾行：設定裡沒寫 dts，先看 package.json 有沒有 types，或 exports 裡有沒有 types 條件，有就開。
+[click] 原始碼就在同一個 resolveUserConfig 裡：設定裡沒寫 dts，先看 package.json 有沒有 types，或 exports 裡有沒有 types 條件，有就開。
 
 [click] 都沒有，再讀 tsconfig 的 declaration。你本來就會替 TypeScript 專案設這些，不用再講一次。
 
-[click] Vue 元件庫要多一行：dts 的 vue 設成 true。因為預設的 tsc 跟 Oxc 都看不懂 .vue 檔，開了 vue 才會接上 Vue 的語言支援，等於 vue-tsc 那一套，SFC 的 props 跟 emits 才推得出來。
+[click] Vue 元件庫要多一行：dts 的 vue 設成 true。因為預設的 tsc 看不懂 .vue 檔，開了 vue 才會接上 Vue 的語言支援，等於 vue-tsc 那一套，SFC 的 props 跟 emits 才推得出來。
 -->
 
 ---
@@ -108,24 +110,26 @@ if (dts == null) {
 
 <div class="-mt-1 mb-5"><PublishSteps :current="3" /></div>
 
-<div class="grid grid-cols-[1.35fr_1fr] gap-6 items-start">
+<div class="grid grid-cols-[1.7fr_1fr] gap-6 items-start">
 
 <div class="min-w-0 [&_pre]:text-[0.66rem]! [&_pre]:leading-[1.45]!">
 
 <div class="flex flex-wrap items-center gap-2 mb-2 text-sm">
 <span class="muted">VFM 的依賴</span>
-<span class="tag tag-neutral">vue</span><span class="tag tag-neutral">focus-trap</span><span class="tag tag-neutral">vue-use-template</span>
+<span class="tag tag-neutral">vue</span><span class="tag tag-neutral">@vueuse/core</span><span class="tag tag-neutral">focus-trap</span><span class="tag tag-neutral">vue-use-template</span><span class="tag tag-neutral">scroll-lock</span>
 <span class="flex items-center gap-2 whitespace-nowrap"><carbon-arrow-right class="faint" /><span class="muted">不打進 dist，留成 import</span></span>
 </div>
 
-```ts {all|2-3|5-8}
-// src/features/deps.ts · 這個 import 要不要外部化
-if (deps.includes(id) || deps.some(dep => id.startsWith(`${dep}/`)))
-  return true // dependencies、peerDependencies，連子路徑都算
-if (importer && RE_DTS.test(importer) && !id.startsWith('@types/')) {
-  const typesName = getTypesPackageName(id)
-  if (typesName && deps.includes(typesName)) return true
-} // d.ts 裡 import 的套件，有對應的 @types 也外部化
+```ts {all|3-4|6-9}
+// src/features/deps.ts
+async function externalStrategy(id, importer) {
+  if (deps.includes(id) || deps.some(dep => id.startsWith(`${dep}/`)))
+    return true // dependencies、peerDependencies
+  if (importer && RE_DTS.test(importer) && !id.startsWith('@types/')) {
+    const typesName = getTypesPackageName(id)
+    if (typesName && deps.includes(typesName)) return true
+  } // d.ts 裡 import 的套件，有對應的 @types 也外部化
+}
 ```
 
 
@@ -136,11 +140,11 @@ if (importer && RE_DTS.test(importer) && !id.startsWith('@types/')) {
 </div>
 
 <!--
-第三步，依賴。依賴自動外部化，打進去的會寫給你看。VFM 的 package.json 裡，vue、focus-trap、@vueuse/core 是 peerDependencies，vue-use-template 跟 scroll-lock 是 dependencies。設定檔一個字都沒提它們，產物裡卻全部變成 import。這是 sxzz 去年講過的自動外部化，今天看它怎麼判斷。
+第三步，依賴。打包的時候，原本要手動設定外部化的部分，tsdown 自動地幫我們做掉了，確保我們不會將不該打包的依賴包進最終的資料夾。拿 VFM 舉例：vue、@vueuse/core、focus-trap 是 peerDependencies，vue-use-template 跟 scroll-lock 是 dependencies。設定檔不需要提到這些依賴，但 tsdown 是怎麼判斷的？
 
-[click] deps.ts 拿每一個 import 去對 package.json：在 dependencies 或 peerDependencies 裡的就外部化，連 vue/server-renderer 這種子路徑都算。
+[click] deps.ts 裡的 externalStrategy 這個函式，拿每一個 import 去對應 package.json：在 dependencies 或 peerDependencies 裡的就自動外部化。
 
-[click] 他沒講的是這段：型別宣告也懂 @types。d.ts 裡 import 的套件，只要對應的 @types 在你的依賴裡，一樣外部化。 反過來，node_modules 的東西意外被打進去，它會在 build 時列出來提醒你。
+[click] 型別檔也一樣：d.ts 裡 import 的套件照同一套規則外部化，不會把別人的型別整包抄進來。
 -->
 
 ---
@@ -149,23 +153,25 @@ if (importer && RE_DTS.test(importer) && !id.startsWith('@types/')) {
 
 <div class="-mt-1 mb-5"><PublishSteps :current="4" /></div>
 
-<div class="grid grid-cols-[1.35fr_1fr] gap-6 items-start">
+<div class="grid grid-cols-[1.7fr_1fr] gap-6 items-start">
 
 <div class="min-w-0 [&_pre]:text-[0.7rem]!">
 
 <div class="card py-3! mb-3">
 <div class="flex items-center gap-3 mb-1"><carbon-paint-brush class="text-xl accent" /><div class="eyebrow normal-case">Vue 一個 plugin，CSS 一行都不用寫</div></div>
-<div class="text-sm muted leading-relaxed">SFC 交給 <span class="font-mono">unplugin-vue/rolldown</span>；偵測到 <span class="font-mono">@tsdown/css</span> 就掛上，SFC 的 style 抽成 <span class="font-mono">style.css</span>，有開 <span class="font-mono">exports</span> 還會補一條 <span class="font-mono">./style.css</span></div>
+<div class="text-sm muted leading-relaxed">SFC 交給 <span class="font-mono">unplugin-vue/rolldown</span>；偵測到 <span class="font-mono">@tsdown/css</span> 就掛上，SFC 的 style 抽成 <span class="font-mono">style.css</span></div>
 </div>
 
-```ts {all|2-4|6|7}
-// src/features/rolldown.ts · plugin 順序
-plugins.push(DepsPlugin(config, bundle)) // external
-if (dts) plugins.push(dtsPlugin(options)) // 型別
-if (hasCss) plugins.push(...cssPlugins.pre) // @tsdown/css
-plugins.push(ReportPlugin(config))
-plugins.push(userPlugins) // 你的 unplugin-vue
-plugins.push(...cssPostPlugins) // 收 CSS，排最後
+```ts {all|3-5|7|8}
+// src/features/rolldown.ts
+async function resolveInputOptions(config) {
+  plugins.push(DepsPlugin(config, bundle)) // external
+  if (dts) plugins.push(dtsPlugin(options)) // 型別
+  if (hasCss) plugins.push(...cssPlugins.pre) // @tsdown/css
+  plugins.push(ReportPlugin(config))
+  plugins.push(userPlugins) // 你的 unplugin-vue
+  plugins.push(...cssPostPlugins) // 收 CSS，排最後
+}
 ```
 
 </div>
@@ -177,7 +183,7 @@ plugins.push(...cssPostPlugins) // 收 CSS，排最後
 <!--
 第四步，CSS 跟 Vue。CSS 零設定，而且排在你的 plugin 之後。Vue 元件庫只要一個 plugin：unplugin-vue。CSS 一行都不用寫，裝了 @tsdown/css 它就自動掛上，SFC 的 style 抽成 dist/style.css。問題是 scoped style 要先經過 Vue plugin 轉換，它怎麼知道要等？
 
-[click] 答案在 rolldown.ts 組 plugin 的順序，而且是固定的：先掛處理依賴的 DepsPlugin，再掛產型別的 dts，然後是 @tsdown/css 的前置 plugin，這些都是內建的。
+[click] 答案在 rolldown.ts 的 resolveInputOptions 組 plugin 的順序，而且是固定的：先掛處理依賴的 DepsPlugin，再掛產型別的 dts，然後是 @tsdown/css 的前置 plugin，這些都是內建的。
 
 [click] 內建的掛完，才掛你自己的 plugins，unplugin-vue 排在這裡。
 
