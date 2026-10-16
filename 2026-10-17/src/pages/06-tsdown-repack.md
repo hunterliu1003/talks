@@ -1,92 +1,5 @@
 <div class="kicker">06 · 打包換成 tsdown</div>
 
-# 三代打包工具，三份設定檔
-
-<div class="grid grid-cols-[0.72fr_1.7fr] gap-8 mt-4 items-start">
-
-<div class="vsteps mt-2">
-
-<div class="vstep is-on">
-<div class="vstep-dot"></div>
-<div><div class="eyebrow">2020-06 · v0</div><div class="vstep-desc">Vue 2 · <a href="https://cli.vuejs.org" target="_blank" rel="noopener">Vue CLI</a><br>拿 App 工具打包函式庫，只產 UMD</div></div>
-</div>
-
-<div class="vstep" :class="$clicks >= 1 ? 'is-on' : ''">
-<div class="vstep-dot"></div>
-<div><div class="eyebrow">2020-08 → 2021-03 · v0.10 到 v3</div><div class="vstep-desc">Vue 2 與 Vue 3 兩條線 · <a href="https://rollupjs.org" target="_blank" rel="noopener">Rollup</a><br>手接 7 個 plugin，型別手寫 d.ts</div></div>
-</div>
-
-<div class="vstep" :class="$clicks >= 2 ? 'is-on' : ''">
-<div class="vstep-dot"></div>
-<div><div class="eyebrow">2023-02 · v4</div><div class="vstep-desc">Vue 3 · <a href="https://vite.dev/guide/build#library-mode" target="_blank" rel="noopener">Vite library mode</a><br>改寫成 TypeScript，型別自動產生</div></div>
-</div>
-
-</div>
-
-<div class="min-w-0 [&_pre]:text-[0.68rem]! [&_pre]:leading-[1.45]!">
-
-````md magic-move {at: 1}
-```js
-// package.json · Vue CLI
-"scripts": {
-  "build:lib": "vue-cli-service build --target lib \\
-    --name VueFinalModal ./plugin.js --dest lib",
-},
-"main": "./lib/VueFinalModal.umd.min.js",
-"unpkg": "./lib/VueFinalModal.umd.min.js",
-```
-
-```js
-// rollup.config.js · 46 行
-const plugins = [
-  NodeResolve(), VuePlugin(), cleanup(), terser(), PostCSS(), commonjs(), sizes(),
-  babel({ babelHelpers: 'bundled', extensions: ['.js', '.vue'] }),
-]
-export default {
-  input: 'lib/index.js',
-  output: [
-    { file: pkg.main, format: 'umd', name: 'VueFinalModal',
-      globals: { vue: 'Vue' } },
-    { file: pkg.module, format: 'esm' },
-  ],
-  plugins, external: ['vue'],
-}
-```
-
-```ts
-// vite.config.ts · 56 行
-export default defineConfig({
-  plugins: [VueMacros({ plugins: { vue: Vue() } }),
-    DefineOptions(), dts({ include: 'src' })],
-  build: {
-    lib: { entry: 'src/index.ts', name, fileName: f => `index.${f}.js` },
-    rollupOptions: {
-      external: ['vue', '@vueuse/core', 'focus-trap' /* … */],
-      output: { globals: { 'vue': 'Vue', '@vueuse/core': 'VueUse' /* … */ } },
-    },
-  },
-})
-```
-````
-
-</div>
-
-</div>
-
-<!--
-先從打包開始。不過在看 v5 的設定檔之前，先回頭看一下 VFM 之前換過哪些打包工具。
-
-2020 年 6 月的第一版是給 Vue 2 的，從來沒打包過元件庫的我，當時我直接用 Vue CLI 的 library mode，webpack 設定全部交給 CLI。方便是方便，但產出只有 UMD，沒有 ESM。
-
-[click] 同年 8 月換成 Rollup，一路用到 2021 年的 v3。中間 Vue 3 出來，同一套元件要同時維護 Vue 2 跟 Vue 3 兩條線，一個改動要發兩個版本。Rollup 的 plugin 一個一個自己接。那時候專案還是 JavaScript，支援 TS 型別的部分我沒記錯的話，第一版還是 Alex 幫我寫的 d.ts，問題就是 d.ts 常常和實際的 API 不同步。
-
-[click] 2023 年改用 TypeScript 重寫了 v4，打包改用 Vite 的 library mode。搭配 VueMacros、DefineOptions、dts 等等 plugins。我覺得是 VueFinalModal 變得真正好用且穩定的版本。然後 2024 年 1 月發了 v5 的第一個 beta 版本後，就沒有然後了。但是暫停維護的這兩年多，也讓我迎來了 tsdown，接下來看看它怎麼優雅的解決 v5 打包的問題！
--->
-
----
-
-<div class="kicker">06 · 打包換成 tsdown</div>
-
 # v5 的 tsdown 設定
 
 <div class="grid grid-cols-[0.8fr_1.7fr] gap-8 mt-4 items-start">
@@ -159,7 +72,6 @@ export default defineConfig({
   platform: 'node',
   format: ['esm'],
   deps: { neverBundle: [/^@nuxt\//, /^nuxt(\/|$)/, /^#/, 'vue-final-modal'] },
-  dts: true,
   clean: false,
 }
 ```
@@ -170,13 +82,13 @@ export default defineConfig({
 </div>
 
 <!--
-這是 v5 的 tsdown 設定檔，整份 58 行，分成三組 build，左下角的 dist 會跟著亮出每一組產出的檔案。先看第一組，主套件的 ESM 跟 CJS，只有 9 行。跟 v4 的 Vite 設定比，少掉的東西比留下的多：VueMacros 不用了，因為 Vue 3.3 之後 defineOptions 是原生的；external 整段刪掉，tsdown 會讀 package.json 自己判斷；build.lib 也不用寫，因為它本來就是為函式庫設計的，entry 一行、format 一行就好。型別只要一行，dts 的 vue 設成 true，.vue 檔的型別它會用 vue-tsc 處理，產出 index.d.ts 給 ESM、index.d.cts 給 CJS。
+前面看過三份舊設定檔，這是第四份：v5 的 tsdown 設定檔，分成三組 build，左邊的 dist 會跟著亮出每一組產出的檔案。第一組是主套件的 ESM 跟 CJS。跟 v4 的 Vite 設定比，少掉的東西比留下的多：VueMacros 不用了，external 整段刪掉，build.lib 也不用寫，entry 一行、format 一行就好。型別只要 dts 的 vue 設成 true。
 
-[click] CSS 的部分，設定檔裡一行都沒寫。只要專案裝了 @tsdown/css，tsdown 偵測到就會自動掛上，把 SFC 的 style 抽成 dist/style.css。使用者的用法跟 v4 一樣要自己 import style.css，用 Nuxt module 的話會自動幫你加進去。
+[click] CSS 的部分一行都沒寫，裝了 @tsdown/css 它就會把 SFC 的 style 抽成 dist/style.css，用法跟 v4 一樣要自己 import。
 
-[click] 第二組是 UMD，只給 CDN 用。這裡用 deps.alwaysBundle 把 vue-use-template 跟 scroll-lock 一起打包進去，因為這兩個套件沒有瀏覽器可以直接用 script 標籤載入的版本。minify 開著，因為 CDN 的使用者沒有自己的 build step，下載到什麼就跑什麼；ESM 跟 CJS 就不壓，交給使用者自己的打包工具。這個檔案只有 package.json 的 unpkg 跟 jsdelivr 欄位指向它，用 npm 安裝的人完全碰不到。
+[click] 第二組是 UMD，只給 CDN 用。用 deps.alwaysBundle 把 vue-use-template 跟 scroll-lock 一起打包進去，因為這兩個套件沒有能直接用 script 標籤載入的版本。minify 開著，因為 CDN 的使用者沒有自己的 build step。
 
-[click] 第三組是 Nuxt module，三個入口：module 本身、跑在瀏覽器的 runtime plugin、跑在伺服器的 server plugin，一起產到 dist/nuxt 底下。platform 設成 node，因為 module 是在 Nuxt build 的時候跑的。deps.neverBundle 把 @nuxt、nuxt 跟 # 開頭的 import 都外部化，這些由 Nuxt 提供；比較特別的是 vue-final-modal 自己也要外部化，因為 runtime plugin 必須 import 套件本身，app 跟 plugin 拿到的才會是同一個 vfm 實例，不然狀態會對不起來。最後 clean 設成 false，因為這組跟第一組都寫進同一個 dist，清空的事交給 build script 在最前面做一次就好。三組 build 加上 CSS，就是左下角這一整個 dist。
+[click] 第三組是 Nuxt module，三個入口一起產到 dist/nuxt 底下。@nuxt 和 nuxt 開頭的 import 都外部化，由 Nuxt 提供；vue-final-modal 自己也要外部化，因為 runtime plugin 要 import 套件本身，app 跟 plugin 拿到的才是同一個 vfm。clean 設成 false，因為這組跟第一組寫進同一個 dist。
 -->
 
 ---
@@ -217,7 +129,7 @@ export default defineConfig({
 <div v-click="2" class="card">
 <div class="eyebrow mb-2">平行沒有順序，所以分兩次</div>
 <div class="font-mono text-xs leading-relaxed text-[var(--fg-2)] whitespace-nowrap">tsdown -F vue-use-template -F @hunterliu/scroll-lock<br>tsdown -F vue-final-modal</div>
-<div class="text-sm muted mt-1">UMD 要把另外兩包的 dist 打進去，它們得先好</div>
+<div class="text-sm muted mt-1">UMD 要把另外兩包的 dist 打包進去，它們得先好</div>
 </div>
 
 </div>
@@ -229,5 +141,5 @@ v5 不只 VFM 用 tsdown，拆出來的 vue-use-template 跟 scroll-lock 也是�
 
 [click] 它會掃 packages 底下每個套件，讀各自的 tsdown.config.ts，各自 build，而且是平行跑的。每個套件照自己的需求寫設定就好。
 
-[click] 這邊有一個我實際踩到的點：平行跑就沒有先後順序，但 VFM 給 CDN 的 UMD 要把 vue-use-template 跟 scroll-lock 的 dist 打進去，所以它們兩個要先 build 好。解法是用 -F 過濾，分兩次跑：先 build 那兩個，再 build VFM。
+[click] 這邊有一個我實際踩到的點：平行跑就沒有先後順序，但 VFM 給 CDN 的 UMD 要把 vue-use-template 跟 scroll-lock 的 dist 打包進去，所以它們兩個要先 build 好。解法是用 -F 過濾，分兩次跑：先 build 那兩個，再 build VFM。
 -->

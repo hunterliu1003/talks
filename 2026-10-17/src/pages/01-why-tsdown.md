@@ -13,90 +13,93 @@ class: section-slide
 
 1. 前半段介紹 tsdown
 2. 後半段用 Vue Final Modal 當實戰案例
+
+介紹 tsdown 之前，先講我為什麼會需要它。
 -->
 
 ---
 
-<div class="kicker">01 · 為什麼又一個打包工具</div>
+<div class="kicker">01 · 換了三次打包工具</div>
 
-# 打包函式庫的工具，已經不少了
+# Vue Final Modal 的三代打包工具
 
-<div v-click="1" class="flex flex-wrap items-center gap-4 mt-10">
-  <span class="eyebrow w-28 shrink-0">VFM 用過的</span>
-  <span class="tag text-xl! px-5! py-2!">webpack</span>
-  <span class="tag text-xl! px-5! py-2!">Rollup</span>
-  <span class="tag text-xl! px-5! py-2!">Vite</span>
+<div class="grid grid-cols-[0.72fr_1.7fr] gap-8 mt-4 items-start">
+
+<div class="vsteps mt-2">
+
+<div class="vstep is-on">
+<div class="vstep-dot"></div>
+<div><div class="eyebrow">2020-06 · v0</div><div class="vstep-desc">Vue 2 · <a href="https://cli.vuejs.org" target="_blank" rel="noopener">Vue CLI</a><br>拿 App 工具打包函式庫，只產 UMD</div></div>
 </div>
 
-<div v-click="2" class="flex flex-wrap items-center gap-4 mt-5">
-  <span class="eyebrow w-28 shrink-0">沒用過的</span>
-  <span class="tag tag-neutral text-xl! px-5! py-2! opacity-70">esbuild</span>
-  <span class="tag tag-neutral text-xl! px-5! py-2! opacity-70">tsup</span>
-  <span class="tag tag-neutral text-xl! px-5! py-2! opacity-70">unbuild</span>
+<div class="vstep" :class="$clicks >= 1 ? 'is-on' : ''">
+<div class="vstep-dot"></div>
+<div><div class="eyebrow">2020-08 → 2021-03 · v0.10 到 v3</div><div class="vstep-desc">Vue 2 與 Vue 3 兩條線 · <a href="https://rollupjs.org" target="_blank" rel="noopener">Rollup</a><br>手接 7 個 plugin，型別手寫 d.ts</div></div>
 </div>
 
-<div v-click="3" class="mt-12 text-4xl font-semibold tracking-tight">那為什麼還要 <span class="text-gradient">tsdown</span>？</div>
+<div class="vstep" :class="$clicks >= 2 ? 'is-on' : ''">
+<div class="vstep-dot"></div>
+<div><div class="eyebrow">2023-02 · v4</div><div class="vstep-desc">Vue 3 · <a href="https://vite.dev/guide/build#library-mode" target="_blank" rel="noopener">Vite library mode</a><br>改寫成 TypeScript，型別自動產生</div></div>
+</div>
+
+</div>
+
+<div class="min-w-0 [&_pre]:text-[0.68rem]! [&_pre]:leading-[1.45]!">
+
+````md magic-move {at: 1}
+```js
+// package.json · Vue CLI
+"scripts": {
+  "build:lib": "vue-cli-service build --target lib \\
+    --name VueFinalModal ./plugin.js --dest lib",
+},
+"main": "./lib/VueFinalModal.umd.min.js",
+"unpkg": "./lib/VueFinalModal.umd.min.js",
+```
+
+```js
+// rollup.config.js · 46 行
+const plugins = [
+  NodeResolve(), VuePlugin(), cleanup(), terser(), PostCSS(), commonjs(), sizes(),
+  babel({ babelHelpers: 'bundled', extensions: ['.js', '.vue'] }),
+]
+export default {
+  input: 'lib/index.js',
+  output: [
+    { file: pkg.main, format: 'umd', name: 'VueFinalModal',
+      globals: { vue: 'Vue' } },
+    { file: pkg.module, format: 'esm' },
+  ],
+  plugins, external: ['vue'],
+}
+```
+
+```ts
+// vite.config.ts · 56 行
+export default defineConfig({
+  plugins: [VueMacros({ plugins: { vue: Vue() } }),
+    DefineOptions(), dts({ include: 'src' })],
+  build: {
+    lib: { entry: 'src/index.ts', name, fileName: f => `index.${f}.js` },
+    rollupOptions: {
+      external: ['vue', '@vueuse/core', 'focus-trap' /* … */],
+      output: { globals: { 'vue': 'Vue', '@vueuse/core': 'VueUse' /* … */ } },
+    },
+  },
+})
+```
+````
+
+</div>
+
+</div>
 
 <!--
-打包函式庫的工具其實已經不少了。
+先從我自己的經驗講起。Vue Final Modal 六年來換過三次打包工具，左邊是三代工具，右邊是當時的設定檔。
 
-[click] 這三個是我在 Vue Final Modal 上真的用過的：最早是 Vue CLI，底下是 webpack；後來換 Rollup；v4 換成 Vite 的 library mode，底層其實還是 Rollup。
+2020 年 6 月的第一版是給 Vue 2 的，從來沒打包過元件庫的我，當時我直接用 Vue CLI 的 library mode，webpack 設定全部交給 CLI。方便是方便，但產出只有 UMD，沒有 ESM。
 
-[click] 這三個我自己沒用過，只在別人的專案裡看過，所以好不好用我不評論。大家手上的專案，八成就是這六個裡的其中一個。
+[click] 同年 8 月換成 Rollup，一路用到 2021 年的 v3。中間 Vue 3 出來，同一套元件要同時維護 Vue 2 跟 Vue 3 兩條線，一個改動要發兩個版本。Rollup 的 plugin 一個一個自己接。那時候專案還是 JavaScript，支援 TS 型別的部分我沒記錯的話，第一版還是 Alex 幫我寫的 d.ts，問題就是 d.ts 常常和實際的 API 不同步。
 
-[click] 那為什麼還要再來一個 tsdown？以我自己的經驗，同一個套件換了三次工具，每一次都在重堆設定。
--->
-
----
-
-<div class="kicker">01 · 為什麼又一個打包工具</div>
-
-# 打包函式庫的四個痛點
-
-<div class="grid grid-cols-2 gap-4 mt-8">
-
-<div v-click class="card py-6! px-7! flex items-start gap-5">
-  <carbon-settings-adjust class="text-3xl accent shrink-0 mt-1" />
-  <div>
-    <div class="text-xl font-semibold mb-1">設定繁瑣</div>
-    <div class="text-base muted">Rollup、esbuild 設定複雜</div>
-  </div>
-</div>
-
-<div v-click class="card py-6! px-7! flex items-start gap-5">
-  <carbon-document class="text-3xl accent shrink-0 mt-1" />
-  <div>
-    <div class="text-xl font-semibold mb-1">TS 型別宣告複雜</div>
-    <div class="text-base muted">tsc 一次只吐一份，多格式要自己寫腳本</div>
-  </div>
-</div>
-
-<div v-click class="card py-6! px-7! flex items-start gap-5">
-  <carbon-cube class="text-3xl accent shrink-0 mt-1" />
-  <div>
-    <div class="text-xl font-semibold mb-1">多格式易出錯</div>
-    <div class="text-base muted">ESM、CJS、UMD 各寫一段，改了會漏</div>
-  </div>
-</div>
-
-<div v-click class="card py-6! px-7! flex items-start gap-5">
-  <carbon-hourglass class="text-3xl accent shrink-0 mt-1" />
-  <div>
-    <div class="text-xl font-semibold mb-1">效能瓶頸</div>
-    <div class="text-base muted">JavaScript 寫的打包器，大專案一跑就慢</div>
-  </div>
-</div>
-
-</div>
-
-<!--
-剛剛說的重堆設定，拆開來是四個痛點，做過函式庫的人應該都遇過。
-
-[click] 第一，設定繁瑣。Rollup 以 plugin 為核心，一個完整的流程要湊好幾個 plugin：解析模組、編譯 SFC、PostCSS、commonjs、壓縮，plugin 之間還可能打架。esbuild 雖然快，但型別、多格式這些函式庫要的東西都得自己補。這些設定我在 VFM 上親手堆過，後半段會攤開來看。
-
-[click] 第二，型別宣告複雜。tsc 只是逐檔把 TS 轉成 JS 和 d.ts，一次只吐一份。你要同時出 ESM 跟 CJS，就得自己寫腳本產兩份型別，Vue Final Modal 最初的版本甚至不支援 TS。這時候就不得不提到 Alex，我們這屆 VConf 的總召，也是我 TypeScript 的 mentor，告訴我 TS 有多好，也才有了 VFM v4。
-
-[click] 第三，多格式容易出錯。要同時輸出 ESM、CJS、UMD，Rollup 不是 output 寫好幾段，就是抽一層共用設定，改一個地方很容易漏掉另一個。VFM v3 的 Rollup 設定就是 UMD 跟 ESM 各寫一段。
-
-[click] 第四，效能。這點先說清楚：VFM 很小，build 慢不是我遇過的痛。但 webpack 跟 Rollup 都是 JavaScript 寫的，專案一大就慢，這是社群的共識，也是 esbuild 和後來一堆 Rust 打包器出現的原因。
+[click] 2023 年改用 TypeScript 重寫了 v4，打包改用 Vite 的 library mode。搭配 VueMacros、DefineOptions、dts 等等 plugins。我覺得是 VueFinalModal 變得真正好用且穩定的版本。然後 2024 年 1 月發了 v5 的第一個 beta 版本後，就沒有然後了。但是暫停維護的這兩年多，也讓我迎來了 tsdown。
 -->
