@@ -49,9 +49,9 @@ async function buildWithConfigs(configs) {
 
 <!--
 接下來從設定檔到 npm publish 發生什麼事情，我簡單分成了六個步驟。搭配簡化過後的原始碼，一起看看 tsdown 替我們做掉了什麼。
-第一步，格式。寫一次 format，產物兩份。只寫了一行 format，產物是四個檔：index.js、index.cjs，加上各自的型別。
+第一步，格式。設定檔只寫了一行 format，產物是四個檔：index.js、index.cjs，加上各自的型別。
 
-左邊 options.ts 的 resolveUserConfig 把 format 轉成陣列，對每一個 format 各產生一份獨立的設定。 tsdown 裡是兩次獨立的 build。下面 build.ts 的 buildWithConfigs 把展開後的每一份設定丟給 buildSingle，用 Promise.all 平行跑。buildSingle 就是一次完整的 build：組好 Rolldown 的選項和 plugin，叫 Rolldown 打包，產物寫進 dist。
+左邊 options.ts 的 resolveUserConfig 把 format 轉成陣列，對每一個 format 各產生一份獨立的設定，所以 tsdown 裡其實是兩次獨立的 build。下面 build.ts 的 buildWithConfigs 把展開後的每一份設定丟給 buildSingle，用 Promise.all 平行跑。buildSingle 就是一次完整的 build：組好 Rolldown 的選項和 plugin，叫 Rolldown 打包，產物寫進 dist。
 -->
 
 ---
@@ -69,7 +69,7 @@ async function buildWithConfigs(configs) {
 <span class="tag">types</span><span class="tag">exports.types</span><span class="tag">declaration</span>
 </div>
 
-```ts {all|4-5|6-8}
+```ts
 // src/config/options.ts
 async function resolveUserConfig(config) {
   if (dts == null) {
@@ -83,7 +83,7 @@ async function resolveUserConfig(config) {
 }
 ```
 
-<div v-click="3" class="card card-accent py-2! mt-2">
+<div v-click class="card card-accent py-2! mt-2">
 <div class="flex items-center gap-3 mb-1"><carbon-logo-vue class="text-xl accent" /><div class="eyebrow normal-case">Vue 元件庫多一行</div></div>
 <div class="text-sm muted leading-relaxed"><span class="font-mono">dts: { vue: true }</span>，型別交給 vue-tsc，SFC 的 props 才推得出來；ESM 配 <span class="font-mono">.d.ts</span>、CJS 配 <span class="font-mono">.d.cts</span></div>
 </div>
@@ -95,13 +95,13 @@ async function resolveUserConfig(config) {
 </div>
 
 <!--
-第二步，型別。要不要產型別，它看你的 package.json。VFM 的設定裡沒寫要產型別，dist 裡卻有 index.d.ts 跟 index.d.cts，因為 tsdown 讀 package.json 替你決定。
+第二步，型別。VFM 的設定裡沒有寫要產型別，但 dist 裡有 index.d.ts 跟 index.d.cts。
 
-[click] 原始碼就在同一個 resolveUserConfig 裡：設定裡沒寫 dts，先看 package.json 有沒有 types，或 exports 裡有沒有 types 條件，有就開。
+原始碼一樣在 resolveUserConfig：設定裡沒寫 dts，就看 package.json 有沒有 types，或 exports 裡有沒有 types 條件，有就開。
 
-[click] 都沒有，再讀 tsconfig 的 declaration。你本來就會替 TypeScript 專案設這些，不用再講一次。
+都沒有，再看 tsconfig 的 declaration。這些本來就是 TypeScript 專案會設的東西，不用再寫一次。
 
-[click] Vue 元件庫要多一行：dts 的 vue 設成 true。因為預設的 tsc 看不懂 .vue 檔，開了 vue 才會接上 Vue 的語言支援，等於 vue-tsc 那一套，SFC 的 props 跟 emits 才推得出來。
+[click] Vue 元件庫要多一行設定，dts 的 vue 設成 true。因為 tsc 看不懂 .vue 檔，開了之後才會走 vue-tsc 那一套，SFC 的 props 跟 emits 才推得出來。
 -->
 
 ---
@@ -114,13 +114,13 @@ async function resolveUserConfig(config) {
 
 <div class="min-w-0 [&_pre]:text-[0.66rem]! [&_pre]:leading-[1.45]!">
 
-<div class="flex flex-wrap items-center gap-2 mb-2 text-sm">
-<span class="muted">VFM 的依賴</span>
-<span class="tag tag-neutral">vue</span><span class="tag tag-neutral">@vueuse/core</span><span class="tag tag-neutral">focus-trap</span><span class="tag tag-neutral">vue-use-template</span><span class="tag tag-neutral">scroll-lock</span>
-<span class="flex items-center gap-2 whitespace-nowrap"><carbon-arrow-right class="faint" /><span class="muted">不打進 dist，留成 import</span></span>
+<div class="mb-2 text-sm space-y-1.5">
+<div class="muted">VFM 的依賴</div>
+<div class="flex flex-wrap gap-2"><span class="tag tag-neutral">vue</span><span class="tag tag-neutral">@vueuse/core</span><span class="tag tag-neutral">focus-trap</span><span class="tag tag-neutral">vue-use-template</span><span class="tag tag-neutral">scroll-lock</span></div>
+<div class="flex items-center gap-2"><carbon-arrow-right class="faint" /><span class="muted">不打包進 dist，留成 import</span></div>
 </div>
 
-```ts {all|3-4|6-9}
+```ts
 // src/features/deps.ts
 async function externalStrategy(id, importer) {
   if (deps.includes(id) || deps.some(dep => id.startsWith(`${dep}/`)))
@@ -140,11 +140,11 @@ async function externalStrategy(id, importer) {
 </div>
 
 <!--
-第三步，依賴。打包的時候，原本要手動設定外部化的部分，tsdown 自動地幫我們做掉了，確保我們不會將不該打包的依賴包進最終的資料夾。拿 VFM 舉例：vue、@vueuse/core、focus-trap 是 peerDependencies，vue-use-template 跟 scroll-lock 是 dependencies。設定檔不需要提到這些依賴，但 tsdown 是怎麼判斷的？
+第三步，依賴。打包的時候，原本要手動設定外部化的部分，tsdown 自動地幫我們做掉了，確保我們不會將不該打包的依賴包進最終的資料夾。拿 VFM 舉例：vue、@vueuse/core、focus-trap 是 peerDependencies，vue-use-template 跟 scroll-lock 是 dependencies。設定檔不需要提到這些依賴，但 tsdown 是怎麼做到的？
 
-[click] deps.ts 裡的 externalStrategy 這個函式，拿每一個 import 去對應 package.json：在 dependencies 或 peerDependencies 裡的就自動外部化。
+externalStrategy 這個函式，拿每一個 import 去對應 package.json：在 dependencies 或 peerDependencies 裡的就自動外部化。
 
-[click] 型別檔也一樣：d.ts 裡 import 的套件照同一套規則外部化，不會把別人的型別整包抄進來。
+型別檔也一樣：d.ts 裡 import 的套件照同一套規則外部化，不會把別人的型別整包抄進來。
 -->
 
 ---
@@ -162,7 +162,7 @@ async function externalStrategy(id, importer) {
 <div class="text-sm muted leading-relaxed">SFC 交給 <span class="font-mono">unplugin-vue/rolldown</span>；偵測到 <span class="font-mono">@tsdown/css</span> 就掛上，SFC 的 style 抽成 <span class="font-mono">style.css</span></div>
 </div>
 
-```ts {all|3-5|7|8}
+```ts
 // src/features/rolldown.ts
 async function resolveInputOptions(config) {
   plugins.push(DepsPlugin(config, bundle)) // external
@@ -181,13 +181,19 @@ async function resolveInputOptions(config) {
 </div>
 
 <!--
-第四步，CSS 跟 Vue。CSS 零設定，而且排在你的 plugin 之後。Vue 元件庫只要一個 plugin：unplugin-vue。CSS 一行都不用寫，裝了 @tsdown/css 它就自動掛上，SFC 的 style 抽成 dist/style.css。問題是 scoped style 要先經過 Vue plugin 轉換，它怎麼知道要等？
+第四步，CSS 跟 Vue。
 
-[click] 答案在 rolldown.ts 的 resolveInputOptions 組 plugin 的順序，而且是固定的：先掛處理依賴的 DepsPlugin，再掛產型別的 dts，然後是 @tsdown/css 的前置 plugin，這些都是內建的。
+Vue 元件庫只需要 unplugin-vue/rolldown 一個 plugin
 
-[click] 內建的掛完，才掛你自己的 plugins，unplugin-vue 排在這裡。
+CSS 則是會自動判斷你是否已經裝了 @tsdown/css
 
-[click] 最後是 CSS 的後處理，特地放在使用者 plugin 之後，因為要等 Vue 的 scoped CSS 轉換完才能收集。
+SFC 的 style 會抽成 dist/style.css。但 scoped style 要先經過 Vue plugin 轉換，它怎麼知道要等？
+
+設定都在 rolldown.ts 的 resolveInputOptions 中，plugin 的順序是固定的：先加上處理依賴的 DepsPlugin，再加上產生型別的 dts，然後是 @tsdown/css 的前置 plugin，這些都是內建的。
+
+內建的加完之後，才掛我們自己的 plugins，unplugin-vue 的部分就在這邊。
+
+最後才是 CSS 的後處理，vue plugin 之後，因為要確保 Vue 的 scoped CSS 轉換完。
 -->
 
 ---
@@ -229,11 +235,6 @@ export default defineConfig({
 })
 ```
 ````
-
-<div v-click="3" class="card card-accent mt-3 py-3!">
-<div class="eyebrow mb-1">一個坑</div>
-<div class="text-sm muted">純 ESM 時 <span class="font-mono">main</span>、<span class="font-mono">module</span> 會拿掉，舊的 <span class="font-mono">types</span> 卻留著指向不存在的 <span class="font-mono">.d.cts</span>；開 <span class="font-mono">legacy: true</span> 或自己刪</div>
-</div>
 
 </div>
 
@@ -294,13 +295,11 @@ export default defineConfig({
 </div>
 
 <!--
-第五步，exports。一行 exports，package.json 它來寫。這一步我自己最有感：scroll-lock 的設定檔只有兩行，exports 設成 true，格式 CJS 跟 ESM。右邊 package.json 的 main、module、types、exports，全部是 tsdown 每次 build 寫回去的，這是我 10 月 11 號用 v0.22.5 實際跑出來的。
+第五步，exports。這一步我自己最有感。拿 scroll-lock 舉例，設定檔只有兩行：exports 設成 true，格式 CJS 跟 ESM。右邊 package.json 的 main、module、types、exports，全部是 tsdown 每次 build 幫我們寫回去的。
 
-[click] 多加一個入口 foo，什麼都不用改，exports 自動多一個 ./foo。
+[click] 多加一個入口 foo，其他什麼都不用改，exports 自動多一個 ./foo。
 
-[click] 再開 devExports：開發時 exports 直接指向 src，monorepo 裡其他套件 import 你不用先 build；dist 的版本搬到 publishConfig，publish 時自動換回去。設定檔是唯一的真相，package.json 變成產物。
-
-[click] 一個坑：改成純 ESM 時 main 跟 module 會被拿掉，但舊的 types 會留著，指到已經不存在的 .d.cts。它替你寫，你還是要看一眼。這個坑下一步的檢查會抓到。
+[click] 再開 devExports，開發時 exports 直接指向 src，monorepo 裡其他套件 import 的時候不用先 build；dist 的版本放到 publishConfig，publish 時自動換回去。所以 package.json 變成 build 的產物，我們只要維護設定檔就好。
 -->
 
 ---
@@ -309,67 +308,32 @@ export default defineConfig({
 
 <div class="-mt-1 mb-5"><PublishSteps :current="6" /></div>
 
-<div class="grid grid-cols-[1fr_1.1fr] gap-5 items-start">
+<div class="grid grid-cols-2 gap-5 items-stretch mt-2">
 
-<div class="min-w-0 [&_pre]:text-[0.72rem]! [&_pre]:leading-[1.5]!">
-
-<div v-click="1" class="card py-3! mb-3">
-<div class="eyebrow normal-case mb-1">publint <span class="muted tracking-normal">· publint.dev</span></div>
-<div class="text-sm muted leading-relaxed">對 <span class="font-mono">npm pack</span> 出來的那一包檢查 package.json：<span class="font-mono">main</span>、<span class="font-mono">types</span>、<span class="font-mono">exports</span> 指到的檔案在不在、格式有沒有擺錯</div>
+<div v-click="1" class="card py-5! px-6!">
+<div class="text-2xl font-semibold mb-1">publint</div>
+<div class="muted text-sm mb-4"><a href="https://publint.dev" target="_blank" rel="noopener">publint.dev</a></div>
+<div class="text-lg leading-relaxed">檢查 <span class="font-mono">main</span>、<span class="font-mono">types</span>、<span class="font-mono">exports</span> 指到的檔案在不在，格式有沒有擺錯</div>
 </div>
 
-<div v-click="2" class="card py-3! mb-3">
-<div class="eyebrow normal-case mb-1">attw <span class="muted tracking-normal">· Are the types wrong?</span></div>
-<div class="text-sm muted leading-relaxed">模擬 node10、node16 的 import 與 require、bundler 四種解析去找型別，抓使用者裝了才會炸的錯</div>
+<div v-click="2" class="card py-5! px-6!">
+<div class="text-2xl font-semibold mb-1">attw</div>
+<div class="muted text-sm mb-4"><a href="https://arethetypeswrong.github.io" target="_blank" rel="noopener">Are the types wrong?</a></div>
+<div class="text-lg leading-relaxed">模擬四種模組解析方式去找型別，抓使用者裝了才會炸的錯</div>
 </div>
-
-<div v-click="5" class="text-sm muted leading-relaxed"><span class="accent font-semibold">什麼時候跑：</span>所有 format 到齊 → 寫 <span class="font-mono">exports</span> → <span class="font-mono">npm pack</span> → 兩個檢查平行跑同一包；檢查的是真正會上傳的內容，不是 dist</div>
-
-</div>
-
-<div v-click="3" class="min-w-0 [&_pre]:text-[0.72rem]! [&_pre]:leading-[1.45]!">
-
-<div class="eyebrow normal-case mb-2">scroll-lock 實跑：純 ESM，舊的 types 沒刪</div>
-
-````md magic-move {at: 4}
-```text
-$ publint
-Errors:
-1. pkg.types is ./dist/index.d.cts
-   but the file does not exist.
-
-$ attw --pack
-⚠️ A require call resolved to
-   an ESM JavaScript file
-node16 (from CJS)  ⚠️ ESM (dynamic import only)
-```
-
-```text
-$ publint
-Linting...（沒有 Errors）
-
-$ attw --pack
-No problems found 🌟
-node16 (from CJS)  🟢 (CJS)
-```
-````
-
-<div class="text-sm muted mt-3">設 <span class="font-mono">publint: 'ci-only'</span>、<span class="font-mono">attw: 'ci-only'</span>，只在 <span class="font-mono">CI=true</span> 時跑，本機 build 不會被拖慢</div>
 
 </div>
 
+<div v-click="3" class="card card-accent mt-5 py-4! px-6! text-lg">
+<span class="accent font-semibold">什麼時候跑：</span>所有 format 都 build 完，寫回 <span class="font-mono">exports</span>，<span class="font-mono">npm pack</span> 之後對同一包檢查，也就是真正會上傳的內容
 </div>
 
 <!--
-第六步，發布前檢查。兩個檢查，對著真正的 tarball 跑。這兩個工具是什麼，我做 v5 之前根本不知道，我猜大部分的人也沒聽過。兩個都是獨立的套件，設定裡開起來，tsdown 會在對的時間點替你跑。
+第六步，發布前檢查。publint 和 attw 這兩個工具是什麼，我做 v5 之前根本不知道，我猜大部分的人也沒聽過。它們都是獨立的套件，設定裡開起來，tsdown 會在對的時間點幫我們跑。
 
-[click] publint 是 Vite 團隊的 bluwy 寫的。它拿 npm pack 出來的那一包去對 package.json：main、types、exports 指到的檔案在不在、格式有沒有擺錯。
+[click] publint 拿 npm pack 出來的那一包去對 package.json：main、types、exports 指到的檔案在不在，格式有沒有擺錯。
 
-[click] attw 是 Are the types wrong 的縮寫，TypeScript 團隊的 Andrew Branch 做的。它模擬四種模組解析模式去找你的型別，抓的是只有使用者裝了才會炸的錯。
+[click] attw 是 Are the types wrong 的縮寫，它模擬四種模組解析模式去找你的型別，抓的是使用者裝了才會炸的錯。
 
-[click] 實際的例子就是上一步那個坑。scroll-lock 改成純 ESM，舊的 types 還指著 .d.cts。publint 一行就抓到：types 指到的檔案不存在；attw 則說 require 會解析到 ESM 檔。
-
-[click] 改回 CJS 加 ESM 之後，publint 沒有錯誤，attw 四種模式全綠。設成 ci-only 的話只在 CI 跑，本機 build 不會被拖慢。
-
-[click] 它在哪個時間點跑？所有 format 都 build 完，先寫 exports 回 package.json，再把套件 pack 成 tarball，publint 跟 attw 檢查同一包。檢查的是 npm publish 真正會上傳的內容，不是 dist 資料夾。
+[click] 那它們在哪個時間點跑？所有 format 都 build 完，先寫 exports 回 package.json，再 pack 成 tarball，publint 跟 attw 檢查的是同一包，也就是 npm publish 真正會上傳的內容，不是 dist 資料夾。
 -->

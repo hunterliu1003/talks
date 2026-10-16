@@ -81,23 +81,9 @@ const scenes: Record<Scene, Step[]> = {
   format: [
     { on: ['src/config/options.ts', 'src/build.ts'] },
   ],
-  dts: [
-    { on: ['src/config/options.ts'] },
-    { on: ['src/config/options.ts'] },
-    { on: ['src/config/options.ts'] },
-    { on: ['src/config/options.ts'], calls: ['src/features/rolldown.ts'] },
-  ],
-  deps: [
-    { on: ['src/features/deps.ts'] },
-    { on: ['src/features/deps.ts'] },
-    { on: ['src/features/deps.ts'], calls: ['src/features/rolldown.ts'] },
-  ],
-  css: [
-    { on: ['src/features/rolldown.ts'] },
-    { on: ['src/features/rolldown.ts'], calls: ['src/features/deps.ts'] },
-    { on: ['src/features/rolldown.ts'] },
-    { on: ['src/features/rolldown.ts'] },
-  ],
+  dts: [{ on: ['src/config/options.ts'] }],
+  deps: [{ on: ['src/features/deps.ts'] }],
+  css: [{ on: ['src/features/rolldown.ts'] }],
   pkg: [
     { on: ['src/features/pkg/index.ts'] },
     { on: ['src/features/pkg/index.ts'] },
@@ -124,7 +110,6 @@ const step = computed<Step>(() => {
   return { on: props.highlight ?? [] }
 })
 
-const showLegend = computed(() => props.scene !== undefined && scenes[props.scene].some(s => s.calls?.length))
 
 function flatten(nodes: TreeNode[], out: TreeNode[] = []): TreeNode[] {
   for (const n of nodes) {
@@ -152,9 +137,5 @@ const states = computed<Record<string, State>>(() => {
 <template>
   <div class="card py-2.5! px-3! min-w-0 [--ts-badge:#5ba3d6]">
     <SourceTreeNode v-for="n in tree" :key="n.path" :node="n" :states="states" />
-    <div v-if="showLegend" class="flex gap-4 mt-1.5 px-1 font-sans text-[0.62rem] text-[var(--fg-3)]">
-      <span><span class="inline-block w-2 h-2 rounded-sm bg-[var(--accent)] mr-1 align-middle"></span>正在讀的檔案</span>
-      <span><span class="inline-block w-2 h-2 rounded-sm bg-[var(--fg)] mr-1 align-middle"></span>這幾行呼叫的檔案</span>
-    </div>
   </div>
 </template>
