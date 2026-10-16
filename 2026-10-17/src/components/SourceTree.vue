@@ -94,7 +94,6 @@ const scenes: Record<Scene, Step[]> = {
     { on: ['src/features/deps.ts'] },
     { on: ['src/features/deps.ts'] },
     { on: ['src/features/deps.ts'], calls: ['src/features/rolldown.ts'] },
-    { on: ['src/features/deps.ts'], calls: ['src/features/pkg/exports.ts'] },
   ],
   css: [
     { on: ['src/features/rolldown.ts'] },

@@ -112,11 +112,10 @@ if (dts == null) {
 
 <div class="min-w-0 [&_pre]:text-[0.66rem]! [&_pre]:leading-[1.45]!">
 
-<div class="flex items-center gap-2 mb-2 text-sm whitespace-nowrap">
+<div class="flex flex-wrap items-center gap-2 mb-2 text-sm">
 <span class="muted">VFM 的依賴</span>
 <span class="tag tag-neutral">vue</span><span class="tag tag-neutral">focus-trap</span><span class="tag tag-neutral">vue-use-template</span>
-<carbon-arrow-right class="faint" />
-<span class="muted">只剩 import</span>
+<span class="flex items-center gap-2 whitespace-nowrap"><carbon-arrow-right class="faint" /><span class="muted">不打進 dist，留成 import</span></span>
 </div>
 
 ```ts {all|2-3|5-8}
@@ -129,10 +128,6 @@ if (importer && RE_DTS.test(importer) && !id.startsWith('@types/')) {
 } // d.ts 裡 import 的套件，有對應的 @types 也外部化
 ```
 
-<div v-click="3" class="card card-accent py-2! mt-2">
-<div class="flex items-center gap-3 mb-1"><carbon-package class="text-xl accent" /><div class="eyebrow">VFM 的 UMD 是例外</div></div>
-<div class="text-sm muted leading-relaxed"><span class="font-mono">deps.alwaysBundle</span> 把 vue-use-template 與 scroll-lock 打進 UMD，CDN 使用者沒有 build step；有開 <span class="font-mono">exports</span> 的套件，打進去的套件與版本會寫進 <span class="font-mono">inlinedDependencies</span></div>
-</div>
 
 </div>
 
@@ -145,9 +140,7 @@ if (importer && RE_DTS.test(importer) && !id.startsWith('@types/')) {
 
 [click] deps.ts 拿每一個 import 去對 package.json：在 dependencies 或 peerDependencies 裡的就外部化，連 vue/server-renderer 這種子路徑都算。
 
-[click] 他沒講的是這段：型別宣告也懂 @types。d.ts 裡 import 的套件，只要對應的 @types 在你的依賴裡，一樣外部化。
-
-[click] VFM 有一個例外：UMD。CDN 的使用者沒有 build step，所以用 alwaysBundle 把 vue-use-template 跟 scroll-lock 打進去。反過來，node_modules 的東西意外被打進去，它會在 build 時列出來提醒你。
+[click] 他沒講的是這段：型別宣告也懂 @types。d.ts 裡 import 的套件，只要對應的 @types 在你的依賴裡，一樣外部化。 反過來，node_modules 的東西意外被打進去，它會在 build 時列出來提醒你。
 -->
 
 ---
