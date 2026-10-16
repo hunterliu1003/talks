@@ -2,7 +2,16 @@
 
 # 一個套件，附 Nuxt module
 
-<div class="grid grid-cols-[1fr_max-content_1fr] gap-4 items-start mt-12">
+<div class="card py-4! px-6! mt-4">
+<div class="eyebrow mb-2 normal-case">修復潛在的問題</div>
+<ul class="compact-list text-lg">
+<li>hydration error</li>
+<li>memory leak</li>
+<li>每個 server 請求各自獨立</li>
+</ul>
+</div>
+
+<div class="grid grid-cols-[1fr_max-content_1fr] gap-4 items-start mt-8">
 
 <div v-click>
 <div class="eyebrow mb-2">v4 · 另一個套件</div>
@@ -79,15 +88,15 @@ open()
 </div>
 
 <!--
-SSR 是 v5 新增的能力，底層來自 vue-use-template。open 在哪裡呼叫，會走兩條不同的路。左邊是 server，右邊是瀏覽器。
+SSR 是 v5 新增的能力。
 
-[click] 第一條：在元件的 script setup 內呼叫 open，或是 defaultModelValue 設 true。伺服器渲染時，這個 modal 直接寫進 HTML，帶著正確的 z-index。server 上沒有 transition，open 會立刻 resolve 成 opened。
+[click] 如果在元件的 script setup 內呼叫 useModal open。伺服器渲染時，這個 modal 會直接寫進 HTML。server 上沒有 transition 效果。
 
-[click] 到了瀏覽器，hydration 直接接上 server 寫好的 DOM，modal 維持開啟，第一個畫面就能操作，也不重播進場動畫，不會閃一下。
+[click] 到了瀏覽器，hydration 直接接上 server 寫好的 DOM，modal 維持開啟，第一個畫面就能操作，也不會重播進場動畫，不會閃一下。
 
-[click] 第二條：open 寫在任何元件之外，例如 plugin。典型的情境是閒置逾時警告，計時器跟著整個 app 跑，到期時沒有任何元件在 setup，只能在這裡開 modal。server 上分不出這是哪個 request，所以直接跳過、不寫進 HTML，當成 client-only 的 modal，dev 模式會印警告提醒你。
+[click] 如果是在 script setup 之外呼叫 useModal open ，例如 plugin。server 上可能無法分辨這是哪個請求，所以直接跳過、不寫進 HTML，當成 client-only 的 modal。
 
-[click] 它會自動退回 client 端：瀏覽器接手、元件 mount 之後再把 modal 開起來，進場動畫照播，只是少了首屏就開著的好處。
+[click] 這種情況，一開始就會先看到頁面，再看到 modal 被開啟。
 
-[click] 兩條路 server 跟瀏覽器的輸出都一致，所以不會 hydration mismatch。這也順便解掉 v4 的老問題：v4 的 modal 狀態掛在跨 request 的單例上，server render 會 memory leak；v5 每個 request 各自隔離。
+[click] 這兩條路一起算是提供了比舊版更好的使用體驗，Nuxt 專案不用再擔心有 hydration error 和 memory leak 的問題。
 -->

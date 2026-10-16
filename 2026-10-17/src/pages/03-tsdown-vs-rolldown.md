@@ -38,7 +38,7 @@
 
 [click] 應用程式這一側是 Vite，從 Vite 8 開始打包就是 Rolldown 在做。
 
-[click] 函式庫這一側是 tsdown。Rolldown 負責打包本身，tsdown 負責打包以外的使用體驗：型別宣告、輸出格式、package.json 的 exports，還有發布前的檢查。
+[click] 函式庫這一側是 tsdown。Rolldown 負責打包本身，tsdown 負責打包函式庫的整個使用體驗。
 
 [click] 再來是將兩個都整合在一起的 Vite+，vp build 用 Vite 打包應用程式，vp pack 用 tsdown 打包函式庫。
 -->
