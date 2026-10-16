@@ -101,7 +101,7 @@ async function resolveUserConfig(config) {
 
 都沒有，再看 tsconfig 的 declaration。這些本來就是 TypeScript 專案會設的東西，不用再寫一次。
 
-[click] Vue 元件庫要多一行設定，dts 的 vue 設成 true。因為 tsc 看不懂 .vue 檔，開了之後才會走 vue-tsc 那一套，SFC 的 props 跟 emits 才推得出來。
+[click] 補充一下 Vue 元件庫要多一行設定，dts 的 vue 設成 true。因為 tsc 看不懂 .vue 檔，開了之後才會改走 vue-tsc 去處理 SFC 的型別。
 -->
 
 ---
@@ -140,11 +140,11 @@ async function externalStrategy(id, importer) {
 </div>
 
 <!--
-第三步，依賴。打包的時候，原本要手動設定外部化的部分，tsdown 自動地幫我們做掉了，確保我們不會將不該打包的依賴包進最終的資料夾。拿 VFM 舉例：vue、@vueuse/core、focus-trap 是 peerDependencies，vue-use-template 跟 scroll-lock 是 dependencies。設定檔不需要提到這些依賴，但 tsdown 是怎麼做到的？
+第三步，依賴。打包的時候，原本要手動設定外部化的部分，tsdown 自動地幫我們做掉了，確保我們不會將不該打包的依賴包進最終的資料夾。拿 VFM 舉例：vue、@vueuse/core、focus-trap 是 peerDependencies，vue-use-template 跟 scroll-lock 是 dependencies。設定檔不用寫 external 就能自動將這些依賴外部話，tsdown 是怎麼做到的？
 
-externalStrategy 這個函式，拿每一個 import 去對應 package.json：在 dependencies 或 peerDependencies 裡的就自動外部化。
+我們可以看到 deps.ts 中的 externalStrategy 這個函式，會拿每一個 import 去對應 package.json：在 dependencies 或 peerDependencies 裡的就自動外部化。
 
-型別檔也一樣：d.ts 裡 import 的套件照同一套規則外部化，不會把別人的型別整包抄進來。
+型別檔也是一樣：d.ts 裡 import 的套件照同一套規則外部化，不會把別人的型別不小心打包進來。
 -->
 
 ---
@@ -295,11 +295,11 @@ export default defineConfig({
 </div>
 
 <!--
-第五步，exports。這一步我自己最有感。拿 scroll-lock 舉例，設定檔只有兩行：exports 設成 true，格式 CJS 跟 ESM。右邊 package.json 的 main、module、types、exports，全部是 tsdown 每次 build 幫我們寫回去的。
+第五步，exports。這一步我自己最有感。以前 package.json 的 main、module、types、exports 這幾個欄位都要自己手寫，很容易寫錯。現在 tsdown 會自動去更新 package.json 真的很方便。
 
-[click] 多加一個入口 foo，其他什麼都不用改，exports 自動多一個 ./foo。
+[click] 你如果多加一個入口 foo，package.json 不用動，exports 自動多一個 ./foo。
 
-[click] 再開 devExports，開發時 exports 直接指向 src，monorepo 裡其他套件 import 的時候不用先 build；dist 的版本放到 publishConfig，publish 時自動換回去。所以 package.json 變成 build 的產物，我們只要維護設定檔就好。
+[click] 再開 devExports，開發的時候 exports 會指向 src，monorepo 裡其他套件要用它不用先 build；要發布的時候 tsdown 再換回 dist 的路徑。所以 package.json 變成 build 的產物，我們只要顧好設定檔就好。
 -->
 
 ---
@@ -319,21 +319,16 @@ export default defineConfig({
 <div v-click="2" class="card py-5! px-6!">
 <div class="text-2xl font-semibold mb-1">attw</div>
 <div class="muted text-sm mb-4"><a href="https://arethetypeswrong.github.io" target="_blank" rel="noopener">Are the types wrong?</a></div>
-<div class="text-lg leading-relaxed">模擬四種模組解析方式去找型別，抓使用者裝了才會炸的錯</div>
+<div class="text-lg leading-relaxed">假裝成四種不同設定的使用者專案來找型別，抓裝了才會炸的錯</div>
 </div>
 
 </div>
 
-<div v-click="3" class="card card-accent mt-5 py-4! px-6! text-lg">
-<span class="accent font-semibold">什麼時候跑：</span>所有 format 都 build 完，寫回 <span class="font-mono">exports</span>，<span class="font-mono">npm pack</span> 之後對同一包檢查，也就是真正會上傳的內容
-</div>
 
 <!--
-第六步，發布前檢查。publint 和 attw 這兩個工具是什麼，我做 v5 之前根本不知道，我猜大部分的人也沒聽過。它們都是獨立的套件，設定裡開起來，tsdown 會在對的時間點幫我們跑。
+第六步，發布前檢查。publint 和 attw 這兩個工具是什麼，我做 v5 之前根本不知道，我猜大部分的人也沒聽過。它們都是獨立的工具，設定裡開起來，tsdown 會幫我們執行。
 
-[click] publint 拿 npm pack 出來的那一包去對 package.json：main、types、exports 指到的檔案在不在，格式有沒有擺錯。
+[click] publint 檢查的是 package.json：main、types、exports 這些欄位寫的路徑，檔案是不是真的在那裡，CJS 跟 ESM 有沒有放反。
 
-[click] attw 是 Are the types wrong 的縮寫，它模擬四種模組解析模式去找你的型別，抓的是使用者裝了才會炸的錯。
-
-[click] 那它們在哪個時間點跑？所有 format 都 build 完，先寫 exports 回 package.json，再 pack 成 tarball，publint 跟 attw 檢查的是同一包，也就是 npm publish 真正會上傳的內容，不是 dist 資料夾。
+[click] attw 是 Are the types wrong 的縮寫，它假裝成四種不同設定的使用者專案來 import 你的套件，看型別找不找得到，抓的是使用者裝了才會炸的錯。
 -->
