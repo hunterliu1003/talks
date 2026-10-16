@@ -1,6 +1,6 @@
-<div class="flex items-center justify-between gap-4"><div class="kicker normal-case shrink-0">04 · 從設定檔到 npm publish</div><PublishSteps :current="1" /></div>
+<div class="kicker normal-case">04 · 從設定檔到 npm publish 發生什麼事</div>
 
-# 寫一次 format，產物兩份，副作用一次
+<div class="-mt-1 mb-5"><PublishSteps :current="1" /></div>
 
 <div class="grid grid-cols-[1.35fr_1fr] gap-6 items-start">
 
@@ -12,22 +12,20 @@
 <span class="tag">index.js</span><span class="tag">index.cjs</span><span class="tag tag-neutral">+ .d.ts</span>
 </div>
 
-<div v-show="$clicks < 3">
+<div v-show="$clicks < 2">
 
-```ts {all|2-3|5-6}
+```ts {all|2-3}
 // src/config/options.ts
 const formats = resolveComma(toArray(format, 'esm'))
 return formats.map((fmt, idx) => ({
   ...config,
-  copy: idx === 0 ? config.copy : undefined,
-  onSuccess: idx === 0 ? config.onSuccess : undefined,
   format: normalizeFormat(fmt),
 }))
 ```
 
 </div>
 
-<div v-show="$clicks >= 3">
+<div v-show="$clicks >= 2">
 
 ```ts {all|2-4}
 // src/build.ts
@@ -38,7 +36,7 @@ const bundles = await Promise.all(
 
 </div>
 
-<div v-click="4" class="text-sm muted mt-2 leading-relaxed">副檔名也是它決定：<span class="font-mono">platform</span> 是 node 一律 <span class="font-mono">.mjs</span> / <span class="font-mono">.cjs</span>；VFM 是 neutral 加 <span class="font-mono">"type": "module"</span>，所以是 <span class="font-mono">.js</span> / <span class="font-mono">.cjs</span></div>
+<div v-click="3" class="text-sm muted mt-2 leading-relaxed">副檔名也是它決定：<span class="font-mono">platform</span> 是 node 一律 <span class="font-mono">.mjs</span> / <span class="font-mono">.cjs</span>；VFM 是 neutral 加 <span class="font-mono">"type": "module"</span>，所以是 <span class="font-mono">.js</span> / <span class="font-mono">.cjs</span></div>
 
 </div>
 
@@ -47,11 +45,9 @@ const bundles = await Promise.all(
 </div>
 
 <!--
-接下來跟著 VFM 走六步，從設定檔到 npm publish。每一步先看它替你做了什麼，再看原始碼，右邊會點亮正在讀的檔案。第一步，格式。VFM 只寫了一行 format，產物是四個檔：index.js、index.cjs，加上各自的型別。
+接下來跟著 VFM 走六步，從設定檔到 npm publish。每一步先看它替你做了什麼，再看原始碼，右邊會點亮正在讀的檔案。第一步，格式。寫一次 format，產物兩份。VFM 只寫了一行 format，產物是四個檔：index.js、index.cjs，加上各自的型別。
 
 [click] options.ts 把 format 轉成陣列，對每一個 format 各產生一份獨立的設定。平常說的 dual format，在 tsdown 裡是兩次獨立的 build。
-
-[click] copy 跟 onSuccess 只交給第一份，不然 ESM 跟 CJS 會各跑一次。
 
 [click] 展開後的設定在 build.ts 用 Promise.all 平行跑，clean 只做一次。VFM 三組設定展開就是四次 build 平行跑。
 
@@ -60,13 +56,13 @@ const bundles = await Promise.all(
 
 ---
 
-<div class="flex items-center justify-between gap-4"><div class="kicker normal-case shrink-0">04 · 從設定檔到 npm publish</div><PublishSteps :current="2" /></div>
+<div class="kicker normal-case">04 · 從設定檔到 npm publish 發生什麼事</div>
 
-# 要不要產型別，它看你的 package.json
+<div class="-mt-1 mb-5"><PublishSteps :current="2" /></div>
 
 <div class="grid grid-cols-[1.35fr_1fr] gap-6 items-start">
 
-<div class="min-w-0 [&_pre]:text-[0.7rem]!">
+<div class="min-w-0 [&_pre]:text-[0.66rem]! [&_pre]:leading-[1.45]!">
 
 <div class="flex items-center gap-2 mb-2 text-sm whitespace-nowrap">
 <span class="muted">三個訊號有一個就自動產</span>
@@ -85,7 +81,7 @@ if (dts == null) {
 }
 ```
 
-<div v-click="3" class="card card-accent py-3! mt-2">
+<div v-click="3" class="card card-accent py-2! mt-2">
 <div class="flex items-center gap-3 mb-1"><carbon-logo-vue class="text-xl accent" /><div class="eyebrow normal-case">Vue 元件庫多一行</div></div>
 <div class="text-sm muted leading-relaxed"><span class="font-mono">dts: { vue: true }</span>，型別交給 vue-tsc，SFC 的 props 才推得出來；ESM 配 <span class="font-mono">.d.ts</span>、CJS 配 <span class="font-mono">.d.cts</span></div>
 </div>
@@ -97,7 +93,7 @@ if (dts == null) {
 </div>
 
 <!--
-第二步，型別。VFM 的設定裡沒寫要產型別，dist 裡卻有 index.d.ts 跟 index.d.cts，因為 tsdown 讀 package.json 替你決定。
+第二步，型別。要不要產型別，它看你的 package.json。VFM 的設定裡沒寫要產型別，dist 裡卻有 index.d.ts 跟 index.d.cts，因為 tsdown 讀 package.json 替你決定。
 
 [click] 原始碼就這幾行：設定裡沒寫 dts，先看 package.json 有沒有 types，或 exports 裡有沒有 types 條件，有就開。
 
@@ -108,15 +104,15 @@ if (dts == null) {
 
 ---
 
-<div class="flex items-center justify-between gap-4"><div class="kicker normal-case shrink-0">04 · 從設定檔到 npm publish</div><PublishSteps :current="3" /></div>
+<div class="kicker normal-case">04 · 從設定檔到 npm publish 發生什麼事</div>
 
-# 依賴自動外部化，打進去的會寫給你看
+<div class="-mt-1 mb-5"><PublishSteps :current="3" /></div>
 
 <div class="grid grid-cols-[1.35fr_1fr] gap-6 items-start">
 
-<div class="min-w-0 [&_pre]:text-[0.7rem]!">
+<div class="min-w-0 [&_pre]:text-[0.66rem]! [&_pre]:leading-[1.45]!">
 
-<div class="flex items-center gap-2 mb-3 text-sm whitespace-nowrap">
+<div class="flex items-center gap-2 mb-2 text-sm whitespace-nowrap">
 <span class="muted">VFM 的依賴</span>
 <span class="tag tag-neutral">vue</span><span class="tag tag-neutral">focus-trap</span><span class="tag tag-neutral">vue-use-template</span>
 <carbon-arrow-right class="faint" />
@@ -133,7 +129,7 @@ if (importer && RE_DTS.test(importer) && !id.startsWith('@types/')) {
 } // d.ts 裡 import 的套件，有對應的 @types 也外部化
 ```
 
-<div v-click="3" class="card card-accent py-3! mt-3">
+<div v-click="3" class="card card-accent py-2! mt-2">
 <div class="flex items-center gap-3 mb-1"><carbon-package class="text-xl accent" /><div class="eyebrow">VFM 的 UMD 是例外</div></div>
 <div class="text-sm muted leading-relaxed"><span class="font-mono">deps.alwaysBundle</span> 把 vue-use-template 與 scroll-lock 打進 UMD，CDN 使用者沒有 build step；有開 <span class="font-mono">exports</span> 的套件，打進去的套件與版本會寫進 <span class="font-mono">inlinedDependencies</span></div>
 </div>
@@ -145,7 +141,7 @@ if (importer && RE_DTS.test(importer) && !id.startsWith('@types/')) {
 </div>
 
 <!--
-第三步，依賴。VFM 的 package.json 裡，vue、focus-trap、@vueuse/core 是 peerDependencies，vue-use-template 跟 scroll-lock 是 dependencies。設定檔一個字都沒提它們，產物裡卻全部變成 import。這是 sxzz 去年講過的自動外部化，今天看它怎麼判斷。
+第三步，依賴。依賴自動外部化，打進去的會寫給你看。VFM 的 package.json 裡，vue、focus-trap、@vueuse/core 是 peerDependencies，vue-use-template 跟 scroll-lock 是 dependencies。設定檔一個字都沒提它們，產物裡卻全部變成 import。這是 sxzz 去年講過的自動外部化，今天看它怎麼判斷。
 
 [click] deps.ts 拿每一個 import 去對 package.json：在 dependencies 或 peerDependencies 裡的就外部化，連 vue/server-renderer 這種子路徑都算。
 
@@ -156,9 +152,9 @@ if (importer && RE_DTS.test(importer) && !id.startsWith('@types/')) {
 
 ---
 
-<div class="flex items-center justify-between gap-4"><div class="kicker normal-case shrink-0">04 · 從設定檔到 npm publish</div><PublishSteps :current="4" /></div>
+<div class="kicker normal-case">04 · 從設定檔到 npm publish 發生什麼事</div>
 
-# CSS 零設定，而且排在你的 plugin 之後
+<div class="-mt-1 mb-5"><PublishSteps :current="4" /></div>
 
 <div class="grid grid-cols-[1.35fr_1fr] gap-6 items-start">
 
@@ -186,7 +182,7 @@ plugins.push(...cssPostPlugins) // 收 CSS，排最後
 </div>
 
 <!--
-第四步，CSS 跟 Vue。Vue 元件庫只要一個 plugin：unplugin-vue。CSS 一行都不用寫，裝了 @tsdown/css 它就自動掛上，SFC 的 style 抽成 dist/style.css。問題是 scoped style 要先經過 Vue plugin 轉換，它怎麼知道要等？
+第四步，CSS 跟 Vue。CSS 零設定，而且排在你的 plugin 之後。Vue 元件庫只要一個 plugin：unplugin-vue。CSS 一行都不用寫，裝了 @tsdown/css 它就自動掛上，SFC 的 style 抽成 dist/style.css。問題是 scoped style 要先經過 Vue plugin 轉換，它怎麼知道要等？
 
 [click] 答案在 rolldown.ts 組 plugin 的順序，而且是固定的：先掛處理依賴的 DepsPlugin，再掛產型別的 dts，然後是 @tsdown/css 的前置 plugin，這些都是內建的。
 
@@ -197,9 +193,9 @@ plugins.push(...cssPostPlugins) // 收 CSS，排最後
 
 ---
 
-<div class="flex items-center justify-between gap-4"><div class="kicker normal-case shrink-0">04 · 從設定檔到 npm publish</div><PublishSteps :current="5" /></div>
+<div class="kicker normal-case">04 · 從設定檔到 npm publish 發生什麼事</div>
 
-# 一行 exports，package.json 它來寫
+<div class="-mt-1 mb-5"><PublishSteps :current="5" /></div>
 
 <div class="grid grid-cols-[0.85fr_1.5fr] gap-6 items-start">
 
@@ -299,7 +295,7 @@ export default defineConfig({
 </div>
 
 <!--
-第五步，exports。這一步我自己最有感：scroll-lock 的設定檔只有兩行，exports 設成 true，格式 CJS 跟 ESM。右邊 package.json 的 main、module、types、exports，全部是 tsdown 每次 build 寫回去的，這是我 10 月 11 號用 v0.22.5 實際跑出來的。
+第五步，exports。一行 exports，package.json 它來寫。這一步我自己最有感：scroll-lock 的設定檔只有兩行，exports 設成 true，格式 CJS 跟 ESM。右邊 package.json 的 main、module、types、exports，全部是 tsdown 每次 build 寫回去的，這是我 10 月 11 號用 v0.22.5 實際跑出來的。
 
 [click] 多加一個入口 foo，什麼都不用改，exports 自動多一個 ./foo。
 
@@ -310,9 +306,9 @@ export default defineConfig({
 
 ---
 
-<div class="flex items-center justify-between gap-4"><div class="kicker normal-case shrink-0">04 · 從設定檔到 npm publish</div><PublishSteps :current="6" /></div>
+<div class="kicker normal-case">04 · 從設定檔到 npm publish 發生什麼事</div>
 
-# 兩個檢查，對著真正的 tarball 跑
+<div class="-mt-1 mb-5"><PublishSteps :current="6" /></div>
 
 <div class="grid grid-cols-[1fr_1.1fr] gap-5 items-start">
 
@@ -366,7 +362,7 @@ node16 (from CJS)  🟢 (CJS)
 </div>
 
 <!--
-第六步，發布前檢查。這兩個工具是什麼，我做 v5 之前根本不知道，我猜大部分的人也沒聽過。兩個都是獨立的套件，設定裡開起來，tsdown 會在對的時間點替你跑。
+第六步，發布前檢查。兩個檢查，對著真正的 tarball 跑。這兩個工具是什麼，我做 v5 之前根本不知道，我猜大部分的人也沒聽過。兩個都是獨立的套件，設定裡開起來，tsdown 會在對的時間點替你跑。
 
 [click] publint 是 Vite 團隊的 bluwy 寫的。它拿 npm pack 出來的那一包去對 package.json：main、types、exports 指到的檔案在不在、格式有沒有擺錯。
 
