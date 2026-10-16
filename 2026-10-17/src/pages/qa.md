@@ -14,7 +14,7 @@ title: Vue Final Modal v5 發布
 </div>
 
 <!--
-講到這裡，v5 的東西都看完了，剩下一件事：把它發出去。(pause) 就是現在。切到 npmjs.com，按下 Approve。(pause) 一兩分鐘後 registry 更新，pnpm add vue-final-modal@5 裝到的就是正式版。我先講遷移，謝幕前再回來刷新給大家看。如果你是 v4 的使用者，接下來講怎麼升級。
+講到這裡，v5 的東西都看完了，剩下一件事：把它發出去。(pause) 就是現在。切到 npmjs.com，按下 Approve。(pause) 一兩分鐘後 registry 更新，pnpm add vue-final-modal@5 裝到的就是正式版。如果你是 v4 的使用者，接下來講怎麼升級。
 -->
 
 ---
@@ -23,55 +23,31 @@ title: Vue Final Modal v5 發布
 
 # 從 v4 遷移
 
-<div v-click="1" class="mt-12 max-w-3xl mx-auto">
+<div class="mt-10 flex flex-col items-center gap-2 font-mono">
+<AudienceLink href="https://v5.vue-final-modal.org/get-started/guide/migration-guide" class="no-underline border-none! flex items-center gap-2 text-xl text-[var(--fg)] opacity-85 hover:opacity-100"><carbon-book class="opacity-60" />Migration Guide</AudienceLink>
+<span class="flex items-center gap-2 text-lg text-[var(--fg-3)]"><span class="vfm-logo"></span>v5.vue-final-modal.org</span>
+</div>
+
+<div v-click="1" class="mt-8 max-w-3xl mx-auto">
 
 <div class="card py-5! px-6! font-mono text-xl">
 <div class="flex items-center gap-3"><span class="accent">❯</span><span>claude</span></div>
 <div v-click="2" class="mt-4 text-[var(--fg)]"><span class="faint mr-2">&gt;</span>幫我把 vue-final-modal 升級到 v5</div>
-<div v-click="3" class="mt-4 muted flex items-center gap-3"><span class="inline-block w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse"></span>正在讀 vue-final-modal.org 的遷移指南……</div>
+<div v-click="2" class="mt-4 muted flex items-center gap-3"><span class="inline-block w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse"></span>正在讀 vue-final-modal.org 的遷移指南……</div>
 </div>
 
 </div>
 
 <!--
-遷移怎麼做？2026 年了，先講最省力的做法。
+如何遷移到新版？
+
+其實核心的 API，例如：useModal、VueFinalModal 元件本身基本上全部向下相容。細節的部分可以參考 v5 新的遷移文件
+
+另一個更符合現在 AI 時代的做法是：
 
 [click] 打開終端機，叫 Claude Code 或 Codex 出來，
 
 [click] 跟它說：幫我把 vue-final-modal 升級到 v5。
-
-[click] 它會去讀遷移指南，然後把該改的改一改。(pause) 這不是玩笑，我自己測過，大多數專案真的這樣就過了。不過它讀的那份指南，重點就四個，你自己花一分鐘看完，才知道它改得對不對。
--->
-
----
-class: cover
-title: 從 v4 遷移
----
-
-<div class="flex flex-col items-center justify-center gap-6 scale-150 origin-center">
-
-<AudienceLink href="https://v5.vue-final-modal.org/get-started/guide/migration-guide" class="no-underline border-none! flex items-center gap-2 font-mono text-2xl text-[var(--fg)] opacity-85 hover:opacity-100 transition-opacity">
-<carbon-book class="opacity-60" />
-Migration Guide
-</AudienceLink>
-
-<div class="flex items-center gap-2 font-mono text-sm text-[var(--fg-3)]">
-<span class="vfm-logo"></span>
-v5.vue-final-modal.org
-</div>
-
-</div>
-
-<!--
-遷移的細節直接看文件。點進去 v5 文件站的遷移指南，照著頁面講四件事：
-
-核心 API 向下相容：createVfm、ModalsContainer、useModal、useVfm 全部照舊，大多數專案不用改程式碼，清掉的只有幾個原本就該算私有的東西。
-
-要留意：Vue 要 3.3 以上；@vueuse、focus-trap 跟新的 vue-use-template 變成 peer dependencies，Yarn 要自己裝；Nuxt module 併進主套件，modules 裡改成 vue-final-modal/nuxt。
-
-patchOptions 退場：它會存在是因為以前的使用體驗不好，attrs 傳進 useModal 之後就定住了，想動態改 prop、attr 或事件只能靠 patchOptions 去補。v5 的 attrs 可以直接傳 ref 或 getter，modal 會跟著更新，patchOptions 就沒有存在的意義了。
-
-剛才 Claude 讀的也是這一頁。講完回到投影片收尾。
 -->
 
 ---
