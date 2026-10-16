@@ -130,7 +130,6 @@ pnpm add -D tsdown
 
 ```bash
 pnpm tsdown
-# → dist/index.mjs
 ```
 
 </div>
@@ -139,19 +138,16 @@ pnpm tsdown
 
 <div class="mt-8 text-xl space-y-3">
 <div v-click class="flex items-center gap-3"><carbon-checkmark-outline class="accent shrink-0" />npm、pnpm、Yarn、Bun 都支援</div>
-<div v-click class="flex items-center gap-3"><carbon-checkmark-outline class="accent shrink-0" />Node.js 22.18、24.11 或 26 以上，奇數版不支援</div>
-<div v-click class="flex items-center gap-3"><carbon-checkmark-outline class="accent shrink-0" /><span>沒有設定檔也能跑；有的話，CLI 旗標蓋過去，例如 <span class="font-mono">tsdown --no-dts</span></span></div>
-<div v-click class="flex items-center gap-3"><carbon-checkmark-outline class="accent shrink-0" /><span>常用旗標都有：<span class="font-mono">--format</span>、<span class="font-mono">--watch</span>、<span class="font-mono">--minify</span></span></div>
+<div v-click class="flex items-center gap-3"><carbon-checkmark-outline class="accent shrink-0" />Node.js 22.18+</div>
+<div v-click class="flex items-center gap-3"><carbon-checkmark-outline class="accent shrink-0" /><span>設定檔可有可無，CLI 旗標會蓋過它：<span class="font-mono">--format</span>、<span class="font-mono">--watch</span>、<span class="font-mono">--no-dts</span></span></div>
 </div>
 
 <!--
-怎麼開始？我重啟 v5 的第一天就是這三行：新專案一行指令建範本，既有專案裝成 devDependency，打包一行，dist 底下就有 index.mjs。這個 .mjs 先記著，等一下會回來講。
+怎麼開始？我重啟 v5 的第一天就是這三行：新專案一行指令建範本，既有專案裝成 devDependency，打包一行。
 
 [click] npm、pnpm、Yarn、Bun 都能裝。
 
-[click] Node 要 22.18、24.11 或 26 以上，奇數版不支援。Deno 跟 Bun 當執行環境還是實驗性的，我沒試過。
+[click] Node 要 22.18 以上。
 
-[click] 沒有設定檔也能跑。有設定檔的話，CLI 旗標會蓋過設定檔，例如設定檔開了 dts，臨時想跳過就加 --no-dts，我實測過。
-
-[click] 常用的旗標 format、watch、minify 都有，預設值已經調好，大部分情況不用再加。
+[click] 設定檔不是必要的選擇，CLI 就提供很多旗標能夠使用，例如臨時不要型別就加 --no-dts。
 -->
