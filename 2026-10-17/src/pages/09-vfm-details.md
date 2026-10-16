@@ -15,31 +15,32 @@ clicks: 12
 </div>
 
 <!--
-接下來看行為層，VueFinalModal 元件本身的細節，每一項都先看原生 dialog 怎麼做，再看 VFM 怎麼做：生命週期、文字選取、巢狀遮罩、滾動鎖跟焦點。第一項，Modal 的生命週期。原生 dialog 的 showModal 跟 close 是同步的，呼叫完就回來，沒有「轉場完成」這個時間點，想等 modal 真的開好再做事，只能自己聽 transitionend。
+接下來要分享 VueFinalModal 和原生 dialog 的一些差異，
+第一個是 Modal 的生命週期，原生 dialog 的很簡單 showModal 跟 close 是同步的，呼叫完就回來，如果你要客製化轉場效果就會比較不方便。
 
-[click] VFM 把一個 modal 的一生畫成狀態機。四個狀態：closed、opening、opened、closing，就是 useModal 回傳的 status。實線框是停得住的狀態，虛線框是轉場中。一開始在 closed。
+[click] 我把一個 modal 的一生畫成狀態機。四個狀態：closed、opening、opened、closing，就是 useModal 回傳的 status。初始值狀態在 closed。
 
-[click] 要開的第一關是 beforeOpen，裡面呼叫 stop() 就留在 closed，open() 直接 resolve「被擋下」。
+[click] 如果你在 beforeOpen，裡面呼叫 stop() 
 
-[click] 關著的時候又呼叫 close()，狀態不動，馬上 resolve「已經關著」。
+[click] 或是 Modal 仍在關閉狀態時呼叫關閉，Modal 會直接維持原本狀態。
 
-[click] 這次真的開：呼叫 open()，beforeOpen 沒擋，
+[click] 這次真的開：呼叫 open()，
 
-[click] 進到 opening，進場轉場開始跑，open() 的 promise 在等。
+[click] 進到 opening，開始跑進場過渡動畫。
 
-[click] 轉場跑完到 opened，promise 這時候才 resolve 成 opened。所以 await open() 回來的時候，modal 一定已經開好了。
+[click] 跑完到 opened，promise 這時候才回傳已開啟。
 
-[click] 開著的時候一樣：beforeClose 呼叫 stop() 就留在 opened，close() resolve「被擋下」。
+[click] Modal 開著的時候一樣：beforeClose 呼叫 stop()
 
-[click] 已經開著又呼叫 open()，馬上 resolve「已經開著」；還在開的話就跟著同一趟，開完一起拿到 opened。
+[click] 或是 Modal 已經開著又重複打開，promise 都會馬上 resolve「已經開啟」
 
-[click] 要關：呼叫 close()、按 Esc 或點擊外部，beforeClose 沒擋，
+[click] 下一步進到真正的關閉 Modal 或是點擊 Esc 或是點擊外部關閉
 
-[click] 進到 closing，退場轉場跑，close() 的 promise 在等。
+[click] 會進到 closing，開始跑退場過渡動畫。
 
 [click] 跑完回到 closed，resolve 成 closed。這是走完的一圈。
 
-[click] 最後是沒走完的路。開到一半被 Esc 關掉，或關到一半又打開，就直接反轉方向，原本在等的 promise resolve「被切換」，不會被晾著。例外只有一個：開到一半呼叫 useModal 的 close()，它不反轉，等開完再關，兩個 promise 都拿到正常結果。元件被銷毀也一樣，不管停在哪裡都直接回到 closed，不跑轉場，在等的 promise resolve「被銷毀」。所以每一條路都有結果，promise 不會卡在 pending。VueFinalDialog 也是同一套規則。
+[click] 最後是中途反轉的情況：例如開到一半被 Esc 關掉，或關到一半又打開，promise 也都會回傳相對應的狀態不會卡著。
 -->
 
 ---
@@ -48,7 +49,7 @@ clicks: 3
 
 <div class="kicker normal-case">08 · 對齊原生 dialog 行為</div>
 
-# 文字反白、文字選取
+# 點擊外部關閉與文字選取
 
 <div class="grid grid-cols-[1fr_1.15fr] gap-8 mt-6 items-center">
 
@@ -81,15 +82,15 @@ function onMouseupRoot() {
 
 </div>
 
-
 <!--
-第二項，文字反白、文字選取，很小但每個人都遇過。原生 dialog 預設點遮罩不會關，要關得加 closedby="any"，判定交給瀏覽器，Safari 還不支援。我實測過，瀏覽器會看按下跟放開是不是同一個地方，選取文字不會誤關。
+第二個是點擊外部關閉跟文字選取的小細節。原生 dialog 預設點遮罩不會關，要加 closedby="any" 才會關，不過 Safari 還不支援。
 
-[click] VFM 要自己判定：記住 mousedown 在哪裡，從遮罩按下、也在遮罩放開，才算點外面。右邊實際走一次。
 
-[click] 你在 modal 裡選一段文字，按下去拖著拖著，
+[click] 文字選取的問題是一個 bug，
 
-[click] 拖到遮罩上才放開。很多 modal 只看 click，會當成點外面直接關掉，你剛打的東西就不見了；VFM 不會關。
+[click] VueFinalModal 的解法是：記住點擊時在哪裡，只有從遮罩按下、也在遮罩放開，才算外部點擊。
+
+[click] 所以用滑鼠選取文字並到遮罩放開來，並不會誤觸關閉。
 -->
 
 ---
@@ -139,9 +140,9 @@ function onMouseupRoot() {
 <div v-after class="text-sm faint mt-5">示意圖；<code>overlayBehavior: 'persist'</code> 則保留每一層的遮罩</div>
 
 <!--
-第三項，巢狀 Modal 的遮罩。modal 裡再開一個確認視窗很常見。
+第三個是巢狀 Modal 的遮罩，modal 裡再開一個確認視窗很常見。
 
-[click] 原生 dialog 每一層都有自己的 backdrop，疊三層就蓋了三層，越來越暗。
+[click] 原生 dialog 每一層都有自己的 backdrop，疊三層就蓋了三層，畫面會越來越暗。
 
-[click] VFM 預設只顯示最上面那一層的遮罩，亮度一致；想要每層都有，overlayBehavior 設成 persist 就好。
+[click] VueFinalModal 預設只顯示最上面那一層的遮罩，亮度一致；想要每層都有，overlayBehavior 設成 persist 就好。
 -->
