@@ -19,5 +19,5 @@ title: Vue Final Modal v5 發布
 
 我準備了一個 Live 發布的環節，要正式發佈 VFM 5，希望不會遇到 Live coding 的魔咒。
 
-為了避免出錯，我今天早上提前把版本發到的 npm stage 也確保 CI 通過沒有問題，沒意外的話我只需要按下 Approve 就好了。
+為了避免出錯，我今天早上提前把版本發到 npm stage 也確保 CI 通過沒有問題，沒意外的話我只需要按下 Approve 就好了。
 -->

@@ -49,9 +49,9 @@ async function buildWithConfigs(configs) {
 
 <!--
 接下來從設定檔到 npm publish 發生什麼事情，我簡單分成了六個步驟。搭配簡化過後的原始碼，一起看看 tsdown 替我們做掉了什麼。
-第一步，格式。設定檔只寫了一行 format，產物是四個檔：index.js、index.cjs，加上各自的型別。
+第一步是格式的部分。設定檔只寫了一行 format，產物是四個檔：index.js、index.cjs，加上各自的型別。
 
-左邊 options.ts 的 resolveUserConfig 把 format 轉成陣列，對每一個 format 各產生一份獨立的設定，所以 tsdown 裡其實是兩次獨立的 build。下面 build.ts 的 buildWithConfigs 把展開後的每一份設定丟給 buildSingle，用 Promise.all 平行跑。buildSingle 就是一次完整的 build：組好 Rolldown 的選項和 plugin，叫 Rolldown 打包，產物寫進 dist。
+左邊 options.ts 的 resolveUserConfig 把 format 轉成陣列，對每一個 format 各產生一份獨立的設定，所以 tsdown 裡其實是兩次獨立的 build。下面 build.ts 的 buildWithConfigs 把展開後的每一份設定丟給 buildSingle，用 Promise.all 平行跑。buildSingle 就是一次完整的 build：組好 Rolldown 的設定和 plugin，叫 Rolldown 打包，產物寫進 dist 資料夾。
 -->
 
 ---
@@ -95,8 +95,8 @@ async function resolveUserConfig(config) {
 </div>
 
 <!--
-第二步，型別。VFM 的設定裡沒有寫要產型別，但 dist 裡有 index.d.ts 跟 index.d.cts。
-
+第二步是型別的部分。
+tsdown 主要會根據三個訊號來判斷是否要自動產出型別。
 原始碼一樣在 resolveUserConfig：設定裡沒寫 dts，就看 package.json 有沒有 types，或 exports 裡有沒有 types 條件，有就開。
 
 都沒有，再看 tsconfig 的 declaration。這些本來就是 TypeScript 專案會設的東西，不用再寫一次。
@@ -140,7 +140,8 @@ async function externalStrategy(id, importer) {
 </div>
 
 <!--
-第三步，依賴。打包的時候，原本要手動設定外部化的部分，tsdown 自動地幫我們做掉了，確保我們不會將不該打包的依賴包進最終的資料夾。拿 VFM 舉例：vue、@vueuse/core、focus-trap 是 peerDependencies，vue-use-template 跟 scroll-lock 是 dependencies。設定檔不用寫 external 就能自動將這些依賴外部話，tsdown 是怎麼做到的？
+第三步，依賴。打包的時候，原本要手動設定外部化的地方，tsdown 都幫我們做好了，
+這個部分是為了確保我們不會將不該打包的依賴包進最終的資料夾裡。拿 VFM 舉例：vue、@vueuse/core、focus-trap 是 peerDependencies，vue-use-template 跟 scroll-lock 是 dependencies。設定檔不用寫 external 就能自動將這些依賴外部化，tsdown 是怎麼做到的？
 
 我們可以看到 deps.ts 中的 externalStrategy 這個函式，會拿每一個 import 去對應 package.json：在 dependencies 或 peerDependencies 裡的就自動外部化。
 
@@ -185,15 +186,15 @@ async function resolveInputOptions(config) {
 
 Vue 元件庫只需要 unplugin-vue/rolldown 一個 plugin
 
-CSS 則是會自動判斷你是否已經裝了 @tsdown/css
+CSS 的部分，tsdown 則是會自動判斷你是否已經裝了 @tsdown/css
 
-SFC 的 style 會抽成 dist/style.css。但 scoped style 要先經過 Vue plugin 轉換，它怎麼知道要等？
+SFC 的 style 會抽成 dist/style.css。但 scoped style 需要先經過 Vue plugin 轉換，它怎麼知道要等？
 
 設定都在 rolldown.ts 的 resolveInputOptions 中，plugin 的順序是固定的：先加上處理依賴的 DepsPlugin，再加上產生型別的 dts，然後是 @tsdown/css 的前置 plugin，這些都是內建的。
 
 內建的加完之後，才掛我們自己的 plugins，unplugin-vue 的部分就在這邊。
 
-最後才是 CSS 的後處理，vue plugin 之後，因為要確保 Vue 的 scoped CSS 轉換完。
+最後才是 CSS 的後處理，vue plugin 之後，因為要確保 Vue 的 scoped CSS 先轉換完成。
 -->
 
 ---
@@ -295,11 +296,11 @@ export default defineConfig({
 </div>
 
 <!--
-第五步，exports。這一步我自己最有感。以前 package.json 的 main、module、types、exports 這幾個欄位都要自己手寫，很容易寫錯。現在 tsdown 會自動去更新 package.json 真的很方便。
+第五步，exports。這一步我自己最有感。以前 package.json 的 main、module、types、exports 這幾個欄位都要自己手寫，很容易寫錯或是有遺漏的部分。現在 tsdown 會自動去更新 package.json 真的非常方便。
 
-[click] 你如果多加一個入口 foo，package.json 不用動，exports 自動多一個 ./foo。
+[click] 你如果多加一個入口 foo.ts，package.json 不用動，exports 會由 tsdown 自動設定完成。
 
-[click] 再開 devExports，開發的時候 exports 會指向 src，monorepo 裡其他套件要用它不用先 build；要發布的時候 tsdown 再換回 dist 的路徑。所以 package.json 變成 build 的產物，我們只要顧好設定檔就好。
+[click] 再設定 devExports: true 的話，開發的時候 exports 會指向 src 資料夾，monorepo 裡其他套件要用它不用先打包；要發布的時候 tsdown 再換回 dist 的路徑。所以 package.json 變成 build 的產物，我們只要顧好 tsdown 的設定檔，就會自動產出 exports 的部分。
 -->
 
 ---
@@ -324,11 +325,12 @@ export default defineConfig({
 
 </div>
 
-
 <!--
-第六步，發布前檢查。publint 和 attw 這兩個工具是什麼，我做 v5 之前根本不知道，我猜大部分的人也沒聽過。它們都是獨立的工具，設定裡開起來，tsdown 會幫我們執行。
+第六步是 tsdown 在函式庫發布之前會替我們做的檢查。tsdown 整合了兩個工具，分別是 publint 和 attw。在我認真研究 tsdown 之前我根本沒聽過這兩個工具。那這兩個工具做了什麼檢查呢？
 
-[click] publint 檢查的是 package.json：main、types、exports 這些欄位寫的路徑，檔案是不是真的在那裡，CJS 跟 ESM 有沒有放反。
+[click] publint 檢查的是 package.json：main、types、exports 這些欄位寫的路徑是否正確，檔案是不是真的在那裡，還有其他 package.json 的欄位檢查。
 
-[click] attw 是 Are the types wrong 的縮寫，它假裝成四種不同設定的使用者專案來 import 你的套件，看型別找不找得到，抓的是使用者裝了才會炸的錯。
+[click] attw 是 Are the types wrong 的縮寫，它模擬了四種不同設定的使用者專案來 import 你的函式庫，看型別找不找得到，抓的是使用者裝了才會發現的錯誤。
+
+而這兩個工具都只要簡單的一行設定即可，tsdown 會幫我們自動的執行。
 -->

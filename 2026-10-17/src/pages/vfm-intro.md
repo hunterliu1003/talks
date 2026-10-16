@@ -55,18 +55,17 @@ clicks: 3
 </div>
 
 <!--
-正式開始之前簡單調查一下有多少人用過 VFM? 有用過 useModal 的可以繼續舉著。好的謝謝。
-給沒聽用的人一個簡單的介紹一下：
-Vue Final Modal 是專為 Vue 建構的小型的元件庫。
-最初的版本參考了：vue-js-modal, Vuetify, Element UI, BootstrapVue 等等元件庫。
-保持高度靈活性與可自訂性的同時，也針對模態框設定了一些預設規範，並推行了一套「最佳實踐」。
+正式開始之前簡單調查一下有多少人用過 VFM? 有用過 useModal 的可以繼續舉著。好的謝謝，請放下。
 
-[click] VFM 第一個版本是在 2020 年 6 月，歷經六年，中間斷斷續續的改進，從 Vue CLI 到 Vite, Vue 2 到 Vue 3, JavaScript 到 TypeScript。上個月下載 28.6 萬次；GitHub 一千多顆星。
+先給沒聽過和沒用過的人一個簡單的介紹：
+Vue Final Modal 就是一個 Vue 的元件，最初的版本參考了：vue-js-modal, Vuetify, Element UI, BootstrapVue 等等 Modal 元件，吸收了各個元件庫的優點。
+
+[click] 距離 VFM 第一個版本已經歷經了六年，中間不斷的改進。上個月下載 28.6 萬次；GitHub 一千顆星。
 
 [click] 核心概念是盡可能避免預設的 CSS 樣式，將切版彈性留給前端工程師。
 
-[click] 為了提升開發體驗，VFM 在背後做掉的事情包含但不限於：
-點擊外部關閉、按 Esc 關閉、無障礙網站或是網站易用性、鎖住頁面捲動、正確且自動的計算巢狀的 Modal 的 z-index、開關 Modal 的過渡動畫等等。
+[click] 為了提升開發體驗，VFM 提供的功能包含：
+點擊外部關閉、按 Esc 關閉、網站易用性、Scroll Lock、巢狀 Modal 的 z-index 計算、開關 Modal 的過渡動畫等等。
 
-但是 VFM 提供這麼多功能，應該怎麼用？接下來兩頁簡報，我會先用四個象限替 Modal 進行簡單的分類，再用一個決策樹協助我們做決定。
+但是 VFM 提供這麼多功能，應該怎麼正確用呢？接下來兩頁簡報，我會先用四個象限替 Modal 進行簡單的分類，再用一個決策樹協助我們做決定。
 -->

@@ -1,7 +1,3 @@
----
-clicks: 12
----
-
 <div class="kicker normal-case">08 · 對齊原生 dialog 行為</div>
 
 # Modal 的生命週期
@@ -10,37 +6,27 @@ clicks: 12
 
 <div class="w-[33rem] mx-auto mt-4">
 
-<ModalLifecycleFsm :stage="$clicks" />
+<ModalLifecycleFsm :stage="7" />
 
 </div>
 
 <!--
 接下來要分享 VueFinalModal 和原生 dialog 的一些差異，
-第一個是 Modal 的生命週期，原生 dialog 的很簡單 showModal 跟 close 是同步的，呼叫完就回來，如果你要客製化轉場效果就會比較不方便。
+第一個是 Modal 的生命週期，原生 dialog 的部分很簡單，showModal 跟 close 是同步的，呼叫完就回來，如果你要客製化轉場效果就會比較不方便。
 
-[click] 我把一個 modal 的一生畫成狀態機。四個狀態：closed、opening、opened、closing，就是 useModal 回傳的 status。初始值狀態在 closed。
+我把一個 modal 的一生畫成狀態機。有四個狀態，初始狀態在 closed。
 
-[click] 如果你在 beforeOpen，裡面呼叫 stop() 
+呼叫 open() 之後進到 opening，開始跑進場的過渡動畫。
 
-[click] 或是 Modal 仍在關閉狀態時呼叫關閉，Modal 會直接維持原本狀態。
+跑完到 opened，promise 這時候才回傳已開啟。
 
-[click] 這次真的開：呼叫 open()，
+關閉也一樣，不管是呼叫 close()、按 Esc 或是點擊外部，都會進到 closing，開始跑退場的過渡動畫。
 
-[click] 進到 opening，開始跑進場過渡動畫。
+跑完回到 closed，resolve 成 closed。這是走完的一圈。
 
-[click] 跑完到 opened，promise 這時候才回傳已開啟。
+再來是不會動的情況：在 beforeOpen 或 beforeClose 裡呼叫 stop()，或是已經關著又 close、已經開著又 open，狀態都維持不變，promise 會馬上回傳目前的狀態。
 
-[click] Modal 開著的時候一樣：beforeClose 呼叫 stop()
-
-[click] 或是 Modal 已經開著又重複打開，promise 都會馬上 resolve「已經開啟」
-
-[click] 下一步進到真正的關閉 Modal 或是點擊 Esc 或是點擊外部關閉
-
-[click] 會進到 closing，開始跑退場過渡動畫。
-
-[click] 跑完回到 closed，resolve 成 closed。這是走完的一圈。
-
-[click] 最後是中途反轉的情況：例如開到一半被 Esc 關掉，或關到一半又打開，promise 也都會回傳相對應的狀態不會卡著。
+最後是中途反轉的情況：例如開到一半被 Esc 關掉，或關到一半又打開，promise 也都會回傳相對應的狀態不會卡著。
 -->
 
 ---

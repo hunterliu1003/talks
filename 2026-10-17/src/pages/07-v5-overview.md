@@ -13,13 +13,13 @@ clicks: 7
 </div>
 
 <!--
-接下來用一段動畫看 useModal 和 ModalsContainer 實際怎麼運作動。
+接下來用一段動畫看 useModal 和 ModalsContainer 實際怎麼運作。
 
 useModal 給一個 component，呼叫 open。ModalsContainer 放在 App.vue，每 open 一次就 push 一筆進去，由它渲染。右邊是使用者看到的畫面。
 
-[click] 先開 VueFinalModal，畫面出現一個有遮罩的 modal。v4 就有的用法，樣式自己決定。
+[click] 先開 VueFinalModal，畫面出現一個有遮罩的 modal。
 
-[click] 換成 VueFinalDialog，多的是一個原生 dialog。v5 新增，原生行為夠用就選它。
+[click] 再來是新增的 VueFinalDialog 元件，底層是原生的 dialog。如果原生行為夠用就選它。
 
 [click] 實務上通常不會直接開 VueFinalModal，而是包成自己的元件像是 Dialog，
 

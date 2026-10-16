@@ -20,7 +20,7 @@ clicks: 4
 <!--
 第四項，滾動鎖跟焦點。
 
-滾動鎖：VFM 從 v0 到 v4 一直用 body-scroll-lock，他已經很久沒維護了而且不支援 TypeScript。所以 v5 重新寫了 scroll-lock：沒有任何依賴，Nuxt 的 server 端也能跑。
+滾動鎖：VFM 從 v0 到 v4 一直用 body-scroll-lock，它已經很久沒維護了而且不支援 TypeScript。所以 v5 重新寫了 scroll-lock：沒有任何依賴，Nuxt 的 server 端也能跑。
 
 焦點：原生 dialog 瀏覽器會自動處理好焦點的問題；VueFinalModal 必須用 focus-trap 自己做。
 

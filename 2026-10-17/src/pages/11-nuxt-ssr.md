@@ -94,7 +94,7 @@ SSR 是 v5 新增的能力。
 
 [click] 到了瀏覽器，hydration 直接接上 server 寫好的 DOM，modal 維持開啟，第一個畫面就能操作，也不會重播進場動畫，不會閃一下。
 
-[click] 如果是在 script setup 之外呼叫 useModal open ，例如 plugin。server 上可能無法分辨這是哪個請求，所以直接跳過、不寫進 HTML，當成 client-only 的 modal。
+[click] 如果是在 script setup 之外呼叫 useModal open，例如 plugin。server 上可能無法分辨這是哪個請求，所以直接跳過、不寫進 HTML，當成 client-only 的 modal。
 
 [click] 這種情況，一開始就會先看到頁面，再看到 modal 被開啟。
 

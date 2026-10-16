@@ -32,6 +32,8 @@
 </div>
 
 <!--
+剛剛說底層是 Rolldown，那 tsdown 跟 Rolldown 到底是什麼關係？
+
 這一頁把這層關係講清楚。
 
 [click] 核心是剛剛說的 Rolldown：API 跟 Rollup 相容、功能向 esbuild 看齊，它只負責打包這件事。

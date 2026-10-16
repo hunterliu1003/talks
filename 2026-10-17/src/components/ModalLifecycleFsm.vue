@@ -5,17 +5,17 @@ const props = defineProps<{ stage: number }>()
 
 const STEP = {
   states: 1,
-  openStopped: 2,
-  alreadyClosed: 3,
-  openCalled: 4,
-  opening: 5,
-  opened: 6,
-  closeStopped: 7,
-  alreadyOpen: 8,
-  closeCalled: 9,
-  closing: 10,
-  closed: 11,
-  reversed: 12,
+  openCalled: 2,
+  opening: 2,
+  opened: 3,
+  closeCalled: 4,
+  closing: 4,
+  closed: 5,
+  openStopped: 6,
+  alreadyClosed: 6,
+  closeStopped: 6,
+  alreadyOpen: 6,
+  reversed: 7,
 } as const
 
 const NODE_W = 104

@@ -122,18 +122,18 @@ const { open, close } = useModal({
 </div>
 
 <!--
-打包講完，接下來回到 VFM 5 本身。VFM 自己不再管「怎麼把一個元件動態渲染出來」，這件事整個交給 vue-use-template。它是我以 VFM 的核心概念從頭重寫的函式庫，useModal 底層是用 useTemplate， ModalsContainer 底層是用 TemplateProvider。
+剛剛動畫裡的 useModal 跟 ModalsContainer，VFM 現在將這個行為交給 vue-use-template 處理。useModal 底層是用 useTemplate，ModalsContainer 底層是用 TemplateProvider。
 
-舊版開著的 Modal 要改資料，你得拿 patchOptions，手動同步一次，寫起來跟 Vue 3 響應的方式完全不一樣。
+舊版使用 useModal 打開的 Modal 如果要改資料，你得拿 patchOptions，手動同步一次，寫起來跟 Vue 3 響應的方式完全不一樣，非常不直覺。
 
-[click] v5 善用了 Vue 的響應式。不管你是要用 getter
+[click] 所以 v5 做了這方面的改進，不管你是要用 getter
 [click] ref
 [click] computed
 [click] 或是 reactive 都可以
 
-[click] 而且不只 attrs：props, emits 也是同樣支援這寫法。
+[click] 而且不只 attrs：props, emits 都可以用同樣的寫法。
 
-[click] 再來 slots 也是：slot 裡放的巢狀 template，slot 可以用 defineTemplate 包起來，提供較好的型別檢查。
+[click] 再來 slots 也是：slot 裡放的巢狀 template，可以用 defineTemplate 包起來，提供較好的 TypeScript 型別檢查。
 
-[click] 寫法自由了，型別沒有跟著變鬆。型別檢查主要是靠 vue-component-type-helpers 把元件的 props、events、slots 讀取出來：title 是必填的字串，你給數字，TS型別檢查都會報錯；同理 events 和 slots 也是，巢狀 template 要用 defineTemplate 包一層才有檢查，這是 TypeScript 對巢狀 callback 推導的限制，目前還沒有更好的解決辦法。
+[click] 型別檢查主要是靠 vue-component-type-helpers 把元件的 props、events、slots 取出來做正確的 TS 型別檢查。
 -->

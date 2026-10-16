@@ -46,7 +46,7 @@ pnpm tsdown
 </div>
 
 <!--
-讓我們先認識 tsdown，它怎麼優雅的解決 v5 打包的問題，留到後半段！
+讓我們先認識 tsdown。
 
 tsdown 是專為函式庫設計的打包工具。
 
@@ -61,6 +61,4 @@ tsdown 是專為函式庫設計的打包工具。
 [click] 支援 npm、pnpm、Yarn、Bun 
 
 [click] Node 要 22.18 以上。
-
-剛剛說底層是 Rolldown，那 tsdown 跟 Rolldown 到底是什麼關係？
 -->

@@ -11,5 +11,5 @@ class: section-slide
 <div class="chapter-ghost">2</div>
 
 <!--
-了解完 tsdown 之後，接下來進入實戰的部分，我將分享今天要發佈的 VueFinalModal 5 帶來了哪些改進。
+了解完 tsdown 之後，接下來進入實戰的部分，我將分享今天要發佈的 VueFinalModal 5 帶來了哪些新的改進。
 -->

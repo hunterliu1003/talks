@@ -22,17 +22,19 @@ class: text-center
 VFM 5 改進了非常多東西，算是累積了三年左右迎來的一次報復性改動
 因為過去三年，小弟我主要專注在照顧女兒上，也感謝 VFM 使用者多多包涵，還有老婆的寬容。
 
-打包換成 tsdown。
+首先 v5 最重要的改動之一就是 tsdown 重新打包
 
-核心換成 vue-use-template，這是我從 VFM 拆出來用於動態渲染元件的部分。
+第二個是，核心改用 vue-use-template 稍後會介紹
 
-將元件行為對齊原生 dialog，還新增了一個 VueFinalDialog 的元件，提供給想直接使用原生 dialog 的使用者。
+再來是將 Modal 的行為對齊原生的 dialog
 
-然後因為原本用的函式庫 body-scroll-lock 的作者沒有再維護了，因此我用 Typescript 重新寫了 scroll-lock。
+開發了新的 scroll-lock 機制
 
-Nuxt 這次是正式且完整的支援，細節留到後面講。
+正式支援 SSR 並且提供 Nuxt module
 
-API 幾乎全部相容，大部分專案只需要進行微調。
+幾乎所有 API 向下相容
 
-最後則是補上比 v4 更多的單元測試、e2e 測試。
+還補上了更多的 e2e 測試
+
+接下來，我會一個一個進行分享
 -->
