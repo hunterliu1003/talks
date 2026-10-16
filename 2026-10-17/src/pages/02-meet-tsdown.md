@@ -8,7 +8,6 @@
 
 <div class="flex flex-col items-center gap-4">
   <img src="/tsdown.svg" alt="tsdown" class="w-52" />
-  <div class="font-mono text-xl font-semibold">tsdown</div>
 </div>
 
 <div>
@@ -16,8 +15,7 @@
 <div v-click class="flex items-center gap-4 mb-4 text-2xl"><carbon-settings-adjust class="accent shrink-0" />極簡設定，開箱即用</div>
 <div v-click class="flex items-center gap-4 mb-4 text-2xl"><carbon-document class="accent shrink-0" />型別宣告自動產生，依賴自動分析</div>
 <div v-click class="flex items-center gap-4 mb-4 text-2xl"><carbon-cube class="accent shrink-0" />多種格式，一套設定一致輸出</div>
-<div v-click class="flex items-center gap-4 mb-4 text-2xl"><carbon-hourglass class="accent shrink-0" /><span>Rust 驅動，底層是 <a href="https://rolldown.rs" target="_blank" rel="noopener">Rolldown</a></span></div>
-<div v-click class="flex items-center gap-4 text-2xl"><carbon-inspection class="accent shrink-0" /><span>連發布前的 <span class="font-mono">exports</span>、publint、attw 都管</span></div>
+<div v-click class="flex items-center gap-4 mb-4 text-2xl"><carbon-hourglass class="accent shrink-0" /><span>底層是 Rust 寫的 <a href="https://rolldown.rs" target="_blank" rel="noopener">Rolldown</a></span></div>
 
 </div>
 
@@ -33,8 +31,6 @@ tsdown 就是衝著這四件事來的。它把自己定位成專為函式庫設�
 [click] 多格式：ESM 跟 CJS 一份設定一次 build。
 
 [click] 效能：底層是 Rust 寫的 Rolldown。VFM 太小感受不深，它跟 Rolldown 的關係等一下分清楚。
-
-[click] 第五點是今天的主線：它連發布前的事都管。package.json 的 exports 它幫你寫，publint 跟 attw 它幫你跑。這兩個工具是什麼，我做 v5 之前也不知道，等一下跟著 VFM 走一遍就會碰到。
 -->
 
 ---
@@ -83,7 +79,7 @@ tsdown 就是衝著這四件事來的。它把自己定位成專為函式庫設�
 
 </div>
 
-<div v-click class="mt-4 text-xl muted">還有更多：JSON、WASM、source map、watch…，今天只挑核心的講</div>
+<div v-click class="mt-4 text-xl muted">還有很多值得大家去挖掘，今天先挑我核心的幾個和我有用到的講。</div>
 
 <!--
 它具體能做什麼？六張卡，我照 VFM 用到的講。
@@ -100,7 +96,7 @@ tsdown 就是衝著這四件事來的。它把自己定位成專為函式庫設�
 
 [click] plugin。Rolldown 的全部能用，Rollup 的大多數能用，unplugin 也能用。VFM 只掛了一個 unplugin-vue。
 
-[click] 還有更多功能，今天只挑 VFM 碰到的講。
+[click] 還有很多值得大家去挖掘，今天先挑我核心的幾個和我有用到的講。
 -->
 
 ---
