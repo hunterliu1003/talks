@@ -8,12 +8,12 @@
 <span class="flex items-center gap-2 text-lg text-[var(--fg-3)]"><span class="vfm-logo"></span>v5.vue-final-modal.org</span>
 </div>
 
-<div v-click="1" class="mt-8 max-w-3xl mx-auto">
+<div class="mt-8 max-w-3xl mx-auto">
 
 <div class="card py-5! px-6! font-mono text-xl">
 <div class="flex items-center gap-3"><span class="accent">❯</span><span>claude</span></div>
-<div v-click="2" class="mt-4 text-[var(--fg)]"><span class="faint mr-2">&gt;</span>幫我把 vue-final-modal 升級到 v5</div>
-<div v-click="2" class="mt-4 muted flex items-center gap-3"><span class="inline-block w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse"></span>正在讀 vue-final-modal.org 的遷移指南……</div>
+<div class="mt-4 text-[var(--fg)]"><span class="faint mr-2">&gt;</span>幫我把 vue-final-modal 升級到 v5</div>
+<div class="mt-4 muted flex items-center gap-3"><span class="inline-block w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse"></span>正在讀 vue-final-modal.org 的遷移指南……</div>
 </div>
 
 </div>
@@ -25,9 +25,9 @@
 
 另一個更符合現在 AI 時代的做法是：
 
-[click] 打開終端機，叫 Claude Code 或 Codex 出來，
+打開終端機，叫 Claude Code 或 Codex 出來，
 
-[click] 跟它說：幫我把 vue-final-modal 升級到 v5。
+跟它說：幫我把 vue-final-modal 升級到 v5。
 -->
 
 ---

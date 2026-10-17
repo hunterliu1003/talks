@@ -101,5 +101,5 @@ export default defineConfig({
 
 [click] 同年 8 月換成 Rollup，一路用到 2021 年的 v3。中間 Vue 3 出來，同一套元件要同時維護 Vue 2 跟 Vue 3 兩條線，一個改動要發兩個版本。Rollup 的 plugin 一個一個自己接。那時候專案還是 JavaScript，支援 TS 型別的部分我沒記錯的話，第一版還是 Alex 幫我寫的 d.ts，問題就是 d.ts 常常和實際的 API 不同步。
 
-[click] 2023 年改用 TypeScript 重寫了 v4，打包改用 Vite 的 library mode。搭配 VueMacros、DefineOptions、dts 等等 plugins。我覺得是 VueFinalModal 變得真正好用且穩定的版本。然後 2024 年 1 月發了 v5 的第一個 beta 版本後，就沒有然後了。但是暫停維護的這兩年多，也讓我迎來了 tsdown。
+[click] 2023 年改用 TypeScript 重寫了 v4，打包改用 Vite 的 library mode。搭配 VueMacros、DefineOptions、dts 等等 plugins。我覺得是 VueFinalModal 變得真正好用且穩定的版本。然後 2024 年 1 月發了 v5 的第一個 beta 版本後，因為一些特殊原因，暫停維護 vue final modal 將近三年，直到前陣子聽到了 tsdown。
 -->

@@ -82,7 +82,7 @@ export default defineConfig({
 </div>
 
 <!--
-vfm
+這頁要來分享 VFM 的 tsdown 設定。
 左邊的 dist 是實際打包後的結果，右邊搭配是 tsdown 的 config。
 entry 只有一個 index.ts 因為要支援 SSR, platform 設定成 neutral, format 要輸出成 esm 和 cjs, 也因為要打包的是 Vue 元件，所以加上了 Vue plugin 以及型別的設定。
 

@@ -30,7 +30,7 @@
 -->
 
 ---
-clicks: 3
+clicks: 2
 ---
 
 <div class="kicker normal-case">08 · 對齊原生 dialog 行為</div>
@@ -62,17 +62,14 @@ function onMouseupRoot() {
 
 <div v-click="1">
 
-<SelectDragDemo :stage="Math.max($clicks - 1, 0)" />
+<SelectDragDemo :stage="$clicks" />
 
 </div>
 
 </div>
 
 <!--
-第二個是點擊外部關閉跟文字選取的小細節。原生 dialog 預設點遮罩不會關，要加 closedby="any" 才會關，不過 Safari 還不支援。
-
-
-[click] 文字選取的問題是一個 bug，
+第二個是點擊外部關閉跟文字選取的小細節。原生 dialog 預設點遮罩不會關，要加 closedby="any" 才會關，不過 Safari 還不支援。文字選取的問題是一個 bug，
 
 [click] VueFinalModal 的解法是：記住點擊時在哪裡，只有從遮罩按下、也在遮罩放開，才算外部點擊。
 
@@ -87,7 +84,7 @@ function onMouseupRoot() {
 
 <div class="grid grid-cols-2 gap-8 mt-6">
 
-<div v-click>
+<div>
 <div class="eyebrow normal-case mb-3">原生：每個 dialog 各自一個 ::backdrop</div>
 <div class="relative h-56 rounded-xl overflow-hidden border border-[var(--border)]">
 <div class="absolute inset-0 bg-[#ece9e1]"></div>
@@ -105,7 +102,7 @@ function onMouseupRoot() {
 </div>
 </div>
 
-<div v-click>
+<div>
 <div class="eyebrow normal-case mb-3">VFM：<code>overlayBehavior: 'auto'</code></div>
 <div class="relative h-56 rounded-xl overflow-hidden border border-[var(--border)]">
 <div class="absolute inset-0 bg-[#ece9e1]"></div>
@@ -128,7 +125,7 @@ function onMouseupRoot() {
 <!--
 第三個是巢狀 Modal 的遮罩，modal 裡再開一個確認視窗很常見。
 
-[click] 原生 dialog 每一層都有自己的 backdrop，疊三層就蓋了三層，畫面會越來越暗。
+原生 dialog 每一層都有自己的 backdrop，疊三層就蓋了三層，畫面會越來越暗。
 
-[click] VueFinalModal 預設只顯示最上面那一層的遮罩，亮度一致；想要每層都有，overlayBehavior 設成 persist 就好。
+VueFinalModal 預設只顯示最上面那一層的遮罩，亮度一致；想要每層都有，overlayBehavior 設成 persist 就好。
 -->

@@ -188,13 +188,13 @@ Vue 元件庫只需要 unplugin-vue/rolldown 一個 plugin
 
 CSS 的部分，tsdown 則是會自動判斷你是否已經裝了 @tsdown/css
 
-SFC 的 style 會抽成 dist/style.css。但 scoped style 需要先經過 Vue plugin 轉換，它怎麼知道要等？
+SFC 的 style 會抽成 dist/style.css。
 
-設定都在 rolldown.ts 的 resolveInputOptions 中，plugin 的順序是固定的：先加上處理依賴的 DepsPlugin，再加上產生型別的 dts，然後是 @tsdown/css 的前置 plugin，這些都是內建的。
+這些設定都寫在 rolldown.ts 的 resolveInputOptions 中，plugin 的順序是固定的：先加上處理依賴的 DepsPlugin，再加上產生型別的 dts，然後是 @tsdown/css 的前置 plugin，這些都是內建的。
 
 內建的加完之後，才掛我們自己的 plugins，unplugin-vue 的部分就在這邊。
 
-最後才是 CSS 的後處理，vue plugin 之後，因為要確保 Vue 的 scoped CSS 先轉換完成。
+最後 cssPostPlugins 被擺在 vue plugin 之後的原因是因為要確保 Vue 的 scoped CSS 先轉換完成。
 -->
 
 ---
@@ -311,13 +311,13 @@ export default defineConfig({
 
 <div class="grid grid-cols-2 gap-5 items-stretch mt-2">
 
-<div v-click="1" class="card py-5! px-6!">
+<div class="card py-5! px-6!">
 <div class="text-2xl font-semibold mb-1">publint</div>
 <div class="muted text-sm mb-4"><a href="https://publint.dev" target="_blank" rel="noopener">publint.dev</a></div>
 <div class="text-lg leading-relaxed">檢查 <span class="font-mono">main</span>、<span class="font-mono">types</span>、<span class="font-mono">exports</span> 指到的檔案在不在，格式有沒有擺錯</div>
 </div>
 
-<div v-click="2" class="card py-5! px-6!">
+<div class="card py-5! px-6!">
 <div class="text-2xl font-semibold mb-1">attw</div>
 <div class="muted text-sm mb-4"><a href="https://arethetypeswrong.github.io" target="_blank" rel="noopener">Are the types wrong?</a></div>
 <div class="text-lg leading-relaxed">假裝成四種不同設定的使用者專案來找型別，抓裝了才會炸的錯</div>
@@ -328,9 +328,9 @@ export default defineConfig({
 <!--
 第六步是 tsdown 在函式庫發布之前會替我們做的檢查。tsdown 整合了兩個工具，分別是 publint 和 attw。在我認真研究 tsdown 之前我根本沒聽過這兩個工具。那這兩個工具做了什麼檢查呢？
 
-[click] publint 檢查的是 package.json：main、types、exports 這些欄位寫的路徑是否正確，檔案是不是真的在那裡，還有其他 package.json 的欄位檢查。
+publint 檢查的是 package.json：main、types、exports 這些欄位寫的路徑是否正確，檔案是不是真的在那裡，還有其他 package.json 的欄位檢查。
 
-[click] attw 是 Are the types wrong 的縮寫，它模擬了四種不同設定的使用者專案來 import 你的函式庫，看型別找不找得到，抓的是使用者裝了才會發現的錯誤。
+attw 是 Are the types wrong 的縮寫，它模擬了四種不同設定的使用者專案來 import 你的函式庫，看型別找不找得到，抓的是使用者裝了才會發現的錯誤。
 
 而這兩個工具都只要簡單的一行設定即可，tsdown 會幫我們自動的執行。
 -->

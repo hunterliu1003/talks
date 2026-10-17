@@ -37,28 +37,28 @@ pnpm tsdown
 </div>
 
 <div class="mt-4 text-lg space-y-1.5">
-<div v-click class="flex items-center gap-3"><carbon-checkmark-outline class="accent shrink-0" />極簡設定，開箱即用</div>
-<div v-click class="flex items-center gap-3"><carbon-checkmark-outline class="accent shrink-0" />型別宣告自動產生，依賴自動分析</div>
-<div v-click class="flex items-center gap-3"><carbon-checkmark-outline class="accent shrink-0" />多種格式，一套設定一致輸出</div>
-<div v-click class="flex items-center gap-3"><carbon-checkmark-outline class="accent shrink-0" /><span>極致效能，底層是 Rust 寫的 <a href="https://rolldown.rs" target="_blank" rel="noopener">Rolldown</a></span></div>
-<div v-click class="flex items-center gap-3"><carbon-checkmark-outline class="accent shrink-0" />npm、pnpm、Yarn、Bun 都支援</div>
-<div v-click class="flex items-center gap-3"><carbon-checkmark-outline class="accent shrink-0" />Node.js 22.18+</div>
+<div class="flex items-center gap-3"><carbon-checkmark-outline class="accent shrink-0" />極簡設定，開箱即用</div>
+<div class="flex items-center gap-3"><carbon-checkmark-outline class="accent shrink-0" />型別宣告自動產生，依賴自動分析</div>
+<div class="flex items-center gap-3"><carbon-checkmark-outline class="accent shrink-0" />多種格式，一套設定一致輸出</div>
+<div class="flex items-center gap-3"><carbon-checkmark-outline class="accent shrink-0" /><span>極致效能，底層是 Rust 寫的 <a href="https://rolldown.rs" target="_blank" rel="noopener">Rolldown</a></span></div>
+<div class="flex items-center gap-3"><carbon-checkmark-outline class="accent shrink-0" />npm、pnpm、Yarn、Bun 都支援</div>
+<div class="flex items-center gap-3"><carbon-checkmark-outline class="accent shrink-0" />Node.js 22.18+</div>
 </div>
 
 <!--
-讓我們先認識 tsdown。
+讓我從介紹 tsdown 開始。
 
 tsdown 是專為函式庫設計的打包工具。
 
-[click] 設定非常簡單，開箱即用。
+設定非常簡單，開箱即用。
 
-[click] 自動產生 TS 型別宣告，依賴也自動分析哪些要外部化。
+自動產生 TS 型別宣告，依賴也自動分析哪些要外部化。
 
-[click] 多種格式一套設定一次輸出。
+多種格式一套設定一次輸出。
 
-[click] 極致效能，底層是 Rust 寫的 Rolldown
+極致效能，底層是 Rust 寫的 Rolldown
 
-[click] 支援 npm、pnpm、Yarn、Bun 
+支援 npm、pnpm、Yarn、Bun 
 
-[click] Node 要 22.18 以上。
+Node 要 22.18 以上。
 -->

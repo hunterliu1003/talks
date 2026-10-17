@@ -20,7 +20,7 @@ class: py-10!
 
 [click] 第五題才進到 Modal：非擋住流程不可嗎？不需要擋住的話就是 Nonmodal，例如 Cookie 通知、Tooltip、Popover 這些元件。
 
-[click] 第六題，如果只是告知結果可以用 Toast。
+[click] 第六題，如果只是單純告知結果可以用 Toast。
 
 [click] 最後一題，要收集資訊或確認操作嗎？要的話用 Dialog；不用的話用 Bottom Sheet 或 Nav Drawer。
 

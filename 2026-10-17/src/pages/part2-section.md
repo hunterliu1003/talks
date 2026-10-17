@@ -6,7 +6,6 @@ class: section-slide
 
 # Vue Final Modal v5
 
-<div class="desc">換打包工具，也換核心，API 不變。</div>
 
 <div class="chapter-ghost">2</div>
 

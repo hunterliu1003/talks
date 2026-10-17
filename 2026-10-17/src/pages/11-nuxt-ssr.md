@@ -13,7 +13,7 @@
 
 <div class="grid grid-cols-[1fr_max-content_1fr] gap-4 items-start mt-8">
 
-<div v-click>
+<div>
 <div class="eyebrow mb-2">v4 · 另一個套件</div>
 
 ```ts
@@ -25,9 +25,9 @@ export default defineNuxtConfig({
 
 </div>
 
-<carbon-arrow-right v-click class="text-2xl faint self-center" />
+<carbon-arrow-right class="text-2xl faint self-center" />
 
-<div v-after>
+<div>
 <div class="eyebrow mb-2">v5 · 隨主套件發布</div>
 
 ```ts
@@ -43,9 +43,9 @@ export default defineNuxtConfig({
 <!--
 鎖講完了，最後一章：SSR 與 Nuxt。v5 這次花最多力氣的地方是 SSR，徹底的解決 hydration error, memory leak, 每個 server request 各自獨立等等問題，確保 A 使用者的 modal 絕對不會出現在 B 使用者的頁面上，細節都放在新的文件裡。
 
-[click] v4 的時候，Nuxt module 是另一個獨立的套件 @vue-final-modal/nuxt，要另外安裝。
+v4 的時候，Nuxt module 是另一個獨立的套件 @vue-final-modal/nuxt，要另外安裝。
 
-[click] v5 透過 tsdown 簡易的設定，把 Nuxt module 併回主套件，modules 裡寫 vue-final-modal/nuxt 就好。module 會自動匯入 vue-final-modal exports 出去的東西。
+v5 透過 tsdown 簡易的設定，把 Nuxt module 併回主套件，modules 裡寫 vue-final-modal/nuxt 就好。module 會自動匯入 vue-final-modal exports 出去的東西。
 -->
 
 ---
